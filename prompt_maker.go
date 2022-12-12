@@ -13,6 +13,11 @@ import (
 const ENABLE_BOLD = true
 const COLOR_FG_BOLD = "#ffffff"
 
+type promptInfoT struct {
+	Username    string
+	UserHomeDir string
+}
+
 func main() {
 	optDump := flag.Bool("dump", false,
 		"Show all prompt components and all prompts in all formatting styles.")
@@ -30,12 +35,27 @@ func main() {
 	path := strings.TrimSpace(args[0])
 	getPath(path)
 
+	promptInfo, _ := buildPromptInfo()
+
 	if *optDump {
 		fmt.Println("Dump:")
 		fmt.Println(path)
+		fmt.Println(promptInfo)
 	}
 
 	os.Exit(0)
+}
+
+func buildPromptInfo() (promptInfoT, error) {
+	promptInfo := promptInfoT{}
+
+	user, err := user.Current()
+	if err != nil {
+		return promptInfo, err
+	}
+	promptInfo.Username = user.Username
+	promptInfo.UserHomeDir = user.HomeDir
+	return promptInfo, nil
 }
 
 func getPath(path string) {
