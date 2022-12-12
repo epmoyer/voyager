@@ -47,10 +47,12 @@ func main() {
 		fmt.Println(path)
 		fmt.Printf("%#v\n", promptInfo)
 		promptText := renderPrompt(false, promptInfo)
+		fmt.Println("-------------------------------------------------")
 		fmt.Printf("PROMPT TEXT:\n%s\n", promptText)
 		// promptPowerline = renderPrompt(true)
 		promptPowerline := renderPromptPowerline(promptInfo)
 		fmt.Printf("PROMPT POWERLINE:\n%s\n", promptPowerline)
+		fmt.Println("-------------------------------------------------")
 	}
 
 	os.Exit(0)
