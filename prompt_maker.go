@@ -12,13 +12,15 @@ import (
 	"github.com/gookit/color"
 )
 
-const ENABLE_BOLD = true
+const ENABLE_BOLD = false
 const COLOR_FG_BOLD = "#ffffff"
 
 type promptInfoT struct {
 	Username    string
 	UserHomeDir string
 	Hostname    string
+	PathGitRoot string
+	PathGitSub  string
 }
 
 func main() {
@@ -36,9 +38,9 @@ func main() {
 		os.Exit(1)
 	}
 	path := strings.TrimSpace(args[0])
-	getPath(path)
+	// getPath(path)
 
-	promptInfo, _ := buildPromptInfo()
+	promptInfo, _ := buildPromptInfo(path)
 
 	if *optDump {
 		fmt.Println("Dump:")
@@ -53,20 +55,26 @@ func main() {
 }
 
 func renderPrompt(usePowerline bool, promptInfo promptInfoT) string {
-	// context := promptInfo.Username + "@" + promptInfo.Hostname
-	// contextColor := color.HEX("#8976D2")
 	contextColor := color.HEX("#C040BE")
 	context := contextColor.Sprintf("%s", promptInfo.Username+"@"+promptInfo.Hostname)
 
-	// prompt = color.Red.Render(prompt)
-	// prompt = myColor.Basic().Render(prompt)
-	// prompt = myColor.Sprintf("%s", prompt)
-	prompt := context + " $"
+	basePathColor := color.HEX("#808080")
+	basePath := basePathColor.Sprintf("%s", promptInfo.PathGitRoot)
+
+	subPathColor := color.HEX("#8080e0")
+	subPath := subPathColor.Sprintf("%s", promptInfo.PathGitSub)
+
+	prompt := context + ":" + basePath + ":" + subPath + " $"
 	return prompt
 }
 
-func buildPromptInfo() (promptInfoT, error) {
+func buildPromptInfo(path string) (promptInfoT, error) {
+
 	promptInfo := promptInfoT{}
+
+	pathGitRoot, pathGitSub := getPath(path)
+	promptInfo.PathGitRoot = pathGitRoot
+	promptInfo.PathGitSub = pathGitSub
 
 	user, err := user.Current()
 	if err != nil {
@@ -87,7 +95,7 @@ func buildPromptInfo() (promptInfoT, error) {
 	return promptInfo, nil
 }
 
-func getPath(path string) {
+func getPath(path string) (string, string) {
 
 	usr, _ := user.Current()
 	dir := usr.HomeDir
@@ -102,7 +110,7 @@ func getPath(path string) {
 	}
 	pathGitRoot = shortenPath(pathGitRoot)
 
-	fmt.Println(pathGitRoot + "|" + pathGitSub)
+	return pathGitRoot, pathGitSub
 }
 
 func shortenPath(path string) string {
@@ -137,6 +145,7 @@ func splitGitPath(path string) (string, string) {
 	cmd.Dir = path
 	out, err := cmd.Output()
 	if err != nil {
+		fmt.Println("🔴 Not a git repo")
 		// This is not a git repo
 		return path, ""
 	}
