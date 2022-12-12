@@ -75,7 +75,7 @@ func renderPrompt(usePowerline bool, promptInfo promptInfoT) string {
 
 func renderPromptPowerline(promptInfo promptInfoT) string {
 	contextColor := color.HEXStyle("#000000", "#C040BE")
-	context := contextColor.Sprintf("%s", promptInfo.Username+"@"+promptInfo.Hostname)
+	context := contextColor.Sprintf(" %s ", promptInfo.Username+"@"+promptInfo.Hostname)
 
 	basePathColor := color.HEX("#808080")
 	basePath := basePathColor.Sprintf("%s", promptInfo.PathGitRoot)
