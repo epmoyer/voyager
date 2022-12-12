@@ -15,6 +15,12 @@ import (
 const ENABLE_BOLD = false
 const COLOR_FG_BOLD = "#ffffff"
 
+const COLOR_PL_CONTEXT = "#B294BF"
+const COLOR_PL_PATH_GITROOT = "#4F6D6F"
+const COLOR_PL_PATH_GITSUB = "#515151"
+const COLOR_PL_GIT_CLEAN = "#A2C3C7"
+const COLOR_PL_GIT_DIRTY = "#E2D47D"
+
 type promptInfoT struct {
 	Username    string
 	UserHomeDir string
@@ -78,7 +84,7 @@ func renderPrompt(usePowerline bool, promptInfo promptInfoT) string {
 func renderPromptPowerline(promptInfo promptInfoT) string {
 	separator := "\ue0b0"
 
-	contextColor := color.HEXStyle("#000000", "#C040BE")
+	contextColor := color.HEXStyle("#000000", COLOR_PL_CONTEXT)
 	context := contextColor.Sprintf(" %s ", promptInfo.Username+"@"+promptInfo.Hostname)
 
 	// basePathColor := color.HEX("#808080")
@@ -91,7 +97,7 @@ func renderPromptPowerline(promptInfo promptInfoT) string {
 	// separatorColor := color.HEX("#404040")
 	// separator := separatorColor.Sprintf(" ⟫ ")
 
-	prompt := context + makeSeparator("#C040BE", "#A2C3C7") + basePath + separator + subPath + " $"
+	prompt := context + makeSeparator(COLOR_PL_CONTEXT, "#A2C3C7") + basePath + separator + subPath + " $"
 	return prompt
 }
 
