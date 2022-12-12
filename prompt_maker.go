@@ -16,7 +16,10 @@ const ENABLE_BOLD = false
 const COLOR_FG_BOLD = "#ffffff"
 const COLOR_BG_DEFAULT = "#000000"
 
-const COLOR_TEXT_FG_PATH_GITROOT = "#808080"
+const COLOR_TEXT_FG_PATH_CONTEXT = "#C040BE"
+const COLOR_TEXT_FG_PATH_GITROOT = "#6D8B8F"
+const COLOR_TEXT_FG_PATH_GITSUB = "#8080e0"
+const COLOR_TEXT_FG_SEPARATOR = "#d0d0d0"
 
 const COLOR_POWERLINE_BG_CONTEXT = "#B294BF"
 const COLOR_POWERLINE_FG_PATH_GITROOT = "#ffffff"
@@ -32,6 +35,7 @@ type promptInfoT struct {
 	Hostname    string
 	PathGitRoot string
 	PathGitSub  string
+	GitBranch   string
 }
 
 func main() {
@@ -70,17 +74,16 @@ func main() {
 }
 
 func renderPrompt(usePowerline bool, promptInfo promptInfoT) string {
-	contextColor := color.HEX("#C040BE")
+	contextColor := color.HEX(COLOR_TEXT_FG_PATH_CONTEXT)
 	context := contextColor.Sprintf("%s", promptInfo.Username+"@"+promptInfo.Hostname)
 
 	basePathColor := color.HEX(COLOR_TEXT_FG_PATH_GITROOT)
 	basePath := basePathColor.Sprintf("%s", promptInfo.PathGitRoot)
 
-	subPathColor := color.HEX("#8080e0")
+	subPathColor := color.HEX(COLOR_TEXT_FG_PATH_GITSUB)
 	subPath := subPathColor.Sprintf("%s", promptInfo.PathGitSub)
 
-	// separatorColor := color.HEX("#4EAC4D")
-	separatorColor := color.HEX("#d0d0d0")
+	separatorColor := color.HEX(COLOR_TEXT_FG_SEPARATOR)
 	separator := separatorColor.Sprintf(" ⟫ ")
 
 	prompt := context + separator + basePath + separator + subPath + " $"
@@ -141,6 +144,8 @@ func buildPromptInfo(path string) (promptInfoT, error) {
 	}
 	promptInfo.Hostname = hostname
 
+	promptInfo.GitBranch = getGitBranch(path)
+
 	return promptInfo, nil
 }
 
@@ -194,7 +199,6 @@ func splitGitPath(path string) (string, string) {
 	cmd.Dir = path
 	out, err := cmd.Output()
 	if err != nil {
-		fmt.Println("🔴 Not a git repo")
 		// This is not a git repo
 		return path, ""
 	}
@@ -205,4 +209,18 @@ func splitGitPath(path string) (string, string) {
 	}
 
 	return pathGitRoot, pathGitSub
+}
+
+func getGitBranch(path string) string {
+	cmd := exec.Command("git", "rev-parse", "--abbrev-ref", "HEAD")
+	var e bytes.Buffer
+	cmd.Stderr = &e
+	cmd.Dir = path
+	out, err := cmd.Output()
+	if err != nil {
+		// This is not a git repo
+		return ""
+	}
+	// TODO: If blank call "git rev-parse --short HEAD" for hash
+	return strings.TrimSpace(string(out))
 }
