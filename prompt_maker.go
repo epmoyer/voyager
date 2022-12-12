@@ -8,6 +8,8 @@ import (
 	"os/exec"
 	"os/user"
 	"strings"
+
+	"github.com/gookit/color"
 )
 
 const ENABLE_BOLD = true
@@ -42,9 +44,21 @@ func main() {
 		fmt.Println("Dump:")
 		fmt.Println(path)
 		fmt.Printf("%#v\n", promptInfo)
+		promptText := renderPrompt(false, promptInfo)
+		fmt.Printf("PROMPT TEXT: %s\n", promptText)
+		// promptPowerline = renderPrompt(true)
 	}
 
 	os.Exit(0)
+}
+
+func renderPrompt(usePowerline bool, promptInfo promptInfoT) string {
+	prompt := promptInfo.Username + "@" + promptInfo.Hostname + " $"
+	// prompt = color.Red.Render(prompt)
+	myColor := color.HEX("#8976D2")
+	// prompt = myColor.Basic().Render(prompt)
+	prompt = myColor.Sprintf("%s", prompt)
+	return prompt
 }
 
 func buildPromptInfo() (promptInfoT, error) {
