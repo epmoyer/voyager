@@ -14,12 +14,15 @@ import (
 
 const ENABLE_BOLD = false
 const COLOR_FG_BOLD = "#ffffff"
+const COLOR_BG_DEFAULT = "#000000"
 
-const COLOR_PL_CONTEXT = "#B294BF"
-const COLOR_PL_PATH_GITROOT = "#4F6D6F"
-const COLOR_PL_PATH_GITSUB = "#515151"
-const COLOR_PL_GIT_CLEAN = "#A2C3C7"
-const COLOR_PL_GIT_DIRTY = "#E2D47D"
+const COLOR_POWERLINE_BG_CONTEXT = "#B294BF"
+const COLOR_POWERLINE_FG_PATH_GITROOT = "#ffffff"
+const COLOR_POWERLINE_BG_PATH_GITROOT = "#4F6D6F"
+const COLOR_POWERLINE_FG_PATH_GITSUB = "#c0c0c0"
+const COLOR_POWERLINE_BG_PATH_GITSUB = "#515151"
+const COLOR_POWERLINE_BG_GIT_CLEAN = "#A2C3C7"
+const COLOR_POWERLINE_BG_GIT_DIRTY = "#E2D47D"
 
 type promptInfoT struct {
 	Username    string
@@ -82,21 +85,27 @@ func renderPrompt(usePowerline bool, promptInfo promptInfoT) string {
 }
 
 func renderPromptPowerline(promptInfo promptInfoT) string {
-	separator := "\ue0b0"
+	// separator := "\ue0b0"
 
-	contextColor := color.HEXStyle("#000000", COLOR_PL_CONTEXT)
+	contextColor := color.HEXStyle("#000000", COLOR_POWERLINE_BG_CONTEXT)
 	context := contextColor.Sprintf(" %s ", promptInfo.Username+"@"+promptInfo.Hostname)
 
-	basePathColor := color.HEXStyle("#000000", COLOR_PL_PATH_GITROOT)
-	basePath := basePathColor.Sprintf(" %s", promptInfo.PathGitRoot)
+	basePathColor := color.HEXStyle(COLOR_POWERLINE_FG_PATH_GITROOT, COLOR_POWERLINE_BG_PATH_GITROOT)
+	basePath := basePathColor.Sprintf(" %s ", promptInfo.PathGitRoot)
 
-	subPathColor := color.HEX("#8080e0")
-	subPath := subPathColor.Sprintf("%s", promptInfo.PathGitSub)
+	subPathColor := color.HEXStyle(COLOR_POWERLINE_FG_PATH_GITSUB, COLOR_POWERLINE_BG_PATH_GITSUB)
+	subPath := subPathColor.Sprintf(" %s ", promptInfo.PathGitSub)
 
 	// separatorColor := color.HEX("#404040")
 	// separator := separatorColor.Sprintf(" ⟫ ")
 
-	prompt := context + makeSeparator(COLOR_PL_CONTEXT, COLOR_PL_PATH_GITROOT) + basePath + separator + subPath + " $"
+	prompt := (context +
+		makeSeparator(COLOR_POWERLINE_BG_CONTEXT, COLOR_POWERLINE_BG_PATH_GITROOT) +
+		basePath +
+		makeSeparator(COLOR_POWERLINE_BG_PATH_GITROOT, COLOR_POWERLINE_BG_PATH_GITSUB) +
+		subPath +
+		makeSeparator(COLOR_POWERLINE_BG_PATH_GITSUB, COLOR_BG_DEFAULT) +
+		" ")
 	return prompt
 }
 
