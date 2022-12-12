@@ -47,8 +47,10 @@ func main() {
 		fmt.Println(path)
 		fmt.Printf("%#v\n", promptInfo)
 		promptText := renderPrompt(false, promptInfo)
-		fmt.Printf("PROMPT TEXT: %s\n", promptText)
+		fmt.Printf("PROMPT TEXT:\n%s\n", promptText)
 		// promptPowerline = renderPrompt(true)
+		promptPowerline := renderPromptPowerline(promptInfo)
+		fmt.Printf("PROMPT POWERLINE:\n%s\n", promptPowerline)
 	}
 
 	os.Exit(0)
@@ -64,7 +66,27 @@ func renderPrompt(usePowerline bool, promptInfo promptInfoT) string {
 	subPathColor := color.HEX("#8080e0")
 	subPath := subPathColor.Sprintf("%s", promptInfo.PathGitSub)
 
-	prompt := context + ":" + basePath + ":" + subPath + " $"
+	separatorColor := color.HEX("#404040")
+	separator := separatorColor.Sprintf(" ⟫ ")
+
+	prompt := context + separator + basePath + separator + subPath + " $"
+	return prompt
+}
+
+func renderPromptPowerline(promptInfo promptInfoT) string {
+	contextColor := color.HEXStyle("#000000", "#C040BE")
+	context := contextColor.Sprintf("%s", promptInfo.Username+"@"+promptInfo.Hostname)
+
+	basePathColor := color.HEX("#808080")
+	basePath := basePathColor.Sprintf("%s", promptInfo.PathGitRoot)
+
+	subPathColor := color.HEX("#8080e0")
+	subPath := subPathColor.Sprintf("%s", promptInfo.PathGitSub)
+
+	separatorColor := color.HEX("#404040")
+	separator := separatorColor.Sprintf(" ⟫ ")
+
+	prompt := context + separator + basePath + separator + subPath + " $"
 	return prompt
 }
 
