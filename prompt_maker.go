@@ -74,20 +74,28 @@ func renderPrompt(usePowerline bool, promptInfo promptInfoT) string {
 }
 
 func renderPromptPowerline(promptInfo promptInfoT) string {
+	separator := "\ue0b0"
+
 	contextColor := color.HEXStyle("#000000", "#C040BE")
 	context := contextColor.Sprintf(" %s ", promptInfo.Username+"@"+promptInfo.Hostname)
 
-	basePathColor := color.HEX("#808080")
-	basePath := basePathColor.Sprintf("%s", promptInfo.PathGitRoot)
+	// basePathColor := color.HEX("#808080")
+	basePathColor := color.HEXStyle("#000000", "#A2C3C7")
+	basePath := basePathColor.Sprintf(" %s", promptInfo.PathGitRoot)
 
 	subPathColor := color.HEX("#8080e0")
 	subPath := subPathColor.Sprintf("%s", promptInfo.PathGitSub)
 
-	separatorColor := color.HEX("#404040")
-	separator := separatorColor.Sprintf(" ⟫ ")
+	// separatorColor := color.HEX("#404040")
+	// separator := separatorColor.Sprintf(" ⟫ ")
 
-	prompt := context + separator + basePath + separator + subPath + " $"
+	prompt := context + makeSeparator("#C040BE", "#A2C3C7") + basePath + separator + subPath + " $"
 	return prompt
+}
+
+func makeSeparator(oldColor string, newColor string) string {
+	separatorStyle := color.HEXStyle(oldColor, newColor)
+	return separatorStyle.Sprintf("\ue0b0")
 }
 
 func buildPromptInfo(path string) (promptInfoT, error) {
