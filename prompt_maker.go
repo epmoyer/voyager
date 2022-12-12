@@ -16,6 +16,7 @@ const COLOR_FG_BOLD = "#ffffff"
 type promptInfoT struct {
 	Username    string
 	UserHomeDir string
+	Hostname    string
 }
 
 func main() {
@@ -40,7 +41,7 @@ func main() {
 	if *optDump {
 		fmt.Println("Dump:")
 		fmt.Println(path)
-		fmt.Println(promptInfo)
+		fmt.Printf("%#v\n", promptInfo)
 	}
 
 	os.Exit(0)
@@ -55,6 +56,16 @@ func buildPromptInfo() (promptInfoT, error) {
 	}
 	promptInfo.Username = user.Username
 	promptInfo.UserHomeDir = user.HomeDir
+
+	hostname, err := os.Hostname()
+	if err != nil {
+		return promptInfo, err
+	}
+	if strings.HasSuffix(hostname, ".local") {
+		hostname = strings.Replace(hostname, ".local", "", 1)
+	}
+	promptInfo.Hostname = hostname
+
 	return promptInfo, nil
 }
 
