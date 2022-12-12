@@ -16,6 +16,8 @@ const ENABLE_BOLD = false
 const COLOR_FG_BOLD = "#ffffff"
 const COLOR_BG_DEFAULT = "#000000"
 
+const COLOR_TEXT_FG_PATH_GITROOT = "#808080"
+
 const COLOR_POWERLINE_BG_CONTEXT = "#B294BF"
 const COLOR_POWERLINE_FG_PATH_GITROOT = "#ffffff"
 const COLOR_POWERLINE_BG_PATH_GITROOT = "#4F6D6F"
@@ -71,13 +73,14 @@ func renderPrompt(usePowerline bool, promptInfo promptInfoT) string {
 	contextColor := color.HEX("#C040BE")
 	context := contextColor.Sprintf("%s", promptInfo.Username+"@"+promptInfo.Hostname)
 
-	basePathColor := color.HEX("#808080")
+	basePathColor := color.HEX(COLOR_TEXT_FG_PATH_GITROOT)
 	basePath := basePathColor.Sprintf("%s", promptInfo.PathGitRoot)
 
 	subPathColor := color.HEX("#8080e0")
 	subPath := subPathColor.Sprintf("%s", promptInfo.PathGitSub)
 
-	separatorColor := color.HEX("#404040")
+	// separatorColor := color.HEX("#4EAC4D")
+	separatorColor := color.HEX("#d0d0d0")
 	separator := separatorColor.Sprintf(" ⟫ ")
 
 	prompt := context + separator + basePath + separator + subPath + " $"
