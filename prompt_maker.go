@@ -26,8 +26,9 @@ const COLOR_POWERLINE_FG_PATH_GITROOT = "#ffffff"
 const COLOR_POWERLINE_BG_PATH_GITROOT = "#4F6D6F"
 const COLOR_POWERLINE_FG_PATH_GITSUB = "#c0c0c0"
 const COLOR_POWERLINE_BG_PATH_GITSUB = "#515151"
-const COLOR_POWERLINE_BG_GIT_CLEAN = "#A2C3C7"
-const COLOR_POWERLINE_BG_GIT_DIRTY = "#E2D47D"
+const COLOR_POWERLINE_FG_GIT_INFO = "#000000"
+const COLOR_POWERLINE_BG_GIT_INFO_CLEAN = "#A2C3C7"
+const COLOR_POWERLINE_BG_GIT_INFO_DIRTY = "#E2D47D"
 
 type promptInfoT struct {
 	Username    string
@@ -102,13 +103,16 @@ func renderPromptPowerline(promptInfo promptInfoT) string {
 	subPathColor := color.HEXStyle(COLOR_POWERLINE_FG_PATH_GITSUB, COLOR_POWERLINE_BG_PATH_GITSUB)
 	subPath := subPathColor.Sprintf(" %s ", promptInfo.PathGitSub)
 
-	// separatorColor := color.HEX("#404040")
-	// separator := separatorColor.Sprintf(" ⟫ ")
+	gitBackgroundColor := COLOR_POWERLINE_BG_GIT_INFO_CLEAN
+	gitColor := color.HEXStyle(COLOR_POWERLINE_FG_GIT_INFO, gitBackgroundColor)
+	gitInfo := gitColor.Sprintf(" %s ", promptInfo.GitBranch)
 
 	prompt := (context +
 		makeSeparator(COLOR_POWERLINE_BG_CONTEXT, COLOR_POWERLINE_BG_PATH_GITROOT) +
 		basePath +
-		makeSeparator(COLOR_POWERLINE_BG_PATH_GITROOT, COLOR_POWERLINE_BG_PATH_GITSUB) +
+		makeSeparator(COLOR_POWERLINE_BG_PATH_GITROOT, gitBackgroundColor) +
+		gitInfo +
+		makeSeparator(gitBackgroundColor, COLOR_POWERLINE_BG_PATH_GITSUB) +
 		subPath +
 		makeSeparator(COLOR_POWERLINE_BG_PATH_GITSUB, COLOR_BG_DEFAULT) +
 		" ")
