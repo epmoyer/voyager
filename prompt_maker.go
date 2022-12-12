@@ -87,8 +87,7 @@ func renderPromptPowerline(promptInfo promptInfoT) string {
 	contextColor := color.HEXStyle("#000000", COLOR_PL_CONTEXT)
 	context := contextColor.Sprintf(" %s ", promptInfo.Username+"@"+promptInfo.Hostname)
 
-	// basePathColor := color.HEX("#808080")
-	basePathColor := color.HEXStyle("#000000", "#A2C3C7")
+	basePathColor := color.HEXStyle("#000000", COLOR_PL_PATH_GITROOT)
 	basePath := basePathColor.Sprintf(" %s", promptInfo.PathGitRoot)
 
 	subPathColor := color.HEX("#8080e0")
@@ -97,7 +96,7 @@ func renderPromptPowerline(promptInfo promptInfoT) string {
 	// separatorColor := color.HEX("#404040")
 	// separator := separatorColor.Sprintf(" ⟫ ")
 
-	prompt := context + makeSeparator(COLOR_PL_CONTEXT, "#A2C3C7") + basePath + separator + subPath + " $"
+	prompt := context + makeSeparator(COLOR_PL_CONTEXT, COLOR_PL_PATH_GITROOT) + basePath + separator + subPath + " $"
 	return prompt
 }
 
