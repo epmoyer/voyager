@@ -53,11 +53,15 @@ func main() {
 }
 
 func renderPrompt(usePowerline bool, promptInfo promptInfoT) string {
-	prompt := promptInfo.Username + "@" + promptInfo.Hostname + " $"
+	// context := promptInfo.Username + "@" + promptInfo.Hostname
+	// contextColor := color.HEX("#8976D2")
+	contextColor := color.HEX("#C040BE")
+	context := contextColor.Sprintf("%s", promptInfo.Username+"@"+promptInfo.Hostname)
+
 	// prompt = color.Red.Render(prompt)
-	myColor := color.HEX("#8976D2")
 	// prompt = myColor.Basic().Render(prompt)
-	prompt = myColor.Sprintf("%s", prompt)
+	// prompt = myColor.Sprintf("%s", prompt)
+	prompt := context + " $"
 	return prompt
 }
 
