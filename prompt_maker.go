@@ -27,7 +27,8 @@ const COLOR_FG_BOLD = "#ffffff"
 const COLOR_BG_DEFAULT = "#000000"
 
 const COLOR_TEXT_FG_PATH_CONTEXT = "#C040BE"
-const COLOR_TEXT_FG_PATH_GITROOT = "#00d000"
+const COLOR_TEXT_FG_PATH_GITROOT = "#009000"
+const COLOR_TEXT_FG_PATH_GITROOT_FINAL = "#30FF30"
 const COLOR_TEXT_FG_PATH_GITSUB = "#6D8B8F"
 const COLOR_TEXT_FG_SEPARATOR = "#d0d0d0"
 const COLOR_TEXT_FG_GIT_INFO_CLEAN = "#A2C3C7"
@@ -105,7 +106,10 @@ func renderPrompt(usePowerline bool, promptInfo promptInfoT) string {
 	context := contextColor.Sprintf("%s", promptInfo.Username+"@"+promptInfo.Hostname)
 
 	basePathColor := color.HEX(COLOR_TEXT_FG_PATH_GITROOT)
-	basePath := basePathColor.Sprintf("%s%s", promptInfo.PathGitRootBeginning, promptInfo.PathGitRootFinal)
+	basePathBeginning := basePathColor.Sprintf("%s", promptInfo.PathGitRootBeginning)
+
+	basePathFinalColor := color.HEX(COLOR_TEXT_FG_PATH_GITROOT_FINAL)
+	basePathFinal := basePathFinalColor.Sprintf("%s", promptInfo.PathGitRootFinal)
 
 	gitColor := color.HEX(COLOR_TEXT_FG_GIT_INFO_CLEAN)
 	gitInfo := gitColor.Sprintf("%s", promptInfo.GitBranch)
@@ -116,7 +120,7 @@ func renderPrompt(usePowerline bool, promptInfo promptInfoT) string {
 	separatorColor := color.HEX(COLOR_TEXT_FG_SEPARATOR)
 	separator := separatorColor.Sprintf(" ⟫ ")
 
-	prompt := context + separator + basePath + separator + gitInfo + separator + subPath + " $"
+	prompt := context + separator + basePathBeginning + basePathFinal + separator + gitInfo + separator + subPath + " $"
 	return prompt
 }
 
