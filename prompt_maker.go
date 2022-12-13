@@ -42,14 +42,15 @@ var STYLE_GIT_INFO_DIRTY = promptStyleT{ColorHexFG: "#000000", ColorHexBG: "#E2D
 var STYLE_GITSUB = promptStyleT{ColorHexFG: "#c0c0c0", ColorHexBG: "#515151"}
 
 type promptInfoT struct {
-	CondaEnvironment string
-	Username         string
-	UserHomeDir      string
-	ShowContext      bool
-	Hostname         string
-	PathGitRoot      string
-	PathGitSub       string
-	GitBranch        string
+	CondaEnvironment     string
+	Username             string
+	UserHomeDir          string
+	ShowContext          bool
+	Hostname             string
+	PathGitRootBeginning string
+	PathGitRootFinal     string
+	PathGitSub           string
+	GitBranch            string
 }
 
 func main() {
@@ -104,7 +105,7 @@ func renderPrompt(usePowerline bool, promptInfo promptInfoT) string {
 	context := contextColor.Sprintf("%s", promptInfo.Username+"@"+promptInfo.Hostname)
 
 	basePathColor := color.HEX(COLOR_TEXT_FG_PATH_GITROOT)
-	basePath := basePathColor.Sprintf("%s", promptInfo.PathGitRoot)
+	basePath := basePathColor.Sprintf("%s%s", promptInfo.PathGitRootBeginning, promptInfo.PathGitRootFinal)
 
 	gitColor := color.HEX(COLOR_TEXT_FG_GIT_INFO_CLEAN)
 	gitInfo := gitColor.Sprintf("%s", promptInfo.GitBranch)
@@ -144,11 +145,11 @@ func renderPromptPowerline(promptInfo promptInfoT) string {
 	// Git root directory
 	// -----------------------
 	prompt = prompt.addSegment(
-		fmt.Sprintf(" %s", promptInfo.PathGitRoot),
+		fmt.Sprintf(" %s", promptInfo.PathGitRootBeginning),
 		STYLE_GITROOT_PRE, true)
 	// TODO: Really extract this last bit of the path
 	prompt = prompt.addSegment(
-		fmt.Sprintf("/%s ", "BOLD_BIT"),
+		fmt.Sprintf("%s ", promptInfo.PathGitRootFinal),
 		STYLE_GITROOT, false)
 
 	// -----------------------
@@ -182,7 +183,7 @@ func buildPromptInfo(path string) (promptInfoT, error) {
 	promptInfo.ShowContext = true
 
 	pathGitRoot, pathGitSub := getPath(path)
-	promptInfo.PathGitRoot = pathGitRoot
+	promptInfo.PathGitRootBeginning, promptInfo.PathGitRootFinal = chopPath(pathGitRoot)
 	promptInfo.PathGitSub = pathGitSub
 
 	user, err := user.Current()
@@ -280,4 +281,24 @@ func getGitBranch(path string) string {
 	}
 	// TODO: If blank call "git rev-parse --short HEAD" for hash
 	return strings.TrimSpace(string(out))
+}
+
+func chopPath(path string) (string, string) {
+	pieces := strings.Split(path, "/")
+	newPieces := []string{}
+	var piece string
+	var finalComponent string
+	for i := 0; i < len(pieces); i++ {
+		piece = pieces[i]
+		if i < (len(pieces) - 1) {
+			newPieces = append(newPieces, piece)
+		} else {
+			finalComponent = piece
+		}
+	}
+	if len(newPieces) > 0 {
+		// This will cause a trailing slash in the base path if a base path exists
+		newPieces = append(newPieces, "")
+	}
+	return strings.Join(newPieces, "/"), finalComponent
 }
