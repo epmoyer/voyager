@@ -36,7 +36,10 @@ const COLOR_TEXT_FG_GIT_INFO_DIRTY = "#E2D47D"
 var STYLE_POWERLINE_CONDA = promptStyleT{ColorHexFG: "#202020", ColorHexBG: "#5EABF7"}
 var STYLE_POWERLINE_CONTEXT = promptStyleT{ColorHexFG: "#000000", ColorHexBG: "#B294BF"}
 var STYLE_GITROOT_PRE = promptStyleT{ColorHexFG: "#c0c0c0", ColorHexBG: "#4F6D6F"}
-var STYLE_GITROOT = promptStyleT{ColorHexFG: "#c0c0c0", ColorHexBG: "#4F6D6F", Bold: true}
+var STYLE_GITROOT = promptStyleT{ColorHexFG: "#ffffff", ColorHexBG: "#4F6D6F", Bold: true}
+var STYLE_GIT_INFO_CLEAN = promptStyleT{ColorHexFG: "#000000", ColorHexBG: "#A2C3C7"}
+var STYLE_GIT_INFO_DIRTY = promptStyleT{ColorHexFG: "#000000", ColorHexBG: "#E2D47D"}
+var STYLE_GITSUB = promptStyleT{ColorHexFG: "#c0c0c0", ColorHexBG: "#515151"}
 
 const COLOR_POWERLINE_BG_CONDA = "#5EABF7"
 const COLOR_POWERLINE_FG_CONDA = "#202020"
@@ -103,6 +106,8 @@ func main() {
 		prompt = prompt.addSegment(" context ", STYLE_POWERLINE_CONTEXT, true)
 		prompt = prompt.addSegment(" gitroot_pre/", STYLE_GITROOT_PRE, true)
 		prompt = prompt.addSegment("final ", STYLE_GITROOT, false)
+		prompt = prompt.addSegment(" "+SYMBOL_GIT_BRANCH+" git_info "+SYMBOL_GIT_UNSTAGED+" ", STYLE_GIT_INFO_DIRTY, true)
+		prompt = prompt.addSegment(" gitsub ", STYLE_GITSUB, true)
 
 		prompt = prompt.endSegments()
 		fmt.Printf("PROMPT POWERLINE SEGMENT TEST:\n%s\n", prompt.Prompt)
