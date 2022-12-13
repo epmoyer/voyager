@@ -85,17 +85,17 @@ func main() {
 		promptPowerline := renderPromptPowerline(promptInfo)
 		fmt.Printf("PROMPT POWERLINE:\n%s\n", promptPowerline)
 
-		prompt := promptT{}
+		// prompt := promptT{}
 
-		prompt = prompt.addSegment(" conda ", STYLE_POWERLINE_CONDA, false)
-		prompt = prompt.addSegment(" context ", STYLE_POWERLINE_CONTEXT, true)
-		prompt = prompt.addSegment(" gitroot_pre/", STYLE_GITROOT_PRE, true)
-		prompt = prompt.addSegment("final ", STYLE_GITROOT, false)
-		prompt = prompt.addSegment(" "+SYMBOL_GIT_BRANCH+" git_info "+SYMBOL_GIT_UNSTAGED+" ", STYLE_GIT_INFO_DIRTY, true)
-		prompt = prompt.addSegment(" gitsub ", STYLE_GITSUB, true)
+		// prompt = prompt.addSegment(" conda ", STYLE_POWERLINE_CONDA, false)
+		// prompt = prompt.addSegment(" context ", STYLE_POWERLINE_CONTEXT, true)
+		// prompt = prompt.addSegment(" gitroot_pre/", STYLE_GITROOT_PRE, true)
+		// prompt = prompt.addSegment("final ", STYLE_GITROOT, false)
+		// prompt = prompt.addSegment(" "+SYMBOL_GIT_BRANCH+" git_info "+SYMBOL_GIT_UNSTAGED+" ", STYLE_GIT_INFO_DIRTY, true)
+		// prompt = prompt.addSegment(" gitsub ", STYLE_GITSUB, true)
 
-		prompt = prompt.endSegments()
-		fmt.Printf("PROMPT POWERLINE SEGMENT TEST:\n%s\n", prompt.Prompt)
+		// prompt = prompt.endSegments()
+		// fmt.Printf("PROMPT POWERLINE SEGMENT TEST:\n%s\n", prompt.Prompt)
 		fmt.Println("-------------------------------------------------")
 	}
 
@@ -130,7 +130,7 @@ func renderPromptPowerline(promptInfo promptInfoT) string {
 	// -----------------------
 	// Conda Environment
 	// -----------------------
-	prompt := promptT{}
+	prompt := powerlinePromptT{}
 	if promptInfo.CondaEnvironment != "" {
 		prompt = prompt.addSegment(
 			fmt.Sprintf(" %s ", promptInfo.CondaEnvironment),
@@ -162,18 +162,22 @@ func renderPromptPowerline(promptInfo promptInfoT) string {
 	// -----------------------
 	// TODO: Detect clean/dirty
 	// TODO: Do nothing if not in a git dir
-	prompt = prompt.addSegment(
-		fmt.Sprintf(" %s %s ", SYMBOL_GIT_BRANCH, promptInfo.GitBranch),
-		STYLE_GIT_INFO_CLEAN,
-		true)
+	if promptInfo.GitBranch != "" {
+		prompt = prompt.addSegment(
+			fmt.Sprintf(" %s %s ", SYMBOL_GIT_BRANCH, promptInfo.GitBranch),
+			STYLE_GIT_INFO_CLEAN,
+			true)
+	}
 
 	// -----------------------
 	// Sub-directory within Git Repo
 	// -----------------------
-	prompt = prompt.addSegment(
-		fmt.Sprintf(" %s ", promptInfo.PathGitSub),
-		STYLE_GITSUB,
-		true)
+	if promptInfo.PathGitSub != "" {
+		prompt = prompt.addSegment(
+			fmt.Sprintf(" %s ", promptInfo.PathGitSub),
+			STYLE_GITSUB,
+			true)
+	}
 
 	prompt = prompt.endSegments()
 
