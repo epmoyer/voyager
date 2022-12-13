@@ -95,12 +95,6 @@ func main() {
 		fmt.Printf("PROMPT POWERLINE:\n%s\n", promptPowerline)
 
 		prompt := promptT{}
-		// prompt = prompt.addSegment(" conda ", COLOR_POWERLINE_FG_CONDA, COLOR_POWERLINE_BG_CONDA, false)
-		// prompt = prompt.addSegment(" context ", COLOR_POWERLINE_FG_CONTEXT, COLOR_POWERLINE_BG_CONTEXT, true)
-		// prompt = prompt.addSegment(" gitroot_pre/", COLOR_POWERLINE_FG_PATH_GITROOT_PRE, COLOR_POWERLINE_BG_PATH_GITROOT, true)
-		// prompt = prompt.addSegment("final ", COLOR_POWERLINE_FG_PATH_GITROOT, COLOR_POWERLINE_BG_PATH_GITROOT, false)
-		// prompt = prompt.addSegment(" "+SYMBOL_GIT_BRANCH+" git_info "+SYMBOL_GIT_UNSTAGED+" ", COLOR_POWERLINE_FG_GIT_INFO, COLOR_POWERLINE_BG_GIT_INFO_DIRTY, true)
-		// prompt = prompt.addSegment(" gitsub ", COLOR_POWERLINE_FG_PATH_GITSUB, COLOR_POWERLINE_BG_PATH_GITSUB, true)
 
 		prompt = prompt.addSegment(" conda ", STYLE_POWERLINE_CONDA, false)
 		prompt = prompt.addSegment(" context ", STYLE_POWERLINE_CONTEXT, true)
