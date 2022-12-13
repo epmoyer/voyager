@@ -23,6 +23,8 @@ const COLOR_TEXT_FG_SEPARATOR = "#d0d0d0"
 const COLOR_TEXT_FG_GIT_INFO_CLEAN = "#A2C3C7"
 const COLOR_TEXT_FG_GIT_INFO_DIRTY = "#E2D47D"
 
+const COLOR_POWERLINE_BG_CONDA = "#5EABF7"
+const COLOR_POWERLINE_FG_CONDA = "#202020"
 const COLOR_POWERLINE_FG_CONTEXT = "#000000"
 const COLOR_POWERLINE_BG_CONTEXT = "#B294BF"
 const COLOR_POWERLINE_FG_PATH_GITROOT_PRE = "#c0c0c0"
@@ -74,9 +76,12 @@ func main() {
 		fmt.Printf("PROMPT POWERLINE:\n%s\n", promptPowerline)
 
 		prompt := promptT{}
-		prompt = prompt.addSegment(" test_context ", COLOR_POWERLINE_FG_CONTEXT, COLOR_POWERLINE_BG_CONTEXT, false)
-		prompt = prompt.addSegment(" test_gitroot_dark/", COLOR_POWERLINE_FG_PATH_GITROOT_PRE, COLOR_POWERLINE_BG_PATH_GITROOT, true)
-		prompt = prompt.addSegment("test_gitroot_light ", COLOR_POWERLINE_FG_PATH_GITROOT, COLOR_POWERLINE_BG_PATH_GITROOT, false)
+		prompt = prompt.addSegment(" conda ", COLOR_POWERLINE_FG_CONDA, COLOR_POWERLINE_BG_CONDA, false)
+		prompt = prompt.addSegment(" context ", COLOR_POWERLINE_FG_CONTEXT, COLOR_POWERLINE_BG_CONTEXT, true)
+		prompt = prompt.addSegment(" gitroot_pre/", COLOR_POWERLINE_FG_PATH_GITROOT_PRE, COLOR_POWERLINE_BG_PATH_GITROOT, true)
+		prompt = prompt.addSegment("final ", COLOR_POWERLINE_FG_PATH_GITROOT, COLOR_POWERLINE_BG_PATH_GITROOT, false)
+		prompt = prompt.addSegment(" git_info ", COLOR_POWERLINE_FG_GIT_INFO, COLOR_POWERLINE_BG_GIT_INFO_DIRTY, true)
+		prompt = prompt.addSegment(" gitsub ", COLOR_POWERLINE_FG_PATH_GITSUB, COLOR_POWERLINE_BG_PATH_GITSUB, true)
 		prompt = prompt.endSegments()
 		fmt.Printf("PROMPT POWERLINE SEGMENT TEST:\n%s\n", prompt.Prompt)
 		fmt.Println("-------------------------------------------------")
