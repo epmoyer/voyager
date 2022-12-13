@@ -23,16 +23,7 @@ const SYMBOL_SEPARATOR = "\ue0b0"            // PowerLine: Triangle-Right Separa
 const ENABLE_BOLD = false
 const COLOR_FG_BOLD = "#ffffff"
 const COLOR_BG_DEFAULT = "#000000"
-
-const COLOR_TEXT_FG_PATH_CONDA = "#4040ff"
-const COLOR_TEXT_FG_PATH_CONTEXT = "#C040BE"
-const COLOR_TEXT_FG_PATH_GITROOT = "#009000"
-const COLOR_TEXT_FG_PATH_GITROOT_FINAL = "#30FF30"
-const COLOR_TEXT_FG_PATH_GITSUB = "#6D8B8F"
-
 const COLOR_TEXT_FG_SEPARATOR = "#707070"
-const COLOR_TEXT_FG_GIT_INFO_CLEAN = "#A2C3C7"
-const COLOR_TEXT_FG_GIT_INFO_DIRTY = "#E2D47D"
 
 var STYLE_POWERLINE_CONDA = promptStyleT{
 	ColorHexFGPowerline: "#202020",
@@ -172,8 +163,14 @@ func renderPrompt(promptInfo promptInfoT, isPowerline bool) string {
 	// TODO: Detect clean/dirty
 	// TODO: Do nothing if not in a git dir
 	if promptInfo.GitBranch != "" {
+		var segmentText string
+		if isPowerline {
+			segmentText = fmt.Sprintf(" %s %s ", SYMBOL_GIT_BRANCH, promptInfo.GitBranch)
+		} else {
+			segmentText = fmt.Sprintf(" %s ", promptInfo.GitBranch)
+		}
 		prompt = prompt.addSegment(
-			fmt.Sprintf(" %s %s ", SYMBOL_GIT_BRANCH, promptInfo.GitBranch),
+			segmentText,
 			STYLE_GIT_INFO_CLEAN,
 			true)
 	}
