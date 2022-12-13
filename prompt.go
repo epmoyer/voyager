@@ -2,12 +2,7 @@ package main
 
 import "github.com/gookit/color"
 
-// type powerlinePromptT struct {
-// 	Prompt            string
-// 	CurrentBGColorHex string
-// }
-
-type textPromptT struct {
+type promptT struct {
 	Prompt            string
 	CurrentBGColorHex string
 	isPowerline       bool
@@ -20,7 +15,7 @@ type promptStyleT struct {
 	Bold                bool
 }
 
-func (prompt textPromptT) addSegment(text string, style promptStyleT, withSeparator bool) textPromptT {
+func (prompt promptT) addSegment(text string, style promptStyleT, withSeparator bool) promptT {
 	if prompt.Prompt != "" && withSeparator {
 		if prompt.isPowerline {
 			separatorStyle := color.HEXStyle(prompt.CurrentBGColorHex, style.ColorHexBGPowerline)
@@ -45,7 +40,7 @@ func (prompt textPromptT) addSegment(text string, style promptStyleT, withSepara
 	return prompt
 }
 
-func (prompt textPromptT) endSegments() textPromptT {
+func (prompt promptT) endSegments() promptT {
 	if prompt.isPowerline {
 		separatorStyle := color.HEX(prompt.CurrentBGColorHex)
 		prompt.Prompt += separatorStyle.Sprintf(SYMBOL_SEPARATOR)
@@ -54,19 +49,3 @@ func (prompt textPromptT) endSegments() textPromptT {
 	}
 	return prompt
 }
-
-// func (prompt textPromptT) addSegment(text string, colorHexFG string, withSeparator bool) textPromptT {
-// 	if prompt.Prompt != "" && withSeparator {
-// 		separatorColor := color.HEX(COLOR_TEXT_FG_SEPARATOR)
-// 		prompt.Prompt += separatorColor.Sprintf("⟫")
-// 	}
-// 	prompt.CurrentBGColorHex = colorHexFG
-// 	appendColor := color.HEX(colorHexFG)
-// 	prompt.Prompt += appendColor.Sprintf("%s", text)
-// 	return prompt
-// }
-
-// func (prompt textPromptT) endSegments() textPromptT {
-// 	prompt.Prompt += "$ "
-// 	return prompt
-// }
