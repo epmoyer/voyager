@@ -30,7 +30,9 @@ const COLOR_TEXT_FG_PATH_CONTEXT = "#C040BE"
 const COLOR_TEXT_FG_PATH_GITROOT = "#009000"
 const COLOR_TEXT_FG_PATH_GITROOT_FINAL = "#30FF30"
 const COLOR_TEXT_FG_PATH_GITSUB = "#6D8B8F"
-const COLOR_TEXT_FG_SEPARATOR = "#d0d0d0"
+
+// const COLOR_TEXT_FG_SEPARATOR = "#d0d0d0"
+const COLOR_TEXT_FG_SEPARATOR = "#707070"
 const COLOR_TEXT_FG_GIT_INFO_CLEAN = "#A2C3C7"
 const COLOR_TEXT_FG_GIT_INFO_DIRTY = "#E2D47D"
 
@@ -119,6 +121,7 @@ func renderPrompt(usePowerline bool, promptInfo promptInfoT) string {
 
 	separatorColor := color.HEX(COLOR_TEXT_FG_SEPARATOR)
 	separator := separatorColor.Sprintf(" ⟫ ")
+	// separator := separatorColor.Sprintf(" > ")
 
 	prompt := context + separator + basePathBeginning + basePathFinal + separator + gitInfo + separator + subPath + " $"
 	return prompt
@@ -151,7 +154,6 @@ func renderPromptPowerline(promptInfo promptInfoT) string {
 	prompt = prompt.addSegment(
 		fmt.Sprintf(" %s", promptInfo.PathGitRootBeginning),
 		STYLE_GITROOT_PRE, true)
-	// TODO: Really extract this last bit of the path
 	prompt = prompt.addSegment(
 		fmt.Sprintf("%s ", promptInfo.PathGitRootFinal),
 		STYLE_GITROOT, false)
