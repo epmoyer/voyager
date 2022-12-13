@@ -7,6 +7,11 @@ type powerlinePromptT struct {
 	CurrentBGColorHex string
 }
 
+type textPromptT struct {
+	Prompt            string
+	CurrentBGColorHex string
+}
+
 type promptStyleT struct {
 	ColorHexFG string
 	ColorHexBG string
@@ -32,5 +37,21 @@ func (prompt powerlinePromptT) endSegments() powerlinePromptT {
 		separatorStyle := color.HEX(prompt.CurrentBGColorHex)
 		prompt.Prompt += separatorStyle.Sprintf(SYMBOL_SEPARATOR)
 	}
+	return prompt
+}
+
+func (prompt textPromptT) addSegment(text string, colorHexFG string, withSeparator bool) textPromptT {
+	if prompt.Prompt != "" && withSeparator {
+		separatorColor := color.HEX(COLOR_TEXT_FG_SEPARATOR)
+		prompt.Prompt += separatorColor.Sprintf("⟫")
+	}
+	prompt.CurrentBGColorHex = colorHexFG
+	appendColor := color.HEX(colorHexFG)
+	prompt.Prompt += appendColor.Sprintf("%s", text)
+	return prompt
+}
+
+func (prompt textPromptT) endSegments() textPromptT {
+	prompt.Prompt += "$ "
 	return prompt
 }

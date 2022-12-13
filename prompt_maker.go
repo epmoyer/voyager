@@ -8,8 +8,6 @@ import (
 	"os/exec"
 	"os/user"
 	"strings"
-
-	"github.com/gookit/color"
 )
 
 // const SYMBOL_GIT_BRANCH = "\ue0a0"           // PowerLine: VCS Branch
@@ -26,6 +24,7 @@ const ENABLE_BOLD = false
 const COLOR_FG_BOLD = "#ffffff"
 const COLOR_BG_DEFAULT = "#000000"
 
+const COLOR_TEXT_FG_PATH_CONDA = "#4040ff"
 const COLOR_TEXT_FG_PATH_CONTEXT = "#C040BE"
 const COLOR_TEXT_FG_PATH_GITROOT = "#009000"
 const COLOR_TEXT_FG_PATH_GITROOT_FINAL = "#30FF30"
@@ -103,27 +102,83 @@ func main() {
 }
 
 func renderPrompt(usePowerline bool, promptInfo promptInfoT) string {
-	contextColor := color.HEX(COLOR_TEXT_FG_PATH_CONTEXT)
-	context := contextColor.Sprintf("%s", promptInfo.Username+"@"+promptInfo.Hostname)
+	prompt := textPromptT{}
+	// -----------------------
+	// Conda Environment
+	// -----------------------
+	if promptInfo.CondaEnvironment != "" {
+		prompt = prompt.addSegment(
+			fmt.Sprintf(" %s ", promptInfo.CondaEnvironment),
+			COLOR_TEXT_FG_PATH_CONDA,
+			true)
+	}
 
-	basePathColor := color.HEX(COLOR_TEXT_FG_PATH_GITROOT)
-	basePathBeginning := basePathColor.Sprintf("%s", promptInfo.PathGitRootBeginning)
+	// -----------------------
+	// Context
+	// -----------------------
+	if promptInfo.ShowContext {
+		prompt = prompt.addSegment(
+			fmt.Sprintf(" %s@%s ", promptInfo.Username, promptInfo.Hostname),
+			COLOR_TEXT_FG_PATH_CONTEXT, true)
+	}
 
-	basePathFinalColor := color.HEX(COLOR_TEXT_FG_PATH_GITROOT_FINAL)
-	basePathFinal := basePathFinalColor.Sprintf("%s", promptInfo.PathGitRootFinal)
+	// -----------------------
+	// Git root directory
+	// -----------------------
+	prompt = prompt.addSegment(
+		fmt.Sprintf(" %s", promptInfo.PathGitRootBeginning),
+		COLOR_TEXT_FG_PATH_GITROOT, true)
+	prompt = prompt.addSegment(
+		fmt.Sprintf("%s ", promptInfo.PathGitRootFinal),
+		COLOR_TEXT_FG_PATH_GITROOT_FINAL, false)
 
-	gitColor := color.HEX(COLOR_TEXT_FG_GIT_INFO_CLEAN)
-	gitInfo := gitColor.Sprintf("%s", promptInfo.GitBranch)
+	// -----------------------
+	// Git Status
+	// -----------------------
+	// TODO: Detect clean/dirty
+	// TODO: Do nothing if not in a git dir
+	if promptInfo.GitBranch != "" {
+		prompt = prompt.addSegment(
+			fmt.Sprintf(" %s ", promptInfo.GitBranch),
+			COLOR_TEXT_FG_GIT_INFO_CLEAN,
+			true)
+	}
 
-	subPathColor := color.HEX(COLOR_TEXT_FG_PATH_GITSUB)
-	subPath := subPathColor.Sprintf("%s", promptInfo.PathGitSub)
+	// -----------------------
+	// Sub-directory within Git Repo
+	// -----------------------
+	if promptInfo.PathGitSub != "" {
+		prompt = prompt.addSegment(
+			fmt.Sprintf(" %s ", promptInfo.PathGitSub),
+			COLOR_TEXT_FG_PATH_GITSUB,
+			true)
+	}
 
-	separatorColor := color.HEX(COLOR_TEXT_FG_SEPARATOR)
-	separator := separatorColor.Sprintf(" ⟫ ")
+	// contextColor := color.HEX(COLOR_TEXT_FG_PATH_CONTEXT)
+	// context := contextColor.Sprintf("%s", promptInfo.Username+"@"+promptInfo.Hostname)
+
+	// basePathColor := color.HEX(COLOR_TEXT_FG_PATH_GITROOT)
+	// basePathBeginning := basePathColor.Sprintf("%s", promptInfo.PathGitRootBeginning)
+
+	// basePathFinalColor := color.HEX(COLOR_TEXT_FG_PATH_GITROOT_FINAL)
+	// basePathFinal := basePathFinalColor.Sprintf("%s", promptInfo.PathGitRootFinal)
+
+	// gitColor := color.HEX(COLOR_TEXT_FG_GIT_INFO_CLEAN)
+	// gitInfo := gitColor.Sprintf("%s", promptInfo.GitBranch)
+
+	// subPathColor := color.HEX(COLOR_TEXT_FG_PATH_GITSUB)
+	// subPath := subPathColor.Sprintf("%s", promptInfo.PathGitSub)
+
+	// separatorColor := color.HEX(COLOR_TEXT_FG_SEPARATOR)
+	// separator := separatorColor.Sprintf(" ⟫ ")
+
 	// separator := separatorColor.Sprintf(" > ")
 
-	prompt := context + separator + basePathBeginning + basePathFinal + separator + gitInfo + separator + subPath + " $"
-	return prompt
+	// prompt := context + separator + basePathBeginning + basePathFinal + separator + gitInfo + separator + subPath + " $"
+
+	prompt = prompt.endSegments()
+
+	return prompt.Prompt
 }
 
 func renderPromptPowerline(promptInfo promptInfoT) string {
