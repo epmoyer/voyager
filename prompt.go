@@ -6,6 +6,7 @@ type promptT struct {
 	Prompt            string
 	CurrentBGColorHex string
 	isPowerline       bool
+	// segmentInProgress bool
 }
 
 type promptStyleT struct {
@@ -15,8 +16,11 @@ type promptStyleT struct {
 	Bold                bool
 }
 
-func (prompt promptT) addSegment(text string, style promptStyleT, withSeparator bool) promptT {
-	if prompt.Prompt != "" && withSeparator {
+func (prompt promptT) addSegment(text string, style promptStyleT) promptT {
+	if prompt.Prompt != "" {
+		// -------------------
+		//  Add Separator
+		// -------------------
 		if prompt.isPowerline {
 			separatorStyle := color.HEXStyle(prompt.CurrentBGColorHex, style.ColorHexBGPowerline)
 			prompt.Prompt += separatorStyle.Sprintf("\ue0b0")
@@ -26,6 +30,26 @@ func (prompt promptT) addSegment(text string, style promptStyleT, withSeparator 
 		}
 	}
 
+	prompt = prompt.appendToSegment(text, style)
+	// -------------------
+	//  Add Text
+	// -------------------
+	// if prompt.isPowerline {
+	// 	prompt.CurrentBGColorHex = style.ColorHexBGPowerline
+	// 	appendStyle := color.HEXStyle(style.ColorHexFGPowerline, style.ColorHexBGPowerline)
+	// 	if style.Bold {
+	// 		appendStyle.SetOpts(color.Opts{color.OpBold})
+	// 	}
+	// 	prompt.Prompt += appendStyle.Sprintf("%s", text)
+	// } else {
+	// 	appendColor := color.HEX(style.ColorHexFGText)
+	// 	prompt.Prompt += appendColor.Sprintf("%s", text)
+	// }
+	// prompt.segmentInProgress = true
+	return prompt
+}
+
+func (prompt promptT) appendToSegment(text string, style promptStyleT) promptT {
 	if prompt.isPowerline {
 		prompt.CurrentBGColorHex = style.ColorHexBGPowerline
 		appendStyle := color.HEXStyle(style.ColorHexFGPowerline, style.ColorHexBGPowerline)
@@ -47,5 +71,6 @@ func (prompt promptT) endSegments() promptT {
 	} else {
 		prompt.Prompt += "$ "
 	}
+	// prompt.segmentInProgress = false
 	return prompt
 }

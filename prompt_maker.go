@@ -134,8 +134,7 @@ func renderPrompt(promptInfo promptInfoT, isPowerline bool) string {
 	if promptInfo.CondaEnvironment != "" {
 		prompt = prompt.addSegment(
 			fmt.Sprintf(" %s ", promptInfo.CondaEnvironment),
-			STYLE_POWERLINE_CONDA,
-			true)
+			STYLE_POWERLINE_CONDA)
 	}
 
 	// -----------------------
@@ -144,7 +143,7 @@ func renderPrompt(promptInfo promptInfoT, isPowerline bool) string {
 	if promptInfo.ShowContext {
 		prompt = prompt.addSegment(
 			fmt.Sprintf(" %s@%s ", promptInfo.Username, promptInfo.Hostname),
-			STYLE_POWERLINE_CONTEXT, true)
+			STYLE_POWERLINE_CONTEXT)
 	}
 
 	// -----------------------
@@ -152,10 +151,10 @@ func renderPrompt(promptInfo promptInfoT, isPowerline bool) string {
 	// -----------------------
 	prompt = prompt.addSegment(
 		fmt.Sprintf(" %s", promptInfo.PathGitRootBeginning),
-		STYLE_GITROOT_PRE, true)
-	prompt = prompt.addSegment(
+		STYLE_GITROOT_PRE)
+	prompt = prompt.appendToSegment(
 		fmt.Sprintf("%s ", promptInfo.PathGitRootFinal),
-		STYLE_GITROOT, false)
+		STYLE_GITROOT)
 
 	// -----------------------
 	// Git Status
@@ -171,8 +170,7 @@ func renderPrompt(promptInfo promptInfoT, isPowerline bool) string {
 		}
 		prompt = prompt.addSegment(
 			segmentText,
-			STYLE_GIT_INFO_CLEAN,
-			true)
+			STYLE_GIT_INFO_CLEAN)
 	}
 
 	// -----------------------
@@ -181,8 +179,7 @@ func renderPrompt(promptInfo promptInfoT, isPowerline bool) string {
 	if promptInfo.PathGitSub != "" {
 		prompt = prompt.addSegment(
 			fmt.Sprintf(" %s ", promptInfo.PathGitSub),
-			STYLE_GITSUB,
-			true)
+			STYLE_GITSUB)
 	}
 
 	prompt = prompt.endSegments()
