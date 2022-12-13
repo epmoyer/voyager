@@ -41,20 +41,6 @@ var STYLE_GIT_INFO_CLEAN = promptStyleT{ColorHexFG: "#000000", ColorHexBG: "#A2C
 var STYLE_GIT_INFO_DIRTY = promptStyleT{ColorHexFG: "#000000", ColorHexBG: "#E2D47D"}
 var STYLE_GITSUB = promptStyleT{ColorHexFG: "#c0c0c0", ColorHexBG: "#515151"}
 
-// const COLOR_POWERLINE_BG_CONDA = "#5EABF7"
-// const COLOR_POWERLINE_FG_CONDA = "#202020"
-// const COLOR_POWERLINE_FG_CONTEXT = "#000000"
-// const COLOR_POWERLINE_BG_CONTEXT = "#B294BF"
-
-// const COLOR_POWERLINE_FG_PATH_GITROOT_PRE = "#c0c0c0"
-// const COLOR_POWERLINE_FG_PATH_GITROOT = "#ffffff"
-// const COLOR_POWERLINE_BG_PATH_GITROOT = "#4F6D6F"
-// const COLOR_POWERLINE_FG_PATH_GITSUB = "#c0c0c0"
-// const COLOR_POWERLINE_BG_PATH_GITSUB = "#515151"
-// const COLOR_POWERLINE_FG_GIT_INFO = "#000000"
-// const COLOR_POWERLINE_BG_GIT_INFO_CLEAN = "#A2C3C7"
-// const COLOR_POWERLINE_BG_GIT_INFO_DIRTY = "#E2D47D"
-
 type promptInfoT struct {
 	CondaEnvironment string
 	Username         string
@@ -167,35 +153,10 @@ func renderPromptPowerline(promptInfo promptInfoT) string {
 		STYLE_GITSUB,
 		true)
 
-	// basePathColor := color.HEXStyle(COLOR_POWERLINE_FG_PATH_GITROOT, COLOR_POWERLINE_BG_PATH_GITROOT)
-	// basePath := basePathColor.Sprintf(" %s ", promptInfo.PathGitRoot)
-
-	// subPathColor := color.HEXStyle(COLOR_POWERLINE_FG_PATH_GITSUB, COLOR_POWERLINE_BG_PATH_GITSUB)
-	// subPath := subPathColor.Sprintf(" %s ", promptInfo.PathGitSub)
-
-	// gitBackgroundColor := COLOR_POWERLINE_BG_GIT_INFO_CLEAN
-	// gitColor := color.HEXStyle(COLOR_POWERLINE_FG_GIT_INFO, gitBackgroundColor)
-	// gitInfo := gitColor.Sprintf(" %s ", promptInfo.GitBranch)
-
-	// prompt := (context +
-	// 	makeSeparator(COLOR_POWERLINE_BG_CONTEXT, COLOR_POWERLINE_BG_PATH_GITROOT) +
-	// 	basePath +
-	// 	makeSeparator(COLOR_POWERLINE_BG_PATH_GITROOT, gitBackgroundColor) +
-	// 	gitInfo +
-	// 	makeSeparator(gitBackgroundColor, COLOR_POWERLINE_BG_PATH_GITSUB) +
-	// 	subPath +
-	// 	makeSeparator(COLOR_POWERLINE_BG_PATH_GITSUB, COLOR_BG_DEFAULT) +
-	// 	" ")
-
 	prompt = prompt.endSegments()
 
 	return prompt.Prompt
 }
-
-// func makeSeparator(oldColor string, newColor string) string {
-// 	separatorStyle := color.HEXStyle(oldColor, newColor)
-// 	return separatorStyle.Sprintf("\ue0b0")
-// }
 
 func buildPromptInfo(path string) (promptInfoT, error) {
 
