@@ -34,13 +34,42 @@ const COLOR_TEXT_FG_SEPARATOR = "#707070"
 const COLOR_TEXT_FG_GIT_INFO_CLEAN = "#A2C3C7"
 const COLOR_TEXT_FG_GIT_INFO_DIRTY = "#E2D47D"
 
-var STYLE_POWERLINE_CONDA = promptStyleT{ColorHexFG: "#202020", ColorHexBG: "#5EABF7"}
-var STYLE_POWERLINE_CONTEXT = promptStyleT{ColorHexFG: "#000000", ColorHexBG: "#B294BF"}
-var STYLE_GITROOT_PRE = promptStyleT{ColorHexFG: "#c0c0c0", ColorHexBG: "#4F6D6F"}
-var STYLE_GITROOT = promptStyleT{ColorHexFG: "#ffffff", ColorHexBG: "#4F6D6F", Bold: true}
-var STYLE_GIT_INFO_CLEAN = promptStyleT{ColorHexFG: "#000000", ColorHexBG: "#A2C3C7"}
-var STYLE_GIT_INFO_DIRTY = promptStyleT{ColorHexFG: "#000000", ColorHexBG: "#E2D47D"}
-var STYLE_GITSUB = promptStyleT{ColorHexFG: "#c0c0c0", ColorHexBG: "#515151"}
+var STYLE_POWERLINE_CONDA = promptStyleT{
+	ColorHexFGPowerline: "#202020",
+	ColorHexBGPowerline: "#5EABF7",
+	ColorHexFGText:      "#4040ff",
+}
+var STYLE_POWERLINE_CONTEXT = promptStyleT{
+	ColorHexFGPowerline: "#000000",
+	ColorHexBGPowerline: "#B294BF",
+	ColorHexFGText:      "#C040BE",
+}
+var STYLE_GITROOT_PRE = promptStyleT{
+	ColorHexFGPowerline: "#c0c0c0",
+	ColorHexBGPowerline: "#4F6D6F",
+	ColorHexFGText:      "#009000",
+}
+var STYLE_GITROOT = promptStyleT{
+	ColorHexFGPowerline: "#ffffff",
+	ColorHexBGPowerline: "#4F6D6F",
+	ColorHexFGText:      "#30FF30",
+	Bold:                true,
+}
+var STYLE_GIT_INFO_CLEAN = promptStyleT{
+	ColorHexFGPowerline: "#000000",
+	ColorHexBGPowerline: "#A2C3C7",
+	ColorHexFGText:      "#A2C3C7",
+}
+var STYLE_GIT_INFO_DIRTY = promptStyleT{
+	ColorHexFGPowerline: "#000000",
+	ColorHexBGPowerline: "#E2D47D",
+	ColorHexFGText:      "#E2D47D",
+}
+var STYLE_GITSUB = promptStyleT{
+	ColorHexFGPowerline: "#c0c0c0",
+	ColorHexBGPowerline: "#515151",
+	ColorHexFGText:      "#6D8B8F",
+}
 
 type promptInfoT struct {
 	CondaEnvironment     string
@@ -77,93 +106,40 @@ func main() {
 		fmt.Println("Dump:")
 		fmt.Println(path)
 		fmt.Printf("%#v\n", promptInfo)
-		promptText := renderPrompt(false, promptInfo)
 		fmt.Println("-------------------------------------------------")
-		fmt.Printf("PROMPT TEXT:\n%s\n", promptText)
-		// promptPowerline = renderPrompt(true)
-		promptPowerline := renderPromptPowerline(promptInfo)
-		fmt.Printf("PROMPT POWERLINE:\n%s\n", promptPowerline)
+
+		isPowerline := false
+		prompt := renderPrompt(promptInfo, isPowerline)
+		fmt.Printf("TEXT PROMPT:\n%s\n", prompt)
+
+		isPowerline = true
+		prompt = renderPrompt(promptInfo, isPowerline)
+		fmt.Printf("POWERLINE PROMPT:\n%s\n", prompt)
 
 		// prompt := promptT{}
-
 		// prompt = prompt.addSegment(" conda ", STYLE_POWERLINE_CONDA, false)
 		// prompt = prompt.addSegment(" context ", STYLE_POWERLINE_CONTEXT, true)
 		// prompt = prompt.addSegment(" gitroot_pre/", STYLE_GITROOT_PRE, true)
 		// prompt = prompt.addSegment("final ", STYLE_GITROOT, false)
 		// prompt = prompt.addSegment(" "+SYMBOL_GIT_BRANCH+" git_info "+SYMBOL_GIT_UNSTAGED+" ", STYLE_GIT_INFO_DIRTY, true)
 		// prompt = prompt.addSegment(" gitsub ", STYLE_GITSUB, true)
-
 		// prompt = prompt.endSegments()
 		// fmt.Printf("PROMPT POWERLINE SEGMENT TEST:\n%s\n", prompt.Prompt)
+
 		fmt.Println("-------------------------------------------------")
 	}
 
 	os.Exit(0)
 }
 
-func renderPrompt(usePowerline bool, promptInfo promptInfoT) string {
-	prompt := textPromptT{}
+func renderPrompt(promptInfo promptInfoT, isPowerline bool) string {
+	prompt := textPromptT{
+		isPowerline: isPowerline,
+	}
+
 	// -----------------------
 	// Conda Environment
 	// -----------------------
-	if promptInfo.CondaEnvironment != "" {
-		prompt = prompt.addSegment(
-			fmt.Sprintf(" %s ", promptInfo.CondaEnvironment),
-			COLOR_TEXT_FG_PATH_CONDA,
-			true)
-	}
-
-	// -----------------------
-	// Context
-	// -----------------------
-	if promptInfo.ShowContext {
-		prompt = prompt.addSegment(
-			fmt.Sprintf(" %s@%s ", promptInfo.Username, promptInfo.Hostname),
-			COLOR_TEXT_FG_PATH_CONTEXT, true)
-	}
-
-	// -----------------------
-	// Git root directory
-	// -----------------------
-	prompt = prompt.addSegment(
-		fmt.Sprintf(" %s", promptInfo.PathGitRootBeginning),
-		COLOR_TEXT_FG_PATH_GITROOT, true)
-	prompt = prompt.addSegment(
-		fmt.Sprintf("%s ", promptInfo.PathGitRootFinal),
-		COLOR_TEXT_FG_PATH_GITROOT_FINAL, false)
-
-	// -----------------------
-	// Git Status
-	// -----------------------
-	// TODO: Detect clean/dirty
-	// TODO: Do nothing if not in a git dir
-	if promptInfo.GitBranch != "" {
-		prompt = prompt.addSegment(
-			fmt.Sprintf(" %s ", promptInfo.GitBranch),
-			COLOR_TEXT_FG_GIT_INFO_CLEAN,
-			true)
-	}
-
-	// -----------------------
-	// Sub-directory within Git Repo
-	// -----------------------
-	if promptInfo.PathGitSub != "" {
-		prompt = prompt.addSegment(
-			fmt.Sprintf(" %s ", promptInfo.PathGitSub),
-			COLOR_TEXT_FG_PATH_GITSUB,
-			true)
-	}
-
-	prompt = prompt.endSegments()
-
-	return prompt.Prompt
-}
-
-func renderPromptPowerline(promptInfo promptInfoT) string {
-	// -----------------------
-	// Conda Environment
-	// -----------------------
-	prompt := powerlinePromptT{}
 	if promptInfo.CondaEnvironment != "" {
 		prompt = prompt.addSegment(
 			fmt.Sprintf(" %s ", promptInfo.CondaEnvironment),
@@ -215,7 +191,123 @@ func renderPromptPowerline(promptInfo promptInfoT) string {
 	prompt = prompt.endSegments()
 
 	return prompt.Prompt
+
+	// prompt := textPromptT{
+	// 	isPowerline: isPowerline,
+	// }
+	// // -----------------------
+	// // Conda Environment
+	// // -----------------------
+	// if promptInfo.CondaEnvironment != "" {
+	// 	prompt = prompt.addSegment(
+	// 		fmt.Sprintf(" %s ", promptInfo.CondaEnvironment),
+	// 		COLOR_TEXT_FG_PATH_CONDA,
+	// 		true)
+	// }
+
+	// // -----------------------
+	// // Context
+	// // -----------------------
+	// if promptInfo.ShowContext {
+	// 	prompt = prompt.addSegment(
+	// 		fmt.Sprintf(" %s@%s ", promptInfo.Username, promptInfo.Hostname),
+	// 		COLOR_TEXT_FG_PATH_CONTEXT, true)
+	// }
+
+	// // -----------------------
+	// // Git root directory
+	// // -----------------------
+	// prompt = prompt.addSegment(
+	// 	fmt.Sprintf(" %s", promptInfo.PathGitRootBeginning),
+	// 	COLOR_TEXT_FG_PATH_GITROOT, true)
+	// prompt = prompt.addSegment(
+	// 	fmt.Sprintf("%s ", promptInfo.PathGitRootFinal),
+	// 	COLOR_TEXT_FG_PATH_GITROOT_FINAL, false)
+
+	// // -----------------------
+	// // Git Status
+	// // -----------------------
+	// // TODO: Detect clean/dirty
+	// // TODO: Do nothing if not in a git dir
+	// if promptInfo.GitBranch != "" {
+	// 	prompt = prompt.addSegment(
+	// 		fmt.Sprintf(" %s ", promptInfo.GitBranch),
+	// 		COLOR_TEXT_FG_GIT_INFO_CLEAN,
+	// 		true)
+	// }
+
+	// // -----------------------
+	// // Sub-directory within Git Repo
+	// // -----------------------
+	// if promptInfo.PathGitSub != "" {
+	// 	prompt = prompt.addSegment(
+	// 		fmt.Sprintf(" %s ", promptInfo.PathGitSub),
+	// 		COLOR_TEXT_FG_PATH_GITSUB,
+	// 		true)
+	// }
+
+	// prompt = prompt.endSegments()
+
+	// return prompt.Prompt
 }
+
+// func renderPromptPowerline(promptInfo promptInfoT) string {
+// 	// -----------------------
+// 	// Conda Environment
+// 	// -----------------------
+// 	prompt := powerlinePromptT{}
+// 	if promptInfo.CondaEnvironment != "" {
+// 		prompt = prompt.addSegment(
+// 			fmt.Sprintf(" %s ", promptInfo.CondaEnvironment),
+// 			STYLE_POWERLINE_CONDA,
+// 			true)
+// 	}
+
+// 	// -----------------------
+// 	// Context
+// 	// -----------------------
+// 	if promptInfo.ShowContext {
+// 		prompt = prompt.addSegment(
+// 			fmt.Sprintf(" %s@%s ", promptInfo.Username, promptInfo.Hostname),
+// 			STYLE_POWERLINE_CONTEXT, true)
+// 	}
+
+// 	// -----------------------
+// 	// Git root directory
+// 	// -----------------------
+// 	prompt = prompt.addSegment(
+// 		fmt.Sprintf(" %s", promptInfo.PathGitRootBeginning),
+// 		STYLE_GITROOT_PRE, true)
+// 	prompt = prompt.addSegment(
+// 		fmt.Sprintf("%s ", promptInfo.PathGitRootFinal),
+// 		STYLE_GITROOT, false)
+
+// 	// -----------------------
+// 	// Git Status
+// 	// -----------------------
+// 	// TODO: Detect clean/dirty
+// 	// TODO: Do nothing if not in a git dir
+// 	if promptInfo.GitBranch != "" {
+// 		prompt = prompt.addSegment(
+// 			fmt.Sprintf(" %s %s ", SYMBOL_GIT_BRANCH, promptInfo.GitBranch),
+// 			STYLE_GIT_INFO_CLEAN,
+// 			true)
+// 	}
+
+// 	// -----------------------
+// 	// Sub-directory within Git Repo
+// 	// -----------------------
+// 	if promptInfo.PathGitSub != "" {
+// 		prompt = prompt.addSegment(
+// 			fmt.Sprintf(" %s ", promptInfo.PathGitSub),
+// 			STYLE_GITSUB,
+// 			true)
+// 	}
+
+// 	prompt = prompt.endSegments()
+
+// 	return prompt.Prompt
+// }
 
 func buildPromptInfo(path string) (promptInfoT, error) {
 
