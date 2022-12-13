@@ -56,12 +56,14 @@ const COLOR_POWERLINE_BG_GIT_INFO_CLEAN = "#A2C3C7"
 const COLOR_POWERLINE_BG_GIT_INFO_DIRTY = "#E2D47D"
 
 type promptInfoT struct {
-	Username    string
-	UserHomeDir string
-	Hostname    string
-	PathGitRoot string
-	PathGitSub  string
-	GitBranch   string
+	CondaEnvironment string
+	Username         string
+	UserHomeDir      string
+	ShowContext      bool
+	Hostname         string
+	PathGitRoot      string
+	PathGitSub       string
+	GitBranch        string
 }
 
 func main() {
@@ -132,31 +134,62 @@ func renderPrompt(usePowerline bool, promptInfo promptInfoT) string {
 }
 
 func renderPromptPowerline(promptInfo promptInfoT) string {
-	// separator := "\ue0b0"
+	prompt := promptT{}
+	if promptInfo.CondaEnvironment != "" {
+		prompt = prompt.addSegment(
+			fmt.Sprintf(" %s ", promptInfo.CondaEnvironment),
+			STYLE_POWERLINE_CONDA,
+			true)
+	}
 
-	contextColor := color.HEXStyle("#000000", COLOR_POWERLINE_BG_CONTEXT)
-	context := contextColor.Sprintf(" %s ", promptInfo.Username+"@"+promptInfo.Hostname)
+	if promptInfo.ShowContext {
+		prompt = prompt.addSegment(
+			fmt.Sprintf(" %s@%s ", promptInfo.Username, promptInfo.Hostname),
+			STYLE_POWERLINE_CONTEXT, true)
+	}
 
-	basePathColor := color.HEXStyle(COLOR_POWERLINE_FG_PATH_GITROOT, COLOR_POWERLINE_BG_PATH_GITROOT)
-	basePath := basePathColor.Sprintf(" %s ", promptInfo.PathGitRoot)
+	prompt = prompt.addSegment(
+		fmt.Sprintf(" %s", promptInfo.PathGitRoot),
+		STYLE_GITROOT_PRE, true)
+	// TODO: Really extract this last bit of the path
+	prompt = prompt.addSegment(
+		fmt.Sprintf("/%s ", "BOLD_BIT"),
+		STYLE_GITROOT, false)
 
-	subPathColor := color.HEXStyle(COLOR_POWERLINE_FG_PATH_GITSUB, COLOR_POWERLINE_BG_PATH_GITSUB)
-	subPath := subPathColor.Sprintf(" %s ", promptInfo.PathGitSub)
+	// TODO: Detect clean/dirty
+	prompt = prompt.addSegment(
+		fmt.Sprintf(" %s %s ", SYMBOL_GIT_BRANCH, promptInfo.GitBranch),
+		STYLE_GIT_INFO_CLEAN,
+		true)
 
-	gitBackgroundColor := COLOR_POWERLINE_BG_GIT_INFO_CLEAN
-	gitColor := color.HEXStyle(COLOR_POWERLINE_FG_GIT_INFO, gitBackgroundColor)
-	gitInfo := gitColor.Sprintf(" %s ", promptInfo.GitBranch)
+	prompt = prompt.addSegment(
+		fmt.Sprintf(" %s ", promptInfo.PathGitSub),
+		STYLE_GITSUB,
+		true)
 
-	prompt := (context +
-		makeSeparator(COLOR_POWERLINE_BG_CONTEXT, COLOR_POWERLINE_BG_PATH_GITROOT) +
-		basePath +
-		makeSeparator(COLOR_POWERLINE_BG_PATH_GITROOT, gitBackgroundColor) +
-		gitInfo +
-		makeSeparator(gitBackgroundColor, COLOR_POWERLINE_BG_PATH_GITSUB) +
-		subPath +
-		makeSeparator(COLOR_POWERLINE_BG_PATH_GITSUB, COLOR_BG_DEFAULT) +
-		" ")
-	return prompt
+	// basePathColor := color.HEXStyle(COLOR_POWERLINE_FG_PATH_GITROOT, COLOR_POWERLINE_BG_PATH_GITROOT)
+	// basePath := basePathColor.Sprintf(" %s ", promptInfo.PathGitRoot)
+
+	// subPathColor := color.HEXStyle(COLOR_POWERLINE_FG_PATH_GITSUB, COLOR_POWERLINE_BG_PATH_GITSUB)
+	// subPath := subPathColor.Sprintf(" %s ", promptInfo.PathGitSub)
+
+	// gitBackgroundColor := COLOR_POWERLINE_BG_GIT_INFO_CLEAN
+	// gitColor := color.HEXStyle(COLOR_POWERLINE_FG_GIT_INFO, gitBackgroundColor)
+	// gitInfo := gitColor.Sprintf(" %s ", promptInfo.GitBranch)
+
+	// prompt := (context +
+	// 	makeSeparator(COLOR_POWERLINE_BG_CONTEXT, COLOR_POWERLINE_BG_PATH_GITROOT) +
+	// 	basePath +
+	// 	makeSeparator(COLOR_POWERLINE_BG_PATH_GITROOT, gitBackgroundColor) +
+	// 	gitInfo +
+	// 	makeSeparator(gitBackgroundColor, COLOR_POWERLINE_BG_PATH_GITSUB) +
+	// 	subPath +
+	// 	makeSeparator(COLOR_POWERLINE_BG_PATH_GITSUB, COLOR_BG_DEFAULT) +
+	// 	" ")
+
+	prompt = prompt.endSegments()
+
+	return prompt.Prompt
 }
 
 func makeSeparator(oldColor string, newColor string) string {
@@ -167,6 +200,9 @@ func makeSeparator(oldColor string, newColor string) string {
 func buildPromptInfo(path string) (promptInfoT, error) {
 
 	promptInfo := promptInfoT{}
+
+	// TODO: Show conditionally
+	promptInfo.ShowContext = true
 
 	pathGitRoot, pathGitSub := getPath(path)
 	promptInfo.PathGitRoot = pathGitRoot
