@@ -12,7 +12,9 @@ import (
 	"github.com/gookit/color"
 )
 
-const SYMBOL_GIT_REPO = ""
+// const SYMBOL_GIT_BRANCH = "\ue0a0"           // PowerLine: VCS Branch
+// const SYMBOL_GIT_BRANCH = "\ue725"           // PowerLine: VCS Branch
+const SYMBOL_GIT_BRANCH = "\uf418"           // PowerLine: VCS Branch
 const SYMBOL_GIT_STAGED = "\uF0C7"           // PowerLine: Floppy Disk
 const SYMBOL_GIT_UNSTAGED = "\uF448"         // PowerLine: Pencil
 const SYMBOL_GIT_BRANCH_AHEAD = "\uF0DE"     // PowerLine: Up-arrow
@@ -88,7 +90,7 @@ func main() {
 		prompt = prompt.addSegment(" context ", COLOR_POWERLINE_FG_CONTEXT, COLOR_POWERLINE_BG_CONTEXT, true)
 		prompt = prompt.addSegment(" gitroot_pre/", COLOR_POWERLINE_FG_PATH_GITROOT_PRE, COLOR_POWERLINE_BG_PATH_GITROOT, true)
 		prompt = prompt.addSegment("final ", COLOR_POWERLINE_FG_PATH_GITROOT, COLOR_POWERLINE_BG_PATH_GITROOT, false)
-		prompt = prompt.addSegment(" git_info ", COLOR_POWERLINE_FG_GIT_INFO, COLOR_POWERLINE_BG_GIT_INFO_DIRTY, true)
+		prompt = prompt.addSegment(" "+SYMBOL_GIT_BRANCH+" git_info "+SYMBOL_GIT_UNSTAGED+" ", COLOR_POWERLINE_FG_GIT_INFO, COLOR_POWERLINE_BG_GIT_INFO_DIRTY, true)
 		prompt = prompt.addSegment(" gitsub ", COLOR_POWERLINE_FG_PATH_GITSUB, COLOR_POWERLINE_BG_PATH_GITSUB, true)
 		prompt = prompt.endSegments()
 		fmt.Printf("PROMPT POWERLINE SEGMENT TEST:\n%s\n", prompt.Prompt)
