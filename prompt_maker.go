@@ -154,28 +154,6 @@ func renderPrompt(usePowerline bool, promptInfo promptInfoT) string {
 			true)
 	}
 
-	// contextColor := color.HEX(COLOR_TEXT_FG_PATH_CONTEXT)
-	// context := contextColor.Sprintf("%s", promptInfo.Username+"@"+promptInfo.Hostname)
-
-	// basePathColor := color.HEX(COLOR_TEXT_FG_PATH_GITROOT)
-	// basePathBeginning := basePathColor.Sprintf("%s", promptInfo.PathGitRootBeginning)
-
-	// basePathFinalColor := color.HEX(COLOR_TEXT_FG_PATH_GITROOT_FINAL)
-	// basePathFinal := basePathFinalColor.Sprintf("%s", promptInfo.PathGitRootFinal)
-
-	// gitColor := color.HEX(COLOR_TEXT_FG_GIT_INFO_CLEAN)
-	// gitInfo := gitColor.Sprintf("%s", promptInfo.GitBranch)
-
-	// subPathColor := color.HEX(COLOR_TEXT_FG_PATH_GITSUB)
-	// subPath := subPathColor.Sprintf("%s", promptInfo.PathGitSub)
-
-	// separatorColor := color.HEX(COLOR_TEXT_FG_SEPARATOR)
-	// separator := separatorColor.Sprintf(" ⟫ ")
-
-	// separator := separatorColor.Sprintf(" > ")
-
-	// prompt := context + separator + basePathBeginning + basePathFinal + separator + gitInfo + separator + subPath + " $"
-
 	prompt = prompt.endSegments()
 
 	return prompt.Prompt
