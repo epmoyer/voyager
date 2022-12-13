@@ -120,6 +120,9 @@ func renderPrompt(usePowerline bool, promptInfo promptInfoT) string {
 }
 
 func renderPromptPowerline(promptInfo promptInfoT) string {
+	// -----------------------
+	// Conda Environment
+	// -----------------------
 	prompt := promptT{}
 	if promptInfo.CondaEnvironment != "" {
 		prompt = prompt.addSegment(
@@ -128,12 +131,18 @@ func renderPromptPowerline(promptInfo promptInfoT) string {
 			true)
 	}
 
+	// -----------------------
+	// Context
+	// -----------------------
 	if promptInfo.ShowContext {
 		prompt = prompt.addSegment(
 			fmt.Sprintf(" %s@%s ", promptInfo.Username, promptInfo.Hostname),
 			STYLE_POWERLINE_CONTEXT, true)
 	}
 
+	// -----------------------
+	// Git root directory
+	// -----------------------
 	prompt = prompt.addSegment(
 		fmt.Sprintf(" %s", promptInfo.PathGitRoot),
 		STYLE_GITROOT_PRE, true)
@@ -142,12 +151,19 @@ func renderPromptPowerline(promptInfo promptInfoT) string {
 		fmt.Sprintf("/%s ", "BOLD_BIT"),
 		STYLE_GITROOT, false)
 
+	// -----------------------
+	// Git Status
+	// -----------------------
 	// TODO: Detect clean/dirty
+	// TODO: Do nothing if not in a git dir
 	prompt = prompt.addSegment(
 		fmt.Sprintf(" %s %s ", SYMBOL_GIT_BRANCH, promptInfo.GitBranch),
 		STYLE_GIT_INFO_CLEAN,
 		true)
 
+	// -----------------------
+	// Sub-directory within Git Repo
+	// -----------------------
 	prompt = prompt.addSegment(
 		fmt.Sprintf(" %s ", promptInfo.PathGitSub),
 		STYLE_GITSUB,
