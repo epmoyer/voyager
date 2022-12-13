@@ -21,7 +21,7 @@ func (prompt promptT) addSegment(text string, FGColorHex string, BGColorHex stri
 func (prompt promptT) endSegments() promptT {
 	if prompt.Prompt != "" {
 		separatorStyle := color.HEXStyle(prompt.CurrentBGColorHex, COLOR_BG_DEFAULT)
-		prompt.Prompt += separatorStyle.Sprintf("\ue0b0")
+		prompt.Prompt += separatorStyle.Sprintf(SYMBOL_SEPARATOR)
 	}
 	return prompt
 }

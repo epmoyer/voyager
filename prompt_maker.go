@@ -12,6 +12,14 @@ import (
 	"github.com/gookit/color"
 )
 
+const SYMBOL_GIT_REPO = ""
+const SYMBOL_GIT_STAGED = "\uF0C7"           // PowerLine: Floppy Disk
+const SYMBOL_GIT_UNSTAGED = "\uF448"         // PowerLine: Pencil
+const SYMBOL_GIT_BRANCH_AHEAD = "\uF0DE"     // PowerLine: Up-arrow
+const SYMBOL_GIT_BRANCH_BEHIND = "\uF0DD"    // PowerLine: Down-arrow
+const SYMBOL_GIT_BRANCH_UNTRACKED = "\uF128" // PowerLine: Question-mark
+const SYMBOL_SEPARATOR = "\ue0b0"            // PowerLine: Triangle-Right Separator
+
 const ENABLE_BOLD = false
 const COLOR_FG_BOLD = "#ffffff"
 const COLOR_BG_DEFAULT = "#000000"
