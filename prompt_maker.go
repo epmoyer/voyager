@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-const ENABLE_DEBUG_INDICATOR = true
+const ENABLE_DEBUG_INDICATOR = false
 
 // const SYMBOL_PL_GIT_BRANCH = "\ue0a0"           // PowerLine: VCS Branch
 // const SYMBOL_PL_GIT_BRANCH = "\ue725"           // PowerLine: VCS Branch
@@ -29,8 +29,8 @@ const COLOR_TEXT_FG_SEPARATOR = "#707070"
 
 var STYLE_DEBUG = promptStyleT{
 	ColorHexFGPowerline: "#000000",
-	ColorHexBGPowerline: "#FFAA55",
-	ColorHexFGText:      "#FFAA55",
+	ColorHexBGPowerline: "#B8E3B8",
+	ColorHexFGText:      "#B8E3B8",
 }
 var STYLE_CONDA = promptStyleT{
 	ColorHexFGPowerline: "#202020",
