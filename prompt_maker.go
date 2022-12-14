@@ -21,6 +21,7 @@ const SYMBOL_PL_GIT_BRANCH_AHEAD = "\uF0DE"     // PowerLine: Up-arrow
 const SYMBOL_PL_GIT_BRANCH_BEHIND = "\uF0DD"    // PowerLine: Down-arrow
 const SYMBOL_PL_GIT_BRANCH_UNTRACKED = "\uF128" // PowerLine: Question-mark
 const SYMBOL_PL_SEPARATOR = "\ue0b0"            // PowerLine: Triangle-Right Separator
+const SYMBOL_PL_BULLNOSE = ""                  // PowerLine: Triangle-Right Separator
 
 const COLOR_BG_DEFAULT = "#000000"
 const COLOR_FG_DEFAULT = "#ffffff"
@@ -298,8 +299,22 @@ func getGitBranch(path string) string {
 		// This is not a git repo
 		return ""
 	}
+	reference := strings.TrimSpace(string(out))
+	if reference == "HEAD" {
+		// reference = "(other)"
+		cmd := exec.Command("git", "rev-parse", "--short", "HEAD")
+		var e bytes.Buffer
+		cmd.Stderr = &e
+		cmd.Dir = path
+		out, err := cmd.Output()
+		if err != nil {
+			// This is not a git repo
+			return ""
+		}
+		reference = "(" + strings.TrimSpace(string(out)) + ")"
+	}
 	// TODO: If blank call "git rev-parse --short HEAD" for hash
-	return strings.TrimSpace(string(out))
+	return reference
 }
 
 func chopPath(path string) (string, string) {

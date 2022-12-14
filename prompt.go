@@ -39,7 +39,19 @@ func (prompt *promptT) addSegment(text string, style promptStyleT) {
 		// Powerline prompt gets a leading space
 		text = " " + text
 	}
-	if prompt.TextPrintable != "" {
+	if prompt.TextPrintable == "" {
+		// -------------------
+		//  First segment: Start with bull-nose
+		// -------------------
+		if prompt.isPowerline {
+			bullnoseStyle := color.HEXStyle(style.ColorHexBGPowerline)
+			prompt.TextPrintable += bullnoseStyle.Sprint(SYMBOL_PL_BULLNOSE)
+
+			// SHELL
+			prompt.TextShell += " "
+			prompt.TextShell += prompt.colorizer.colorize(SYMBOL_PL_BULLNOSE, style.ColorHexBGPowerline, "")
+		}
+	} else {
 		// -------------------
 		//  Add Separator
 		// -------------------
