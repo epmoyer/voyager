@@ -290,31 +290,53 @@ func splitGitPath(path string) (string, string) {
 }
 
 func getGitBranch(path string) string {
-	cmd := exec.Command("git", "rev-parse", "--abbrev-ref", "HEAD")
+	var cmd *exec.Cmd
 	var e bytes.Buffer
+	var out []byte
+	var err error
+	var reference string
+
+	cmd = exec.Command("git", "rev-parse", "--is-inside-work-tree")
 	cmd.Stderr = &e
 	cmd.Dir = path
-	out, err := cmd.Output()
+	out, err = cmd.Output()
 	if err != nil {
 		// This is not a git repo
 		return ""
 	}
-	reference := strings.TrimSpace(string(out))
-	if reference == "HEAD" {
+	if strings.TrimSpace(string(out)) != "true" {
+		// This is not a git repo
+		return ""
+	}
+
+	cmd = exec.Command("git", "symbolic-ref", "HEAD")
+	cmd.Stderr = &e
+	cmd.Dir = path
+	out, err = cmd.Output()
+	if err == nil {
+		reference = strings.TrimSpace(string(out))
+	}
+	if reference != "" {
+		reference = finalComponent(reference)
+	} else {
 		// reference = "(other)"
-		cmd := exec.Command("git", "rev-parse", "--short", "HEAD")
+		cmd = exec.Command("git", "rev-parse", "--short", "HEAD")
 		var e bytes.Buffer
 		cmd.Stderr = &e
 		cmd.Dir = path
-		out, err := cmd.Output()
+		out, err = cmd.Output()
 		if err != nil {
 			// This is not a git repo
 			return ""
 		}
 		reference = "(" + strings.TrimSpace(string(out)) + ")"
 	}
-	// TODO: If blank call "git rev-parse --short HEAD" for hash
 	return reference
+}
+
+func finalComponent(path string) string {
+	pieces := strings.Split(path, "/")
+	return pieces[len(pieces)-1]
 }
 
 func chopPath(path string) (string, string) {
