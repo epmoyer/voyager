@@ -27,7 +27,7 @@ type promptStyleT struct {
 	Bold                bool
 }
 
-func (prompt promptT) addSegment(text string, style promptStyleT) promptT {
+func (prompt *promptT) addSegment(text string, style promptStyleT) {
 	if prompt.isPowerline {
 		// Powerline prompt gets a leading space
 		text = " " + text
@@ -47,11 +47,10 @@ func (prompt promptT) addSegment(text string, style promptStyleT) promptT {
 			prompt.Prompt += separatorColor.Sprintf("⟫")
 		}
 	}
-	prompt = prompt.appendToSegment(text, style)
-	return prompt
+	prompt.appendToSegment(text, style)
 }
 
-func (prompt promptT) appendToSegment(text string, style promptStyleT) promptT {
+func (prompt *promptT) appendToSegment(text string, style promptStyleT) {
 	if prompt.isPowerline {
 		prompt.CurrentBGColorHex = style.ColorHexBGPowerline
 		appendStyle := color.HEXStyle(style.ColorHexFGPowerline, style.ColorHexBGPowerline)
@@ -63,10 +62,9 @@ func (prompt promptT) appendToSegment(text string, style promptStyleT) promptT {
 		appendColor := color.HEX(style.ColorHexFGText)
 		prompt.Prompt += appendColor.Sprintf("%s", text)
 	}
-	return prompt
 }
 
-func (prompt promptT) endSegments() promptT {
+func (prompt *promptT) endSegments() {
 	if prompt.isPowerline {
 		separatorStyle := color.HEXStyle(COLOR_BG_DEFAULT, prompt.CurrentBGColorHex)
 		prompt.Prompt += separatorStyle.Sprint(" ")
@@ -75,5 +73,4 @@ func (prompt promptT) endSegments() promptT {
 	} else {
 		prompt.Prompt += " $ "
 	}
-	return prompt
 }

@@ -120,8 +120,8 @@ func renderPrompt(promptInfo promptInfoT, isPowerline bool) string {
 	// Conda Environment
 	// -----------------------
 	if promptInfo.CondaEnvironment != "" {
-		prompt = prompt.addSegment(
-			fmt.Sprintf("%s", promptInfo.CondaEnvironment),
+		prompt.addSegment(
+			fmt.Sprint(promptInfo.CondaEnvironment),
 			STYLE_CONDA)
 	}
 
@@ -129,7 +129,7 @@ func renderPrompt(promptInfo promptInfoT, isPowerline bool) string {
 	// Context
 	// -----------------------
 	if promptInfo.ShowContext {
-		prompt = prompt.addSegment(
+		prompt.addSegment(
 			fmt.Sprintf("%s@%s", promptInfo.Username, promptInfo.Hostname),
 			STYLE_CONTEXT)
 	}
@@ -137,11 +137,11 @@ func renderPrompt(promptInfo promptInfoT, isPowerline bool) string {
 	// -----------------------
 	// Git root directory
 	// -----------------------
-	prompt = prompt.addSegment(
-		fmt.Sprintf("%s", promptInfo.PathGitRootBeginning),
+	prompt.addSegment(
+		fmt.Sprint(promptInfo.PathGitRootBeginning),
 		STYLE_GITROOT_PRE)
-	prompt = prompt.appendToSegment(
-		fmt.Sprintf("%s", promptInfo.PathGitRootFinal),
+	prompt.appendToSegment(
+		fmt.Sprint(promptInfo.PathGitRootFinal),
 		STYLE_GITROOT)
 
 	// -----------------------
@@ -154,9 +154,9 @@ func renderPrompt(promptInfo promptInfoT, isPowerline bool) string {
 		if isPowerline {
 			segmentText = fmt.Sprintf("%s %s", SYMBOL_GIT_BRANCH, promptInfo.GitBranch)
 		} else {
-			segmentText = fmt.Sprintf("%s", promptInfo.GitBranch)
+			segmentText = fmt.Sprint(promptInfo.GitBranch)
 		}
-		prompt = prompt.addSegment(
+		prompt.addSegment(
 			segmentText,
 			STYLE_GIT_INFO_CLEAN)
 	}
@@ -165,12 +165,12 @@ func renderPrompt(promptInfo promptInfoT, isPowerline bool) string {
 	// Sub-directory within Git Repo
 	// -----------------------
 	if promptInfo.PathGitSub != "" {
-		prompt = prompt.addSegment(
-			fmt.Sprintf("%s", promptInfo.PathGitSub),
+		prompt.addSegment(
+			fmt.Sprint(promptInfo.PathGitSub),
 			STYLE_GITSUB)
 	}
 
-	prompt = prompt.endSegments()
+	prompt.endSegments()
 
 	return prompt.Prompt
 }
