@@ -214,7 +214,6 @@ func buildPromptInfo(path string) (promptInfoT, error) {
 
 	promptInfo := promptInfoT{}
 
-	// TODO: Show conditionally
 	promptInfo.ShowContext = true
 
 	pathGitRoot, pathGitSub := getPath(path)
