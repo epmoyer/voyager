@@ -88,7 +88,7 @@ func (prompt *promptT) endSegments() {
 		// SHELL
 		prompt.TextShell += " "
 		prompt.TextShell += prompt.colorizer.reset()
-		prompt.TextShell += prompt.colorizer.colorize(SYMBOL_PL_SEPARATOR, prompt.CurrentBGColorHex, "")
+		prompt.TextShell += prompt.colorizer.colorize(SYMBOL_PL_SEPARATOR+" ", prompt.CurrentBGColorHex, "")
 		prompt.TextShell += prompt.colorizer.reset()
 	} else {
 		prompt.TextPrintable += " $ "
