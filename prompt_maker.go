@@ -29,8 +29,8 @@ const COLOR_TEXT_FG_SEPARATOR = "#707070"
 
 var STYLE_DEBUG = promptStyleT{
 	ColorHexFGPowerline: "#000000",
-	ColorHexBGPowerline: "#FFA500",
-	ColorHexFGText:      "#FFA500",
+	ColorHexBGPowerline: "#FFAA55",
+	ColorHexFGText:      "#FFAA55",
 }
 var STYLE_CONDA = promptStyleT{
 	ColorHexFGPowerline: "#202020",
@@ -136,7 +136,7 @@ func renderPrompt(promptInfo promptInfoT, isPowerline bool) promptT {
 	// -----------------------
 	if ENABLE_DEBUG_INDICATOR {
 		prompt.addSegment(
-			"Debug",
+			"",
 			STYLE_DEBUG)
 	}
 
