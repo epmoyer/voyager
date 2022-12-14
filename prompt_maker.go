@@ -21,14 +21,16 @@ const SYMBOL_PL_GIT_BRANCH_AHEAD = "\uF0DE"     // PowerLine: Up-arrow
 const SYMBOL_PL_GIT_BRANCH_BEHIND = "\uF0DD"    // PowerLine: Down-arrow
 const SYMBOL_PL_GIT_BRANCH_UNTRACKED = "\uF128" // PowerLine: Question-mark
 const SYMBOL_PL_SEPARATOR = "\ue0b0"            // PowerLine: Triangle-Right Separator
+const SYMBOL_PL_BULLNOSE = ""                  // PowerLine: Triangle-Right Separator
 
 const COLOR_BG_DEFAULT = "#000000"
+const COLOR_FG_DEFAULT = "#ffffff"
 const COLOR_TEXT_FG_SEPARATOR = "#707070"
 
 var STYLE_DEBUG = promptStyleT{
 	ColorHexFGPowerline: "#000000",
-	ColorHexBGPowerline: "#FFA500",
-	ColorHexFGText:      "#FFA500",
+	ColorHexBGPowerline: "#FFAA55",
+	ColorHexFGText:      "#FFAA55",
 }
 var STYLE_CONDA = promptStyleT{
 	ColorHexFGPowerline: "#202020",
@@ -87,7 +89,7 @@ func main() {
 	promptInfo, _ := buildPromptInfo(path)
 
 	var isPowerline bool
-	var prompt string
+	var prompt promptT
 
 	if *optDump {
 		fmt.Println("Dump:")
@@ -98,11 +100,11 @@ func main() {
 
 		isPowerline = false
 		prompt = renderPrompt(promptInfo, isPowerline)
-		fmt.Printf("TEXT PROMPT:\n%s\n", prompt)
+		fmt.Printf("TEXT PROMPT:\n%s\n%s\n", prompt.TextShell, prompt.TextPrintable)
 
 		isPowerline = true
 		prompt = renderPrompt(promptInfo, isPowerline)
-		fmt.Printf("POWERLINE PROMPT:\n%s\n", prompt)
+		fmt.Printf("POWERLINE PROMPT:\n%s\n%s\n", prompt.TextShell, prompt.TextPrintable)
 
 		// prompt := promptT{}
 		// prompt = prompt.addSegment(" conda ", STYLE_POWERLINE_CONDA, false)
@@ -115,26 +117,26 @@ func main() {
 		// fmt.Printf("PROMPT POWERLINE SEGMENT TEST:\n%s\n", prompt.Prompt)
 
 		fmt.Println("-------------------------------------------------")
+		os.Exit(0)
 	}
 
 	isPowerline = (os.Getenv("GP_FORMAT") == "POWERLINE")
 	prompt = renderPrompt(promptInfo, isPowerline)
-	fmt.Print(prompt)
+	fmt.Print(prompt.TextShell)
 
 	os.Exit(0)
 }
 
-func renderPrompt(promptInfo promptInfoT, isPowerline bool) string {
-	prompt := promptT{
-		isPowerline: isPowerline,
-	}
+func renderPrompt(promptInfo promptInfoT, isPowerline bool) promptT {
+	prompt := promptT{}
+	prompt.init(isPowerline)
 
 	// -----------------------
 	// Debug
 	// -----------------------
 	if ENABLE_DEBUG_INDICATOR {
 		prompt.addSegment(
-			"Debug",
+			"",
 			STYLE_DEBUG)
 	}
 
@@ -167,20 +169,31 @@ func renderPrompt(promptInfo promptInfoT, isPowerline bool) string {
 		STYLE_GITROOT)
 
 	// -----------------------
-	// Git Status
+	// Git Info
 	// -----------------------
 	// TODO: Detect clean/dirty
 	// TODO: Do nothing if not in a git dir
 	if promptInfo.GitBranch != "" {
+		style := STYLE_GIT_INFO_CLEAN
+		if promptInfo.GitStatus != "" {
+			style = STYLE_GIT_INFO_DIRTY
+		}
 		var segmentText string
 		if isPowerline {
 			segmentText = fmt.Sprintf("%s %s", SYMBOL_PL_GIT_BRANCH, promptInfo.GitBranch)
+			if promptInfo.GitStatus != "" {
+				segmentText += " " + promptInfo.GitStatus
+			}
 		} else {
 			segmentText = fmt.Sprint(promptInfo.GitBranch)
+			// TODO: Probably don't use powerline fonts here. Find a way to do ASCII instead
+			if promptInfo.GitStatus != "" {
+				segmentText += " " + promptInfo.GitStatus
+			}
 		}
 		prompt.addSegment(
 			segmentText,
-			STYLE_GIT_INFO_CLEAN)
+			style)
 	}
 
 	// -----------------------
@@ -194,20 +207,22 @@ func renderPrompt(promptInfo promptInfoT, isPowerline bool) string {
 
 	prompt.endSegments()
 
-	return prompt.Prompt
+	return prompt
 }
 
 func buildPromptInfo(path string) (promptInfoT, error) {
 
 	promptInfo := promptInfoT{}
 
-	// TODO: Show conditionally
 	promptInfo.ShowContext = true
 
 	pathGitRoot, pathGitSub := getPath(path)
 	promptInfo.PathGitRootBeginning, promptInfo.PathGitRootFinal = chopPath(pathGitRoot)
 	promptInfo.PathGitSub = pathGitSub
 
+	// ---------------------
+	// User and Host
+	// ---------------------
 	user, err := user.Current()
 	if err != nil {
 		return promptInfo, err
@@ -223,8 +238,23 @@ func buildPromptInfo(path string) (promptInfoT, error) {
 		hostname = strings.Replace(hostname, ".local", "", 1)
 	}
 	promptInfo.Hostname = hostname
+	sshClient := os.Getenv("SSH_CLIENT")
+	// fmt.Printf("sshClient:%#v", sshClient)
+	if sshClient == "" {
+		defaultUser := os.Getenv("DEFAULT_USER")
+		// fmt.Printf("defaultUser:%#v", defaultUser)
+		if defaultUser == promptInfo.Username {
+			promptInfo.ShowContext = false
+		}
+	}
 
+	// ---------------------
+	// Git
+	// ---------------------
 	promptInfo.GitBranch = getGitBranch(path)
+	if promptInfo.GitBranch != "" {
+		promptInfo.GitStatus = getGitStatus(path)
+	}
 
 	return promptInfo, nil
 }
@@ -288,17 +318,83 @@ func splitGitPath(path string) (string, string) {
 }
 
 func getGitBranch(path string) string {
-	cmd := exec.Command("git", "rev-parse", "--abbrev-ref", "HEAD")
+	var cmd *exec.Cmd
 	var e bytes.Buffer
+	var out []byte
+	var err error
+	var reference string
+
+	cmd = exec.Command("git", "rev-parse", "--is-inside-work-tree")
 	cmd.Stderr = &e
 	cmd.Dir = path
-	out, err := cmd.Output()
+	out, err = cmd.Output()
 	if err != nil {
 		// This is not a git repo
 		return ""
 	}
-	// TODO: If blank call "git rev-parse --short HEAD" for hash
-	return strings.TrimSpace(string(out))
+	if strings.TrimSpace(string(out)) != "true" {
+		// This is not a git repo
+		return ""
+	}
+
+	cmd = exec.Command("git", "symbolic-ref", "HEAD")
+	cmd.Stderr = &e
+	cmd.Dir = path
+	out, err = cmd.Output()
+	if err == nil {
+		reference = strings.TrimSpace(string(out))
+	}
+	if reference != "" {
+		reference = finalComponent(reference)
+	} else {
+		// reference = "(other)"
+		cmd = exec.Command("git", "rev-parse", "--short", "HEAD")
+		var e bytes.Buffer
+		cmd.Stderr = &e
+		cmd.Dir = path
+		out, err = cmd.Output()
+		if err != nil {
+			// This is not a git repo
+			return ""
+		}
+		reference = "(" + strings.TrimSpace(string(out)) + ")"
+	}
+	return reference
+}
+
+func getGitStatus(path string) string {
+	var cmd *exec.Cmd
+	var e bytes.Buffer
+	var out []byte
+	var err error
+	var status string
+
+	cmd = exec.Command("git", "status", "--porcelain")
+	cmd.Stderr = &e
+	cmd.Dir = path
+	out, err = cmd.Output()
+	if err == nil {
+		result := string(out)
+		// TODO: These are sloppy checks.  Use proper regexes
+		if strings.Contains(result, "??") {
+			// UNTRACKED
+			status += " "
+		}
+		if strings.Contains(result, "A ") {
+			// STAGED
+			status += " "
+		}
+		if strings.Contains(result, " M") {
+			// MODIFIED
+			status += " "
+		}
+	}
+	return status
+}
+
+func finalComponent(path string) string {
+	pieces := strings.Split(path, "/")
+	return pieces[len(pieces)-1]
 }
 
 func chopPath(path string) (string, string) {
