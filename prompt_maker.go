@@ -25,12 +25,12 @@ const COLOR_FG_BOLD = "#ffffff"
 const COLOR_BG_DEFAULT = "#000000"
 const COLOR_TEXT_FG_SEPARATOR = "#707070"
 
-var STYLE_POWERLINE_CONDA = promptStyleT{
+var STYLE_CONDA = promptStyleT{
 	ColorHexFGPowerline: "#202020",
 	ColorHexBGPowerline: "#5EABF7",
 	ColorHexFGText:      "#4040ff",
 }
-var STYLE_POWERLINE_CONTEXT = promptStyleT{
+var STYLE_CONTEXT = promptStyleT{
 	ColorHexFGPowerline: "#000000",
 	ColorHexBGPowerline: "#B294BF",
 	ColorHexFGText:      "#C040BE",
@@ -60,18 +60,6 @@ var STYLE_GITSUB = promptStyleT{
 	ColorHexFGPowerline: "#c0c0c0",
 	ColorHexBGPowerline: "#515151",
 	ColorHexFGText:      "#6D8B8F",
-}
-
-type promptInfoT struct {
-	CondaEnvironment     string
-	Username             string
-	UserHomeDir          string
-	ShowContext          bool
-	Hostname             string
-	PathGitRootBeginning string
-	PathGitRootFinal     string
-	PathGitSub           string
-	GitBranch            string
 }
 
 func main() {
@@ -134,7 +122,7 @@ func renderPrompt(promptInfo promptInfoT, isPowerline bool) string {
 	if promptInfo.CondaEnvironment != "" {
 		prompt = prompt.addSegment(
 			fmt.Sprintf(" %s ", promptInfo.CondaEnvironment),
-			STYLE_POWERLINE_CONDA)
+			STYLE_CONDA)
 	}
 
 	// -----------------------
@@ -143,7 +131,7 @@ func renderPrompt(promptInfo promptInfoT, isPowerline bool) string {
 	if promptInfo.ShowContext {
 		prompt = prompt.addSegment(
 			fmt.Sprintf(" %s@%s ", promptInfo.Username, promptInfo.Hostname),
-			STYLE_POWERLINE_CONTEXT)
+			STYLE_CONTEXT)
 	}
 
 	// -----------------------

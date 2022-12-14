@@ -2,11 +2,22 @@ package main
 
 import "github.com/gookit/color"
 
+type promptInfoT struct {
+	CondaEnvironment     string
+	Username             string
+	UserHomeDir          string
+	ShowContext          bool
+	Hostname             string
+	PathGitRootBeginning string
+	PathGitRootFinal     string
+	PathGitSub           string
+	GitBranch            string
+}
+
 type promptT struct {
 	Prompt            string
 	CurrentBGColorHex string
 	isPowerline       bool
-	// segmentInProgress bool
 }
 
 type promptStyleT struct {
@@ -29,23 +40,7 @@ func (prompt promptT) addSegment(text string, style promptStyleT) promptT {
 			prompt.Prompt += separatorColor.Sprintf("⟫")
 		}
 	}
-
 	prompt = prompt.appendToSegment(text, style)
-	// -------------------
-	//  Add Text
-	// -------------------
-	// if prompt.isPowerline {
-	// 	prompt.CurrentBGColorHex = style.ColorHexBGPowerline
-	// 	appendStyle := color.HEXStyle(style.ColorHexFGPowerline, style.ColorHexBGPowerline)
-	// 	if style.Bold {
-	// 		appendStyle.SetOpts(color.Opts{color.OpBold})
-	// 	}
-	// 	prompt.Prompt += appendStyle.Sprintf("%s", text)
-	// } else {
-	// 	appendColor := color.HEX(style.ColorHexFGText)
-	// 	prompt.Prompt += appendColor.Sprintf("%s", text)
-	// }
-	// prompt.segmentInProgress = true
 	return prompt
 }
 
@@ -71,6 +66,5 @@ func (prompt promptT) endSegments() promptT {
 	} else {
 		prompt.Prompt += "$ "
 	}
-	// prompt.segmentInProgress = false
 	return prompt
 }
