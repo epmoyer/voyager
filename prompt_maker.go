@@ -84,6 +84,7 @@ func main() {
 
 	if *optDump {
 		fmt.Println("Dump:")
+		fmt.Printf("ENV:GP_FORMAT=%#v\n", os.Getenv("GP_FORMAT"))
 		fmt.Println(path)
 		fmt.Printf("%#v\n", promptInfo)
 		fmt.Println("-------------------------------------------------")
@@ -109,7 +110,7 @@ func main() {
 		fmt.Println("-------------------------------------------------")
 	}
 
-	isPowerline = true
+	isPowerline = (os.Getenv("GP_FORMAT") == "POWERLINE")
 	prompt = renderPrompt(promptInfo, isPowerline)
 	fmt.Print(prompt)
 
