@@ -44,10 +44,14 @@ func (prompt *promptT) addSegment(text string, style promptStyleT) {
 		//  Add Separator
 		// -------------------
 		if prompt.isPowerline {
-			separatorStyle := color.HEXStyle(style.ColorHexBGPowerline, prompt.CurrentBGColorHex)
+			separatorStyle := color.HEXStyle(COLOR_FG_DEFAULT, prompt.CurrentBGColorHex)
 			prompt.TextPrintable += separatorStyle.Sprint(" ")
 			separatorStyle = color.HEXStyle(prompt.CurrentBGColorHex, style.ColorHexBGPowerline)
 			prompt.TextPrintable += separatorStyle.Sprintf("%s", SYMBOL_PL_SEPARATOR)
+
+			// SHELL
+			prompt.TextShell += " "
+			prompt.TextShell += prompt.colorizer.colorize(SYMBOL_PL_SEPARATOR, prompt.CurrentBGColorHex, style.ColorHexBGPowerline)
 		} else {
 			separatorColor := color.HEX(COLOR_TEXT_FG_SEPARATOR)
 			// prompt.Prompt += separatorColor.Sprintf(" ⟫ ")
@@ -65,6 +69,8 @@ func (prompt *promptT) appendToSegment(text string, style promptStyleT) {
 			appendStyle.SetOpts(color.Opts{color.OpBold})
 		}
 		prompt.TextPrintable += appendStyle.Sprintf("%s", text)
+
+		// SHELL
 		prompt.TextShell += prompt.colorizer.colorize(text, style.ColorHexFGPowerline, style.ColorHexBGPowerline)
 	} else {
 		appendColor := color.HEX(style.ColorHexFGText)
@@ -78,6 +84,12 @@ func (prompt *promptT) endSegments() {
 		prompt.TextPrintable += separatorStyle.Sprint(" ")
 		separatorStyle = color.HEXStyle(prompt.CurrentBGColorHex)
 		prompt.TextPrintable += separatorStyle.Sprintf("%s ", SYMBOL_PL_SEPARATOR)
+
+		// SHELL
+		prompt.TextShell += " "
+		prompt.TextShell += prompt.colorizer.reset()
+		prompt.TextShell += prompt.colorizer.colorize(SYMBOL_PL_SEPARATOR, prompt.CurrentBGColorHex, "")
+		prompt.TextShell += prompt.colorizer.reset()
 	} else {
 		prompt.TextPrintable += " $ "
 	}

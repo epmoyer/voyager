@@ -23,6 +23,7 @@ const SYMBOL_PL_GIT_BRANCH_UNTRACKED = "\uF128" // PowerLine: Question-mark
 const SYMBOL_PL_SEPARATOR = "\ue0b0"            // PowerLine: Triangle-Right Separator
 
 const COLOR_BG_DEFAULT = "#000000"
+const COLOR_FG_DEFAULT = "#ffffff"
 const COLOR_TEXT_FG_SEPARATOR = "#707070"
 
 var STYLE_DEBUG = promptStyleT{

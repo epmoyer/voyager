@@ -18,7 +18,7 @@ func (colorizer colorizerT) colorize(text string, colorHexFG string, colorHexBG 
 	if colorHexBG != "" {
 		formatBG = "%K{" + colorHexBG + "}"
 	}
-	result := "%{" + formatFG + formatBG + "}" + text
+	result := "%{" + formatFG + formatBG + "%}" + text
 	return result
 }
 
