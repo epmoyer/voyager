@@ -40,7 +40,7 @@ func (prompt *promptT) addSegment(text string, style promptStyleT) {
 			separatorStyle := color.HEXStyle(style.ColorHexBGPowerline, prompt.CurrentBGColorHex)
 			prompt.Prompt += separatorStyle.Sprint(" ")
 			separatorStyle = color.HEXStyle(prompt.CurrentBGColorHex, style.ColorHexBGPowerline)
-			prompt.Prompt += separatorStyle.Sprintf("%s", SYMBOL_SEPARATOR)
+			prompt.Prompt += separatorStyle.Sprintf("%s", SYMBOL_PL_SEPARATOR)
 		} else {
 			separatorColor := color.HEX(COLOR_TEXT_FG_SEPARATOR)
 			// prompt.Prompt += separatorColor.Sprintf(" ⟫ ")
@@ -69,7 +69,7 @@ func (prompt *promptT) endSegments() {
 		separatorStyle := color.HEXStyle(COLOR_BG_DEFAULT, prompt.CurrentBGColorHex)
 		prompt.Prompt += separatorStyle.Sprint(" ")
 		separatorStyle = color.HEXStyle(prompt.CurrentBGColorHex)
-		prompt.Prompt += separatorStyle.Sprintf("%s ", SYMBOL_SEPARATOR)
+		prompt.Prompt += separatorStyle.Sprintf("%s ", SYMBOL_PL_SEPARATOR)
 	} else {
 		prompt.Prompt += " $ "
 	}

@@ -10,15 +10,15 @@ import (
 	"strings"
 )
 
-// const SYMBOL_GIT_BRANCH = "\ue0a0"           // PowerLine: VCS Branch
-// const SYMBOL_GIT_BRANCH = "\ue725"           // PowerLine: VCS Branch
-const SYMBOL_GIT_BRANCH = "\uf418"           // PowerLine: VCS Branch
-const SYMBOL_GIT_STAGED = "\uF0C7"           // PowerLine: Floppy Disk
-const SYMBOL_GIT_UNSTAGED = "\uF448"         // PowerLine: Pencil
-const SYMBOL_GIT_BRANCH_AHEAD = "\uF0DE"     // PowerLine: Up-arrow
-const SYMBOL_GIT_BRANCH_BEHIND = "\uF0DD"    // PowerLine: Down-arrow
-const SYMBOL_GIT_BRANCH_UNTRACKED = "\uF128" // PowerLine: Question-mark
-const SYMBOL_SEPARATOR = "\ue0b0"            // PowerLine: Triangle-Right Separator
+// const SYMBOL_PL_GIT_BRANCH = "\ue0a0"           // PowerLine: VCS Branch
+// const SYMBOL_PL_GIT_BRANCH = "\ue725"           // PowerLine: VCS Branch
+const SYMBOL_PL_GIT_BRANCH = "\uf418"           // PowerLine: VCS Branch
+const SYMBOL_PL_GIT_STAGED = "\uF0C7"           // PowerLine: Floppy Disk
+const SYMBOL_PL_GIT_UNSTAGED = "\uF448"         // PowerLine: Pencil
+const SYMBOL_PL_GIT_BRANCH_AHEAD = "\uF0DE"     // PowerLine: Up-arrow
+const SYMBOL_PL_GIT_BRANCH_BEHIND = "\uF0DD"    // PowerLine: Down-arrow
+const SYMBOL_PL_GIT_BRANCH_UNTRACKED = "\uF128" // PowerLine: Question-mark
+const SYMBOL_PL_SEPARATOR = "\ue0b0"            // PowerLine: Triangle-Right Separator
 
 const COLOR_BG_DEFAULT = "#000000"
 const COLOR_TEXT_FG_SEPARATOR = "#707070"
@@ -98,7 +98,7 @@ func main() {
 		// prompt = prompt.addSegment(" context ", STYLE_POWERLINE_CONTEXT, true)
 		// prompt = prompt.addSegment(" gitroot_pre/", STYLE_GITROOT_PRE, true)
 		// prompt = prompt.addSegment("final ", STYLE_GITROOT, false)
-		// prompt = prompt.addSegment(" "+SYMBOL_GIT_BRANCH+" git_info "+SYMBOL_GIT_UNSTAGED+" ", STYLE_GIT_INFO_DIRTY, true)
+		// prompt = prompt.addSegment(" "+SYMBOL_PL_GIT_BRANCH+" git_info "+SYMBOL_PL_GIT_UNSTAGED+" ", STYLE_GIT_INFO_DIRTY, true)
 		// prompt = prompt.addSegment(" gitsub ", STYLE_GITSUB, true)
 		// prompt = prompt.endSegments()
 		// fmt.Printf("PROMPT POWERLINE SEGMENT TEST:\n%s\n", prompt.Prompt)
@@ -150,7 +150,7 @@ func renderPrompt(promptInfo promptInfoT, isPowerline bool) string {
 	if promptInfo.GitBranch != "" {
 		var segmentText string
 		if isPowerline {
-			segmentText = fmt.Sprintf("%s %s", SYMBOL_GIT_BRANCH, promptInfo.GitBranch)
+			segmentText = fmt.Sprintf("%s %s", SYMBOL_PL_GIT_BRANCH, promptInfo.GitBranch)
 		} else {
 			segmentText = fmt.Sprint(promptInfo.GitBranch)
 		}
