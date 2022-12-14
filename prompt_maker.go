@@ -20,8 +20,6 @@ const SYMBOL_GIT_BRANCH_BEHIND = "\uF0DD"    // PowerLine: Down-arrow
 const SYMBOL_GIT_BRANCH_UNTRACKED = "\uF128" // PowerLine: Question-mark
 const SYMBOL_SEPARATOR = "\ue0b0"            // PowerLine: Triangle-Right Separator
 
-const ENABLE_BOLD = false
-const COLOR_FG_BOLD = "#ffffff"
 const COLOR_BG_DEFAULT = "#000000"
 const COLOR_TEXT_FG_SEPARATOR = "#707070"
 
@@ -232,11 +230,7 @@ func shortenPath(path string) string {
 	for i := 0; i < len(pieces); i++ {
 		piece = pieces[i]
 		if i < (len(pieces) - 1) {
-			newPieces = append(newPieces, shorten(piece))
-			continue
-		}
-		if ENABLE_BOLD {
-			piece = "%B%F{" + COLOR_FG_BOLD + "}" + piece + "%b%f"
+			piece = shorten(piece)
 		}
 		newPieces = append(newPieces, piece)
 	}
