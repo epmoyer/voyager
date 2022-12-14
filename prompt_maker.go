@@ -87,7 +87,7 @@ func main() {
 	promptInfo, _ := buildPromptInfo(path)
 
 	var isPowerline bool
-	var prompt string
+	var prompt promptT
 
 	if *optDump {
 		fmt.Println("Dump:")
@@ -98,11 +98,11 @@ func main() {
 
 		isPowerline = false
 		prompt = renderPrompt(promptInfo, isPowerline)
-		fmt.Printf("TEXT PROMPT:\n%s\n", prompt)
+		fmt.Printf("TEXT PROMPT:\n%s\n%s\n", prompt.TextShell, prompt.TextPrintable)
 
 		isPowerline = true
 		prompt = renderPrompt(promptInfo, isPowerline)
-		fmt.Printf("POWERLINE PROMPT:\n%s\n", prompt)
+		fmt.Printf("POWERLINE PROMPT:\n%s\n%s\n", prompt.TextShell, prompt.TextPrintable)
 
 		// prompt := promptT{}
 		// prompt = prompt.addSegment(" conda ", STYLE_POWERLINE_CONDA, false)
@@ -115,19 +115,19 @@ func main() {
 		// fmt.Printf("PROMPT POWERLINE SEGMENT TEST:\n%s\n", prompt.Prompt)
 
 		fmt.Println("-------------------------------------------------")
+		os.Exit(0)
 	}
 
 	isPowerline = (os.Getenv("GP_FORMAT") == "POWERLINE")
 	prompt = renderPrompt(promptInfo, isPowerline)
-	fmt.Print(prompt)
+	fmt.Print(prompt.TextShell)
 
 	os.Exit(0)
 }
 
-func renderPrompt(promptInfo promptInfoT, isPowerline bool) string {
-	prompt := promptT{
-		isPowerline: isPowerline,
-	}
+func renderPrompt(promptInfo promptInfoT, isPowerline bool) promptT {
+	prompt := promptT{}
+	prompt.init(isPowerline)
 
 	// -----------------------
 	// Debug
@@ -194,7 +194,7 @@ func renderPrompt(promptInfo promptInfoT, isPowerline bool) string {
 
 	prompt.endSegments()
 
-	return prompt.Prompt
+	return prompt
 }
 
 func buildPromptInfo(path string) (promptInfoT, error) {

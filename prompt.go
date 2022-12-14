@@ -15,9 +15,11 @@ type promptInfoT struct {
 }
 
 type promptT struct {
-	Prompt            string
+	TextPrintable     string
+	TextShell         string
 	CurrentBGColorHex string
 	isPowerline       bool
+	colorizer         colorizerT
 }
 
 type promptStyleT struct {
@@ -27,24 +29,29 @@ type promptStyleT struct {
 	Bold                bool
 }
 
+func (prompt *promptT) init(isPowerline bool) {
+	prompt.colorizer = colorizerT{}
+	prompt.isPowerline = isPowerline
+}
+
 func (prompt *promptT) addSegment(text string, style promptStyleT) {
 	if prompt.isPowerline {
 		// Powerline prompt gets a leading space
 		text = " " + text
 	}
-	if prompt.Prompt != "" {
+	if prompt.TextPrintable != "" {
 		// -------------------
 		//  Add Separator
 		// -------------------
 		if prompt.isPowerline {
 			separatorStyle := color.HEXStyle(style.ColorHexBGPowerline, prompt.CurrentBGColorHex)
-			prompt.Prompt += separatorStyle.Sprint(" ")
+			prompt.TextPrintable += separatorStyle.Sprint(" ")
 			separatorStyle = color.HEXStyle(prompt.CurrentBGColorHex, style.ColorHexBGPowerline)
-			prompt.Prompt += separatorStyle.Sprintf("%s", SYMBOL_PL_SEPARATOR)
+			prompt.TextPrintable += separatorStyle.Sprintf("%s", SYMBOL_PL_SEPARATOR)
 		} else {
 			separatorColor := color.HEX(COLOR_TEXT_FG_SEPARATOR)
 			// prompt.Prompt += separatorColor.Sprintf(" ⟫ ")
-			prompt.Prompt += separatorColor.Sprintf("⟫")
+			prompt.TextPrintable += separatorColor.Sprintf("⟫")
 		}
 	}
 	prompt.appendToSegment(text, style)
@@ -57,20 +64,21 @@ func (prompt *promptT) appendToSegment(text string, style promptStyleT) {
 		if style.Bold {
 			appendStyle.SetOpts(color.Opts{color.OpBold})
 		}
-		prompt.Prompt += appendStyle.Sprintf("%s", text)
+		prompt.TextPrintable += appendStyle.Sprintf("%s", text)
+		prompt.TextShell += prompt.colorizer.colorize(text, style.ColorHexFGPowerline, style.ColorHexBGPowerline)
 	} else {
 		appendColor := color.HEX(style.ColorHexFGText)
-		prompt.Prompt += appendColor.Sprintf("%s", text)
+		prompt.TextPrintable += appendColor.Sprintf("%s", text)
 	}
 }
 
 func (prompt *promptT) endSegments() {
 	if prompt.isPowerline {
 		separatorStyle := color.HEXStyle(COLOR_BG_DEFAULT, prompt.CurrentBGColorHex)
-		prompt.Prompt += separatorStyle.Sprint(" ")
+		prompt.TextPrintable += separatorStyle.Sprint(" ")
 		separatorStyle = color.HEXStyle(prompt.CurrentBGColorHex)
-		prompt.Prompt += separatorStyle.Sprintf("%s ", SYMBOL_PL_SEPARATOR)
+		prompt.TextPrintable += separatorStyle.Sprintf("%s ", SYMBOL_PL_SEPARATOR)
 	} else {
-		prompt.Prompt += " $ "
+		prompt.TextPrintable += " $ "
 	}
 }
