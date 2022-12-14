@@ -221,6 +221,9 @@ func buildPromptInfo(path string) (promptInfoT, error) {
 	promptInfo.PathGitRootBeginning, promptInfo.PathGitRootFinal = chopPath(pathGitRoot)
 	promptInfo.PathGitSub = pathGitSub
 
+	// ---------------------
+	// User and Host
+	// ---------------------
 	user, err := user.Current()
 	if err != nil {
 		return promptInfo, err
@@ -236,7 +239,19 @@ func buildPromptInfo(path string) (promptInfoT, error) {
 		hostname = strings.Replace(hostname, ".local", "", 1)
 	}
 	promptInfo.Hostname = hostname
+	sshClient := os.Getenv("SSH_CLIENT")
+	// fmt.Printf("sshClient:%#v", sshClient)
+	if sshClient == "" {
+		defaultUser := os.Getenv("DEFAULT_USER")
+		// fmt.Printf("defaultUser:%#v", defaultUser)
+		if defaultUser == promptInfo.Username {
+			promptInfo.ShowContext = false
+		}
+	}
 
+	// ---------------------
+	// Git
+	// ---------------------
 	promptInfo.GitBranch = getGitBranch(path)
 	if promptInfo.GitBranch != "" {
 		promptInfo.GitStatus = getGitStatus(path)
