@@ -43,7 +43,8 @@ func (prompt promptT) addSegment(text string, style promptStyleT) promptT {
 			prompt.Prompt += separatorStyle.Sprintf("%s", SYMBOL_SEPARATOR)
 		} else {
 			separatorColor := color.HEX(COLOR_TEXT_FG_SEPARATOR)
-			prompt.Prompt += separatorColor.Sprintf(" ⟫ ")
+			// prompt.Prompt += separatorColor.Sprintf(" ⟫ ")
+			prompt.Prompt += separatorColor.Sprintf("⟫")
 		}
 	}
 	prompt = prompt.appendToSegment(text, style)
