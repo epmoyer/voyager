@@ -79,14 +79,17 @@ func main() {
 
 	promptInfo, _ := buildPromptInfo(path)
 
+	var isPowerline bool
+	var prompt string
+
 	if *optDump {
 		fmt.Println("Dump:")
 		fmt.Println(path)
 		fmt.Printf("%#v\n", promptInfo)
 		fmt.Println("-------------------------------------------------")
 
-		isPowerline := false
-		prompt := renderPrompt(promptInfo, isPowerline)
+		isPowerline = false
+		prompt = renderPrompt(promptInfo, isPowerline)
 		fmt.Printf("TEXT PROMPT:\n%s\n", prompt)
 
 		isPowerline = true
@@ -105,6 +108,10 @@ func main() {
 
 		fmt.Println("-------------------------------------------------")
 	}
+
+	isPowerline = true
+	prompt = renderPrompt(promptInfo, isPowerline)
+	print(prompt)
 
 	os.Exit(0)
 }
