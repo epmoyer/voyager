@@ -111,7 +111,7 @@ func main() {
 
 	isPowerline = true
 	prompt = renderPrompt(promptInfo, isPowerline)
-	print(prompt)
+	fmt.Print(prompt)
 
 	os.Exit(0)
 }
