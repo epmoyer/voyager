@@ -10,48 +10,61 @@ import (
 	"strings"
 )
 
-// const SYMBOL_GIT_BRANCH = "\ue0a0"           // PowerLine: VCS Branch
-// const SYMBOL_GIT_BRANCH = "\ue725"           // PowerLine: VCS Branch
-const SYMBOL_GIT_BRANCH = "\uf418"           // PowerLine: VCS Branch
-const SYMBOL_GIT_STAGED = "\uF0C7"           // PowerLine: Floppy Disk
-const SYMBOL_GIT_UNSTAGED = "\uF448"         // PowerLine: Pencil
-const SYMBOL_GIT_BRANCH_AHEAD = "\uF0DE"     // PowerLine: Up-arrow
-const SYMBOL_GIT_BRANCH_BEHIND = "\uF0DD"    // PowerLine: Down-arrow
-const SYMBOL_GIT_BRANCH_UNTRACKED = "\uF128" // PowerLine: Question-mark
-const SYMBOL_SEPARATOR = "\ue0b0"            // PowerLine: Triangle-Right Separator
+const ENABLE_DEBUG_INDICATOR = true
 
-const ENABLE_BOLD = false
-const COLOR_FG_BOLD = "#ffffff"
+// const SYMBOL_PL_GIT_BRANCH = "\ue0a0"           // PowerLine: VCS Branch
+// const SYMBOL_PL_GIT_BRANCH = "\ue725"           // PowerLine: VCS Branch
+const SYMBOL_PL_GIT_BRANCH = "\uf418"           // PowerLine: VCS Branch
+const SYMBOL_PL_GIT_STAGED = "\uF0C7"           // PowerLine: Floppy Disk
+const SYMBOL_PL_GIT_UNSTAGED = "\uF448"         // PowerLine: Pencil
+const SYMBOL_PL_GIT_BRANCH_AHEAD = "\uF0DE"     // PowerLine: Up-arrow
+const SYMBOL_PL_GIT_BRANCH_BEHIND = "\uF0DD"    // PowerLine: Down-arrow
+const SYMBOL_PL_GIT_BRANCH_UNTRACKED = "\uF128" // PowerLine: Question-mark
+const SYMBOL_PL_SEPARATOR = "\ue0b0"            // PowerLine: Triangle-Right Separator
+
 const COLOR_BG_DEFAULT = "#000000"
-
-const COLOR_TEXT_FG_PATH_CONDA = "#4040ff"
-const COLOR_TEXT_FG_PATH_CONTEXT = "#C040BE"
-const COLOR_TEXT_FG_PATH_GITROOT = "#009000"
-const COLOR_TEXT_FG_PATH_GITROOT_FINAL = "#30FF30"
-const COLOR_TEXT_FG_PATH_GITSUB = "#6D8B8F"
-
 const COLOR_TEXT_FG_SEPARATOR = "#707070"
-const COLOR_TEXT_FG_GIT_INFO_CLEAN = "#A2C3C7"
-const COLOR_TEXT_FG_GIT_INFO_DIRTY = "#E2D47D"
 
-var STYLE_POWERLINE_CONDA = promptStyleT{ColorHexFG: "#202020", ColorHexBG: "#5EABF7"}
-var STYLE_POWERLINE_CONTEXT = promptStyleT{ColorHexFG: "#000000", ColorHexBG: "#B294BF"}
-var STYLE_GITROOT_PRE = promptStyleT{ColorHexFG: "#c0c0c0", ColorHexBG: "#4F6D6F"}
-var STYLE_GITROOT = promptStyleT{ColorHexFG: "#ffffff", ColorHexBG: "#4F6D6F", Bold: true}
-var STYLE_GIT_INFO_CLEAN = promptStyleT{ColorHexFG: "#000000", ColorHexBG: "#A2C3C7"}
-var STYLE_GIT_INFO_DIRTY = promptStyleT{ColorHexFG: "#000000", ColorHexBG: "#E2D47D"}
-var STYLE_GITSUB = promptStyleT{ColorHexFG: "#c0c0c0", ColorHexBG: "#515151"}
-
-type promptInfoT struct {
-	CondaEnvironment     string
-	Username             string
-	UserHomeDir          string
-	ShowContext          bool
-	Hostname             string
-	PathGitRootBeginning string
-	PathGitRootFinal     string
-	PathGitSub           string
-	GitBranch            string
+var STYLE_DEBUG = promptStyleT{
+	ColorHexFGPowerline: "#000000",
+	ColorHexBGPowerline: "#FFA500",
+	ColorHexFGText:      "#FFA500",
+}
+var STYLE_CONDA = promptStyleT{
+	ColorHexFGPowerline: "#202020",
+	ColorHexBGPowerline: "#5EABF7",
+	ColorHexFGText:      "#4040ff",
+}
+var STYLE_CONTEXT = promptStyleT{
+	ColorHexFGPowerline: "#000000",
+	ColorHexBGPowerline: "#B294BF",
+	ColorHexFGText:      "#C040BE",
+}
+var STYLE_GITROOT_PRE = promptStyleT{
+	ColorHexFGPowerline: "#c0c0c0",
+	ColorHexBGPowerline: "#4F6D6F",
+	ColorHexFGText:      "#009000",
+}
+var STYLE_GITROOT = promptStyleT{
+	ColorHexFGPowerline: "#ffffff",
+	ColorHexBGPowerline: "#4F6D6F",
+	ColorHexFGText:      "#30FF30",
+	Bold:                true,
+}
+var STYLE_GIT_INFO_CLEAN = promptStyleT{
+	ColorHexFGPowerline: "#000000",
+	ColorHexBGPowerline: "#A2C3C7",
+	ColorHexFGText:      "#A2C3C7",
+}
+var STYLE_GIT_INFO_DIRTY = promptStyleT{
+	ColorHexFGPowerline: "#000000",
+	ColorHexBGPowerline: "#E2D47D",
+	ColorHexFGText:      "#E2D47D",
+}
+var STYLE_GITSUB = promptStyleT{
+	ColorHexFGPowerline: "#c0c0c0",
+	ColorHexBGPowerline: "#515151",
+	ColorHexFGText:      "#6D8B8F",
 }
 
 func main() {
@@ -73,64 +86,85 @@ func main() {
 
 	promptInfo, _ := buildPromptInfo(path)
 
+	var isPowerline bool
+	var prompt string
+
 	if *optDump {
 		fmt.Println("Dump:")
+		fmt.Printf("ENV:GP_FORMAT=%#v\n", os.Getenv("GP_FORMAT"))
 		fmt.Println(path)
 		fmt.Printf("%#v\n", promptInfo)
-		promptText := renderPrompt(false, promptInfo)
 		fmt.Println("-------------------------------------------------")
-		fmt.Printf("PROMPT TEXT:\n%s\n", promptText)
-		// promptPowerline = renderPrompt(true)
-		promptPowerline := renderPromptPowerline(promptInfo)
-		fmt.Printf("PROMPT POWERLINE:\n%s\n", promptPowerline)
+
+		isPowerline = false
+		prompt = renderPrompt(promptInfo, isPowerline)
+		fmt.Printf("TEXT PROMPT:\n%s\n", prompt)
+
+		isPowerline = true
+		prompt = renderPrompt(promptInfo, isPowerline)
+		fmt.Printf("POWERLINE PROMPT:\n%s\n", prompt)
 
 		// prompt := promptT{}
-
 		// prompt = prompt.addSegment(" conda ", STYLE_POWERLINE_CONDA, false)
 		// prompt = prompt.addSegment(" context ", STYLE_POWERLINE_CONTEXT, true)
 		// prompt = prompt.addSegment(" gitroot_pre/", STYLE_GITROOT_PRE, true)
 		// prompt = prompt.addSegment("final ", STYLE_GITROOT, false)
-		// prompt = prompt.addSegment(" "+SYMBOL_GIT_BRANCH+" git_info "+SYMBOL_GIT_UNSTAGED+" ", STYLE_GIT_INFO_DIRTY, true)
+		// prompt = prompt.addSegment(" "+SYMBOL_PL_GIT_BRANCH+" git_info "+SYMBOL_PL_GIT_UNSTAGED+" ", STYLE_GIT_INFO_DIRTY, true)
 		// prompt = prompt.addSegment(" gitsub ", STYLE_GITSUB, true)
-
 		// prompt = prompt.endSegments()
 		// fmt.Printf("PROMPT POWERLINE SEGMENT TEST:\n%s\n", prompt.Prompt)
+
 		fmt.Println("-------------------------------------------------")
 	}
+
+	isPowerline = (os.Getenv("GP_FORMAT") == "POWERLINE")
+	prompt = renderPrompt(promptInfo, isPowerline)
+	fmt.Print(prompt)
 
 	os.Exit(0)
 }
 
-func renderPrompt(usePowerline bool, promptInfo promptInfoT) string {
-	prompt := textPromptT{}
+func renderPrompt(promptInfo promptInfoT, isPowerline bool) string {
+	prompt := promptT{
+		isPowerline: isPowerline,
+	}
+
+	// -----------------------
+	// Debug
+	// -----------------------
+	if ENABLE_DEBUG_INDICATOR {
+		prompt.addSegment(
+			"Debug",
+			STYLE_DEBUG)
+	}
+
 	// -----------------------
 	// Conda Environment
 	// -----------------------
 	if promptInfo.CondaEnvironment != "" {
-		prompt = prompt.addSegment(
-			fmt.Sprintf(" %s ", promptInfo.CondaEnvironment),
-			COLOR_TEXT_FG_PATH_CONDA,
-			true)
+		prompt.addSegment(
+			fmt.Sprint(promptInfo.CondaEnvironment),
+			STYLE_CONDA)
 	}
 
 	// -----------------------
 	// Context
 	// -----------------------
 	if promptInfo.ShowContext {
-		prompt = prompt.addSegment(
-			fmt.Sprintf(" %s@%s ", promptInfo.Username, promptInfo.Hostname),
-			COLOR_TEXT_FG_PATH_CONTEXT, true)
+		prompt.addSegment(
+			fmt.Sprintf("%s@%s", promptInfo.Username, promptInfo.Hostname),
+			STYLE_CONTEXT)
 	}
 
 	// -----------------------
 	// Git root directory
 	// -----------------------
-	prompt = prompt.addSegment(
-		fmt.Sprintf(" %s", promptInfo.PathGitRootBeginning),
-		COLOR_TEXT_FG_PATH_GITROOT, true)
-	prompt = prompt.addSegment(
-		fmt.Sprintf("%s ", promptInfo.PathGitRootFinal),
-		COLOR_TEXT_FG_PATH_GITROOT_FINAL, false)
+	prompt.addSegment(
+		fmt.Sprint(promptInfo.PathGitRootBeginning),
+		STYLE_GITROOT_PRE)
+	prompt.appendToSegment(
+		fmt.Sprint(promptInfo.PathGitRootFinal),
+		STYLE_GITROOT)
 
 	// -----------------------
 	// Git Status
@@ -138,81 +172,27 @@ func renderPrompt(usePowerline bool, promptInfo promptInfoT) string {
 	// TODO: Detect clean/dirty
 	// TODO: Do nothing if not in a git dir
 	if promptInfo.GitBranch != "" {
-		prompt = prompt.addSegment(
-			fmt.Sprintf(" %s ", promptInfo.GitBranch),
-			COLOR_TEXT_FG_GIT_INFO_CLEAN,
-			true)
+		var segmentText string
+		if isPowerline {
+			segmentText = fmt.Sprintf("%s %s", SYMBOL_PL_GIT_BRANCH, promptInfo.GitBranch)
+		} else {
+			segmentText = fmt.Sprint(promptInfo.GitBranch)
+		}
+		prompt.addSegment(
+			segmentText,
+			STYLE_GIT_INFO_CLEAN)
 	}
 
 	// -----------------------
 	// Sub-directory within Git Repo
 	// -----------------------
 	if promptInfo.PathGitSub != "" {
-		prompt = prompt.addSegment(
-			fmt.Sprintf(" %s ", promptInfo.PathGitSub),
-			COLOR_TEXT_FG_PATH_GITSUB,
-			true)
+		prompt.addSegment(
+			fmt.Sprint(promptInfo.PathGitSub),
+			STYLE_GITSUB)
 	}
 
-	prompt = prompt.endSegments()
-
-	return prompt.Prompt
-}
-
-func renderPromptPowerline(promptInfo promptInfoT) string {
-	// -----------------------
-	// Conda Environment
-	// -----------------------
-	prompt := powerlinePromptT{}
-	if promptInfo.CondaEnvironment != "" {
-		prompt = prompt.addSegment(
-			fmt.Sprintf(" %s ", promptInfo.CondaEnvironment),
-			STYLE_POWERLINE_CONDA,
-			true)
-	}
-
-	// -----------------------
-	// Context
-	// -----------------------
-	if promptInfo.ShowContext {
-		prompt = prompt.addSegment(
-			fmt.Sprintf(" %s@%s ", promptInfo.Username, promptInfo.Hostname),
-			STYLE_POWERLINE_CONTEXT, true)
-	}
-
-	// -----------------------
-	// Git root directory
-	// -----------------------
-	prompt = prompt.addSegment(
-		fmt.Sprintf(" %s", promptInfo.PathGitRootBeginning),
-		STYLE_GITROOT_PRE, true)
-	prompt = prompt.addSegment(
-		fmt.Sprintf("%s ", promptInfo.PathGitRootFinal),
-		STYLE_GITROOT, false)
-
-	// -----------------------
-	// Git Status
-	// -----------------------
-	// TODO: Detect clean/dirty
-	// TODO: Do nothing if not in a git dir
-	if promptInfo.GitBranch != "" {
-		prompt = prompt.addSegment(
-			fmt.Sprintf(" %s %s ", SYMBOL_GIT_BRANCH, promptInfo.GitBranch),
-			STYLE_GIT_INFO_CLEAN,
-			true)
-	}
-
-	// -----------------------
-	// Sub-directory within Git Repo
-	// -----------------------
-	if promptInfo.PathGitSub != "" {
-		prompt = prompt.addSegment(
-			fmt.Sprintf(" %s ", promptInfo.PathGitSub),
-			STYLE_GITSUB,
-			true)
-	}
-
-	prompt = prompt.endSegments()
+	prompt.endSegments()
 
 	return prompt.Prompt
 }
@@ -274,11 +254,7 @@ func shortenPath(path string) string {
 	for i := 0; i < len(pieces); i++ {
 		piece = pieces[i]
 		if i < (len(pieces) - 1) {
-			newPieces = append(newPieces, shorten(piece))
-			continue
-		}
-		if ENABLE_BOLD {
-			piece = "%B%F{" + COLOR_FG_BOLD + "}" + piece + "%b%f"
+			piece = shorten(piece)
 		}
 		newPieces = append(newPieces, piece)
 	}

@@ -2,56 +2,75 @@ package main
 
 import "github.com/gookit/color"
 
-type powerlinePromptT struct {
-	Prompt            string
-	CurrentBGColorHex string
+type promptInfoT struct {
+	CondaEnvironment     string
+	Username             string
+	UserHomeDir          string
+	ShowContext          bool
+	Hostname             string
+	PathGitRootBeginning string
+	PathGitRootFinal     string
+	PathGitSub           string
+	GitBranch            string
 }
 
-type textPromptT struct {
+type promptT struct {
 	Prompt            string
 	CurrentBGColorHex string
+	isPowerline       bool
 }
 
 type promptStyleT struct {
-	ColorHexFG string
-	ColorHexBG string
-	Bold       bool
+	ColorHexFGPowerline string
+	ColorHexBGPowerline string
+	ColorHexFGText      string
+	Bold                bool
 }
 
-func (prompt powerlinePromptT) addSegment(text string, style promptStyleT, withSeparator bool) powerlinePromptT {
-	if prompt.Prompt != "" && withSeparator {
-		separatorStyle := color.HEXStyle(prompt.CurrentBGColorHex, style.ColorHexBG)
-		prompt.Prompt += separatorStyle.Sprintf("\ue0b0")
+func (prompt *promptT) addSegment(text string, style promptStyleT) {
+	if prompt.isPowerline {
+		// Powerline prompt gets a leading space
+		text = " " + text
 	}
-	prompt.CurrentBGColorHex = style.ColorHexBG
-	appendStyle := color.HEXStyle(style.ColorHexFG, style.ColorHexBG)
-	if style.Bold {
-		appendStyle.SetOpts(color.Opts{color.OpBold})
-	}
-	prompt.Prompt += appendStyle.Sprintf("%s", text)
-	return prompt
-}
-
-func (prompt powerlinePromptT) endSegments() powerlinePromptT {
 	if prompt.Prompt != "" {
-		separatorStyle := color.HEX(prompt.CurrentBGColorHex)
-		prompt.Prompt += separatorStyle.Sprintf(SYMBOL_SEPARATOR)
+		// -------------------
+		//  Add Separator
+		// -------------------
+		if prompt.isPowerline {
+			separatorStyle := color.HEXStyle(style.ColorHexBGPowerline, prompt.CurrentBGColorHex)
+			prompt.Prompt += separatorStyle.Sprint(" ")
+			separatorStyle = color.HEXStyle(prompt.CurrentBGColorHex, style.ColorHexBGPowerline)
+			prompt.Prompt += separatorStyle.Sprintf("%s", SYMBOL_PL_SEPARATOR)
+		} else {
+			separatorColor := color.HEX(COLOR_TEXT_FG_SEPARATOR)
+			// prompt.Prompt += separatorColor.Sprintf(" ⟫ ")
+			prompt.Prompt += separatorColor.Sprintf("⟫")
+		}
 	}
-	return prompt
+	prompt.appendToSegment(text, style)
 }
 
-func (prompt textPromptT) addSegment(text string, colorHexFG string, withSeparator bool) textPromptT {
-	if prompt.Prompt != "" && withSeparator {
-		separatorColor := color.HEX(COLOR_TEXT_FG_SEPARATOR)
-		prompt.Prompt += separatorColor.Sprintf("⟫")
+func (prompt *promptT) appendToSegment(text string, style promptStyleT) {
+	if prompt.isPowerline {
+		prompt.CurrentBGColorHex = style.ColorHexBGPowerline
+		appendStyle := color.HEXStyle(style.ColorHexFGPowerline, style.ColorHexBGPowerline)
+		if style.Bold {
+			appendStyle.SetOpts(color.Opts{color.OpBold})
+		}
+		prompt.Prompt += appendStyle.Sprintf("%s", text)
+	} else {
+		appendColor := color.HEX(style.ColorHexFGText)
+		prompt.Prompt += appendColor.Sprintf("%s", text)
 	}
-	prompt.CurrentBGColorHex = colorHexFG
-	appendColor := color.HEX(colorHexFG)
-	prompt.Prompt += appendColor.Sprintf("%s", text)
-	return prompt
 }
 
-func (prompt textPromptT) endSegments() textPromptT {
-	prompt.Prompt += "$ "
-	return prompt
+func (prompt *promptT) endSegments() {
+	if prompt.isPowerline {
+		separatorStyle := color.HEXStyle(COLOR_BG_DEFAULT, prompt.CurrentBGColorHex)
+		prompt.Prompt += separatorStyle.Sprint(" ")
+		separatorStyle = color.HEXStyle(prompt.CurrentBGColorHex)
+		prompt.Prompt += separatorStyle.Sprintf("%s ", SYMBOL_PL_SEPARATOR)
+	} else {
+		prompt.Prompt += " $ "
+	}
 }
