@@ -121,7 +121,7 @@ func renderPrompt(promptInfo promptInfoT, isPowerline bool) string {
 	// -----------------------
 	if promptInfo.CondaEnvironment != "" {
 		prompt = prompt.addSegment(
-			fmt.Sprintf(" %s ", promptInfo.CondaEnvironment),
+			fmt.Sprintf("%s", promptInfo.CondaEnvironment),
 			STYLE_CONDA)
 	}
 
@@ -130,7 +130,7 @@ func renderPrompt(promptInfo promptInfoT, isPowerline bool) string {
 	// -----------------------
 	if promptInfo.ShowContext {
 		prompt = prompt.addSegment(
-			fmt.Sprintf(" %s@%s ", promptInfo.Username, promptInfo.Hostname),
+			fmt.Sprintf("%s@%s", promptInfo.Username, promptInfo.Hostname),
 			STYLE_CONTEXT)
 	}
 
@@ -138,10 +138,10 @@ func renderPrompt(promptInfo promptInfoT, isPowerline bool) string {
 	// Git root directory
 	// -----------------------
 	prompt = prompt.addSegment(
-		fmt.Sprintf(" %s", promptInfo.PathGitRootBeginning),
+		fmt.Sprintf("%s", promptInfo.PathGitRootBeginning),
 		STYLE_GITROOT_PRE)
 	prompt = prompt.appendToSegment(
-		fmt.Sprintf("%s ", promptInfo.PathGitRootFinal),
+		fmt.Sprintf("%s", promptInfo.PathGitRootFinal),
 		STYLE_GITROOT)
 
 	// -----------------------
@@ -152,9 +152,9 @@ func renderPrompt(promptInfo promptInfoT, isPowerline bool) string {
 	if promptInfo.GitBranch != "" {
 		var segmentText string
 		if isPowerline {
-			segmentText = fmt.Sprintf(" %s %s ", SYMBOL_GIT_BRANCH, promptInfo.GitBranch)
+			segmentText = fmt.Sprintf("%s %s", SYMBOL_GIT_BRANCH, promptInfo.GitBranch)
 		} else {
-			segmentText = fmt.Sprintf(" %s ", promptInfo.GitBranch)
+			segmentText = fmt.Sprintf("%s", promptInfo.GitBranch)
 		}
 		prompt = prompt.addSegment(
 			segmentText,
@@ -166,7 +166,7 @@ func renderPrompt(promptInfo promptInfoT, isPowerline bool) string {
 	// -----------------------
 	if promptInfo.PathGitSub != "" {
 		prompt = prompt.addSegment(
-			fmt.Sprintf(" %s ", promptInfo.PathGitSub),
+			fmt.Sprintf("%s", promptInfo.PathGitSub),
 			STYLE_GITSUB)
 	}
 

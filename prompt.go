@@ -28,16 +28,22 @@ type promptStyleT struct {
 }
 
 func (prompt promptT) addSegment(text string, style promptStyleT) promptT {
+	if prompt.isPowerline {
+		// Powerline prompt gets a leading space
+		text = " " + text
+	}
 	if prompt.Prompt != "" {
 		// -------------------
 		//  Add Separator
 		// -------------------
 		if prompt.isPowerline {
-			separatorStyle := color.HEXStyle(prompt.CurrentBGColorHex, style.ColorHexBGPowerline)
-			prompt.Prompt += separatorStyle.Sprintf("\ue0b0")
+			separatorStyle := color.HEXStyle(style.ColorHexBGPowerline, prompt.CurrentBGColorHex)
+			prompt.Prompt += separatorStyle.Sprint(" ")
+			separatorStyle = color.HEXStyle(prompt.CurrentBGColorHex, style.ColorHexBGPowerline)
+			prompt.Prompt += separatorStyle.Sprintf("%s", SYMBOL_SEPARATOR)
 		} else {
 			separatorColor := color.HEX(COLOR_TEXT_FG_SEPARATOR)
-			prompt.Prompt += separatorColor.Sprintf("⟫")
+			prompt.Prompt += separatorColor.Sprintf(" ⟫ ")
 		}
 	}
 	prompt = prompt.appendToSegment(text, style)
@@ -61,10 +67,12 @@ func (prompt promptT) appendToSegment(text string, style promptStyleT) promptT {
 
 func (prompt promptT) endSegments() promptT {
 	if prompt.isPowerline {
-		separatorStyle := color.HEX(prompt.CurrentBGColorHex)
-		prompt.Prompt += separatorStyle.Sprintf(SYMBOL_SEPARATOR)
+		separatorStyle := color.HEXStyle(COLOR_BG_DEFAULT, prompt.CurrentBGColorHex)
+		prompt.Prompt += separatorStyle.Sprint(" ")
+		separatorStyle = color.HEXStyle(prompt.CurrentBGColorHex)
+		prompt.Prompt += separatorStyle.Sprintf("%s ", SYMBOL_SEPARATOR)
 	} else {
-		prompt.Prompt += "$ "
+		prompt.Prompt += " $ "
 	}
 	return prompt
 }
