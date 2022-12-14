@@ -169,20 +169,31 @@ func renderPrompt(promptInfo promptInfoT, isPowerline bool) promptT {
 		STYLE_GITROOT)
 
 	// -----------------------
-	// Git Status
+	// Git Info
 	// -----------------------
 	// TODO: Detect clean/dirty
 	// TODO: Do nothing if not in a git dir
 	if promptInfo.GitBranch != "" {
+		style := STYLE_GIT_INFO_CLEAN
+		if promptInfo.GitStatus != "" {
+			style = STYLE_GIT_INFO_DIRTY
+		}
 		var segmentText string
 		if isPowerline {
 			segmentText = fmt.Sprintf("%s %s", SYMBOL_PL_GIT_BRANCH, promptInfo.GitBranch)
+			if promptInfo.GitStatus != "" {
+				segmentText += " " + promptInfo.GitStatus
+			}
 		} else {
 			segmentText = fmt.Sprint(promptInfo.GitBranch)
+			// TODO: Probably don't use powerline fonts here. Find a way to do ASCII instead
+			if promptInfo.GitStatus != "" {
+				segmentText += " " + promptInfo.GitStatus
+			}
 		}
 		prompt.addSegment(
 			segmentText,
-			STYLE_GIT_INFO_CLEAN)
+			style)
 	}
 
 	// -----------------------
@@ -227,6 +238,9 @@ func buildPromptInfo(path string) (promptInfoT, error) {
 	promptInfo.Hostname = hostname
 
 	promptInfo.GitBranch = getGitBranch(path)
+	if promptInfo.GitBranch != "" {
+		promptInfo.GitStatus = getGitStatus(path)
+	}
 
 	return promptInfo, nil
 }
@@ -332,6 +346,36 @@ func getGitBranch(path string) string {
 		reference = "(" + strings.TrimSpace(string(out)) + ")"
 	}
 	return reference
+}
+
+func getGitStatus(path string) string {
+	var cmd *exec.Cmd
+	var e bytes.Buffer
+	var out []byte
+	var err error
+	var status string
+
+	cmd = exec.Command("git", "status", "--porcelain")
+	cmd.Stderr = &e
+	cmd.Dir = path
+	out, err = cmd.Output()
+	if err == nil {
+		result := string(out)
+		// TODO: These are sloppy checks.  Use proper regexes
+		if strings.Contains(result, "??") {
+			// UNTRACKED
+			status += " "
+		}
+		if strings.Contains(result, "A ") {
+			// STAGED
+			status += " "
+		}
+		if strings.Contains(result, " M") {
+			// MODIFIED
+			status += " "
+		}
+	}
+	return status
 }
 
 func finalComponent(path string) string {

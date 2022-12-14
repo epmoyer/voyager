@@ -12,6 +12,7 @@ type promptInfoT struct {
 	PathGitRootFinal     string
 	PathGitSub           string
 	GitBranch            string
+	GitStatus            string
 }
 
 type promptT struct {
