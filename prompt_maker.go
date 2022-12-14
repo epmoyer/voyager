@@ -10,6 +10,8 @@ import (
 	"strings"
 )
 
+const ENABLE_DEBUG_INDICATOR = true
+
 // const SYMBOL_PL_GIT_BRANCH = "\ue0a0"           // PowerLine: VCS Branch
 // const SYMBOL_PL_GIT_BRANCH = "\ue725"           // PowerLine: VCS Branch
 const SYMBOL_PL_GIT_BRANCH = "\uf418"           // PowerLine: VCS Branch
@@ -23,6 +25,11 @@ const SYMBOL_PL_SEPARATOR = "\ue0b0"            // PowerLine: Triangle-Right Sep
 const COLOR_BG_DEFAULT = "#000000"
 const COLOR_TEXT_FG_SEPARATOR = "#707070"
 
+var STYLE_DEBUG = promptStyleT{
+	ColorHexFGPowerline: "#000000",
+	ColorHexBGPowerline: "#FFA500",
+	ColorHexFGText:      "#FFA500",
+}
 var STYLE_CONDA = promptStyleT{
 	ColorHexFGPowerline: "#202020",
 	ColorHexBGPowerline: "#5EABF7",
@@ -120,6 +127,15 @@ func main() {
 func renderPrompt(promptInfo promptInfoT, isPowerline bool) string {
 	prompt := promptT{
 		isPowerline: isPowerline,
+	}
+
+	// -----------------------
+	// Debug
+	// -----------------------
+	if ENABLE_DEBUG_INDICATOR {
+		prompt.addSegment(
+			"Debug",
+			STYLE_DEBUG)
 	}
 
 	// -----------------------
