@@ -198,22 +198,33 @@ func (gitInfo *gitInfoT) update(path string) {
 		gitInfo.IsStaged ||
 		gitInfo.IsModified)
 }
-func (git gitInfoT) renderStatus(isPowerline bool) string {
+func (git gitInfoT) render(isPowerline bool) string {
 	var symbols map[string]string
 	if isPowerline {
 		symbols = SYMBOLS_POWERLINE
 	} else {
 		symbols = SYMBOLS_TEXT
 	}
+
 	text := ""
+	indicator := "branch"
+	if git.IsDetached {
+		indicator = "detached"
+	}
+	text = symbols[indicator] + " " + git.Branch
+
+	status := ""
 	if git.IsStaged {
-		text += symbols["staged"]
+		status += symbols["staged"]
 	}
 	if git.IsModified {
-		text += symbols["modified"]
+		status += symbols["modified"]
 	}
 	if git.IsUntracked {
-		text += symbols["untracked"]
+		status += symbols["untracked"]
+	}
+	if status != "" {
+		text += " " + status
 	}
 	return text
 }

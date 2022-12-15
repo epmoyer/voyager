@@ -25,11 +25,15 @@ const SYMBOL_PL_CHECK = "\uf00c"                // PowerLine: Check-mark ()
 const SYMBOL_PL_X = "\uf00d"                    // PowerLine: X ()
 
 var SYMBOLS_POWERLINE = map[string]string{
+	"branch":    SYMBOL_PL_GIT_BRANCH,
+	"detached":  SYMBOL_PL_GIT_DETACHED,
 	"staged":    SYMBOL_PL_GIT_STAGED + " ",
 	"modified":  SYMBOL_PL_GIT_MODIFIED + " ",
 	"untracked": SYMBOL_PL_GIT_BRANCH_UNTRACKED + " ",
 }
 var SYMBOLS_TEXT = map[string]string{
+	"branch":    "ʎ",
+	"detached":  "➦",
 	"staged":    "+",
 	"modified":  "!",
 	"untracked": "?",
@@ -203,15 +207,15 @@ func (prompt *promptT) renderPrompt(promptInfo promptInfoT) {
 		if git.IsDetached {
 			style = STYLE_GIT_INFO_DETACHED
 		}
-		text := ""
-		if prompt.isPowerline {
-			symbol := SYMBOL_PL_GIT_BRANCH
-			if git.IsDetached {
-				symbol = SYMBOL_PL_GIT_DETACHED
-			}
-			text += symbol + " "
-		}
-		text += git.Branch + " " + git.renderStatus(prompt.isPowerline)
+		// text := ""
+		// if prompt.isPowerline {
+		// 	symbol := SYMBOL_PL_GIT_BRANCH
+		// 	if git.IsDetached {
+		// 		symbol = SYMBOL_PL_GIT_DETACHED
+		// 	}
+		// 	text += symbol + " "
+		// }
+		text := git.render(prompt.isPowerline)
 		prompt.addSegment(
 			text,
 			style)
