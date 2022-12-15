@@ -63,7 +63,7 @@ var STYLE_CONTEXT = promptStyleT{
 var STYLE_GITROOT_PRE = promptStyleT{
 	ColorHexFGPowerline: "#c0c0c0",
 	ColorHexBGPowerline: "#4F6D6F",
-	ColorHexFGText:      "#009000",
+	ColorHexFGText:      "#00a000",
 }
 var STYLE_GITROOT = promptStyleT{
 	ColorHexFGPowerline: "#ffffff",
@@ -89,7 +89,8 @@ var STYLE_GIT_INFO_DETACHED = promptStyleT{
 var STYLE_GITSUB = promptStyleT{
 	ColorHexFGPowerline: "#c0c0c0",
 	ColorHexBGPowerline: "#515151",
-	ColorHexFGText:      "#6D8B8F",
+	ColorHexFGText:      "#7A9CA1",
+	// ColorHexFGText:      "#6D8B8F",
 }
 
 func main() {
