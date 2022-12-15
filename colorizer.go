@@ -4,16 +4,20 @@ type colorizerT struct {
 	shell string
 }
 
-func (colorizer colorizerT) colorize(text string, colorHexFG string, colorHexBG string) string {
+func (colorizer colorizerT) colorize(text string, colorHexFG string, colorHexBG string, bold bool) string {
 	var formatFG string
 	var formatBG string
+	var formatBold string
 	if colorHexFG != "" {
 		formatFG = "%F{" + colorHexFG + "}"
 	}
 	if colorHexBG != "" {
 		formatBG = "%K{" + colorHexBG + "}"
 	}
-	result := "%{" + formatFG + formatBG + "%}" + text
+	if bold {
+		formatBold = "%B"
+	}
+	result := "%{" + formatFG + formatBG + formatBold + "%}" + text + "%b"
 	return result
 }
 

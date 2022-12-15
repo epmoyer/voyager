@@ -66,7 +66,7 @@ func (prompt *promptT) addSegment(text string, style promptStyleT) {
 
 			// SHELL
 			prompt.TextShell += " "
-			prompt.TextShell += prompt.colorizer.colorize(SYMBOL_PL_BULLNOSE, style.ColorHexBGPowerline, "")
+			prompt.TextShell += prompt.colorizer.colorize(SYMBOL_PL_BULLNOSE, style.ColorHexBGPowerline, "", style.Bold)
 		}
 	} else {
 		// -------------------
@@ -80,14 +80,15 @@ func (prompt *promptT) addSegment(text string, style promptStyleT) {
 
 			// SHELL
 			prompt.TextShell += " "
-			prompt.TextShell += prompt.colorizer.colorize(SYMBOL_PL_SEPARATOR, prompt.CurrentBGColorHex, style.ColorHexBGPowerline)
+			prompt.TextShell += prompt.colorizer.colorize(SYMBOL_PL_SEPARATOR, prompt.CurrentBGColorHex, style.ColorHexBGPowerline, style.Bold)
 		} else {
 			separatorColor := color.HEX(COLOR_TEXT_FG_SEPARATOR)
 			// prompt.Prompt += separatorColor.Sprintf(" ⟫ ")
 			prompt.TextPrintable += separatorColor.Sprintf(SYMBOL_TEXT_SEPARATOR)
 
 			// SHELL
-			prompt.TextShell += prompt.colorizer.colorize(SYMBOL_TEXT_SEPARATOR, COLOR_TEXT_FG_SEPARATOR, "")
+			// TODO: Should probably declare a style for this
+			prompt.TextShell += prompt.colorizer.colorize(SYMBOL_TEXT_SEPARATOR, COLOR_TEXT_FG_SEPARATOR, "", false)
 		}
 	}
 	prompt.appendToSegment(text, style)
@@ -103,14 +104,17 @@ func (prompt *promptT) appendToSegment(text string, style promptStyleT) {
 		prompt.TextPrintable += appendStyle.Sprintf("%s", text)
 
 		// SHELL
-		prompt.TextShell += prompt.colorizer.colorize(text, style.ColorHexFGPowerline, style.ColorHexBGPowerline)
+		prompt.TextShell += prompt.colorizer.colorize(text, style.ColorHexFGPowerline, style.ColorHexBGPowerline, style.Bold)
 	} else {
-		appendColor := color.HEX(style.ColorHexFGText)
-		// TODO: Implement BOLD
-		prompt.TextPrintable += appendColor.Sprintf("%s", text)
+		// appendColor := color.HEX(style.ColorHexFGText)
+		appendStyle := color.HEXStyle(style.ColorHexFGText)
+		if style.Bold {
+			appendStyle.SetOpts(color.Opts{color.OpBold})
+		}
+		prompt.TextPrintable += appendStyle.Sprintf("%s", text)
 
 		// SHELL
-		prompt.TextShell += prompt.colorizer.colorize(text, style.ColorHexFGText, "")
+		prompt.TextShell += prompt.colorizer.colorize(text, style.ColorHexFGText, "", style.Bold)
 	}
 }
 
@@ -124,7 +128,7 @@ func (prompt *promptT) endSegments() {
 		// SHELL
 		prompt.TextShell += " "
 		prompt.TextShell += prompt.colorizer.reset()
-		prompt.TextShell += prompt.colorizer.colorize(SYMBOL_PL_SEPARATOR+" ", prompt.CurrentBGColorHex, "")
+		prompt.TextShell += prompt.colorizer.colorize(SYMBOL_PL_SEPARATOR+" ", prompt.CurrentBGColorHex, "", false)
 		prompt.TextShell += prompt.colorizer.reset()
 	} else {
 		prompt.TextPrintable += " $ "
