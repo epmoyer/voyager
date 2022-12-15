@@ -74,7 +74,7 @@ var STYLE_GITROOT = promptStyleT{
 var STYLE_GIT_INFO_CLEAN = promptStyleT{
 	ColorHexFGPowerline: "#000000",
 	ColorHexBGPowerline: "#A2C3C7",
-	ColorHexFGText:      "#A2C3C7",
+	ColorHexFGText:      "#5EABF7",
 }
 var STYLE_GIT_INFO_DIRTY = promptStyleT{
 	ColorHexFGPowerline: "#000000",

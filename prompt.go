@@ -106,6 +106,7 @@ func (prompt *promptT) appendToSegment(text string, style promptStyleT) {
 		prompt.TextShell += prompt.colorizer.colorize(text, style.ColorHexFGPowerline, style.ColorHexBGPowerline)
 	} else {
 		appendColor := color.HEX(style.ColorHexFGText)
+		// TODO: Implement BOLD
 		prompt.TextPrintable += appendColor.Sprintf("%s", text)
 
 		// SHELL
