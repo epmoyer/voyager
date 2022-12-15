@@ -1,6 +1,21 @@
 package main
 
-import "github.com/gookit/color"
+import (
+	"bytes"
+	"os/exec"
+	"strings"
+
+	"github.com/gookit/color"
+)
+
+type gitInfoT struct {
+	Branch      string
+	IsDetached  bool
+	IsDirty     bool
+	IsStaged    bool
+	IsModified  bool
+	IsUntracked bool
+}
 
 type promptInfoT struct {
 	CondaEnvironment     string
@@ -11,6 +26,7 @@ type promptInfoT struct {
 	PathGitRootBeginning string
 	PathGitRootFinal     string
 	PathGitSub           string
+	Git                  gitInfoT
 	GitBranch            string
 	GitStatus            string
 	IsDetached           bool
@@ -107,5 +123,75 @@ func (prompt *promptT) endSegments() {
 		prompt.TextShell += prompt.colorizer.reset()
 	} else {
 		prompt.TextPrintable += " $ "
+	}
+}
+
+func (gitInfo *gitInfoT) update(path string) {
+	var cmd *exec.Cmd
+	var e bytes.Buffer
+	var out []byte
+	var err error
+	var branchName string
+
+	cmd = exec.Command("git", "rev-parse", "--is-inside-work-tree")
+	cmd.Stderr = &e
+	cmd.Dir = path
+	out, err = cmd.Output()
+	if err != nil {
+		// This is not a git repo
+		return
+	}
+	if strings.TrimSpace(string(out)) != "true" {
+		// This is not a git repo
+		return
+	}
+
+	cmd = exec.Command("git", "symbolic-ref", "HEAD")
+	cmd.Stderr = &e
+	cmd.Dir = path
+	out, err = cmd.Output()
+	if err == nil {
+		branchName = strings.TrimSpace(string(out))
+	}
+	if branchName != "" {
+		branchName = finalComponent(branchName)
+	} else {
+		// reference = "(other)"
+		cmd = exec.Command("git", "rev-parse", "--short", "HEAD")
+		var e bytes.Buffer
+		cmd.Stderr = &e
+		cmd.Dir = path
+		out, err = cmd.Output()
+		if err != nil {
+			// This is not a git repo
+			return
+		}
+		branchName = "(" + strings.TrimSpace(string(out)) + ")"
+		gitInfo.IsDetached = true
+	}
+	if branchName == "" {
+		return
+	}
+	gitInfo.Branch = branchName
+
+	// ---------------------------
+	// Git Status
+	// ---------------------------
+	cmd = exec.Command("git", "status", "--porcelain")
+	cmd.Stderr = &e
+	cmd.Dir = path
+	out, err = cmd.Output()
+	if err == nil {
+		result := string(out)
+		// TODO: These are sloppy checks.  Use proper regexes
+		if strings.Contains(result, "??") {
+			gitInfo.IsUntracked = true
+		}
+		if strings.Contains(result, "A ") {
+			gitInfo.IsStaged = true
+		}
+		if strings.Contains(result, " M") {
+			gitInfo.IsModified = true
+		}
 	}
 }

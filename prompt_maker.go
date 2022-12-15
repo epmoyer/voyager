@@ -25,8 +25,8 @@ const SYMBOL_PL_CHECK = "\uf00c"                // PowerLine: Check-mark ()
 const SYMBOL_PL_X = "\uf00d"                    // PowerLine: X ()
 
 var SYMBOLS_POWERLINE = map[string]string{
-	"staged":   SYMBOL_PL_GIT_STAGED,
-	"modified": SYMBOL_PL_GIT_MODIFIED,
+	"staged":   SYMBOL_PL_GIT_STAGED + " ",
+	"modified": SYMBOL_PL_GIT_MODIFIED + " ",
 }
 var SYMBOLS_TEXT = map[string]string{
 	"staged":   "+",
@@ -275,6 +275,9 @@ func buildPromptInfo(path string) (promptInfoT, error) {
 	// ---------------------
 	// Git
 	// ---------------------
+	promptInfo.Git.update(path)
+
+	// TODO: OLD.  Deprecate this
 	promptInfo.GitBranch, promptInfo.IsDetached = getGitBranch(path)
 	if promptInfo.GitBranch != "" {
 		promptInfo.GitStatus = getGitStatus(path)
