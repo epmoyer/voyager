@@ -129,7 +129,8 @@ func (prompt *promptT) endSegments() {
 	} else {
 		prompt.TextPrintable += " $ "
 		// SHELL
-		prompt.TextShell += prompt.colorizer.reset() + " $  "
+		// TODO: The final reset should not be necessary (but is).  Is a trim() removing the final spaces somewhere?
+		prompt.TextShell += prompt.colorizer.reset() + " $ " + prompt.colorizer.reset()
 	}
 }
 
