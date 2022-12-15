@@ -36,7 +36,7 @@ func (prompt *promptT) init(isPowerline bool) {
 }
 
 func (prompt *promptT) addSegment(text string, style promptStyleT) {
-	if prompt.isPowerline {
+	if prompt.isPowerline && prompt.TextPrintable != "" {
 		// Powerline prompt gets a leading space
 		text = " " + text
 	}

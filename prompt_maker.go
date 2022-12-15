@@ -12,8 +12,6 @@ import (
 
 const ENABLE_DEBUG_INDICATOR = false
 
-// const SYMBOL_PL_GIT_BRANCH = "\ue0a0"           // PowerLine: VCS Branch
-// const SYMBOL_PL_GIT_BRANCH = "\ue725"           // PowerLine: VCS Branch
 const SYMBOL_PL_GIT_BRANCH = "\uf418"           // PowerLine: VCS Branch
 const SYMBOL_PL_GIT_STAGED = "\uF0C7"           // PowerLine: Floppy Disk
 const SYMBOL_PL_GIT_UNSTAGED = "\uF448"         // PowerLine: Pencil
