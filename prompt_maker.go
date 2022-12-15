@@ -12,14 +12,17 @@ import (
 
 const ENABLE_DEBUG_INDICATOR = false
 
-const SYMBOL_PL_GIT_BRANCH = "\uf418"           // PowerLine: VCS Branch
-const SYMBOL_PL_GIT_STAGED = "\uF0C7"           // PowerLine: Floppy Disk
-const SYMBOL_PL_GIT_UNSTAGED = "\uF448"         // PowerLine: Pencil
+const SYMBOL_PL_GIT_BRANCH = "\uf418"           // PowerLine: VCS Branch ()
+const SYMBOL_PL_GIT_DETACHED = "\uf995"         // PowerLine: VCS Detached (秊)
+const SYMBOL_PL_GIT_STAGED = "\uF0C7"           // PowerLine: Floppy Disk ()
+const SYMBOL_PL_GIT_UNSTAGED = "\uF448"         // PowerLine: Pencil ()
 const SYMBOL_PL_GIT_BRANCH_AHEAD = "\uF0DE"     // PowerLine: Up-arrow
 const SYMBOL_PL_GIT_BRANCH_BEHIND = "\uF0DD"    // PowerLine: Down-arrow
-const SYMBOL_PL_GIT_BRANCH_UNTRACKED = "\uF128" // PowerLine: Question-mark
+const SYMBOL_PL_GIT_BRANCH_UNTRACKED = "\uF128" // PowerLine: Question-mark ()
 const SYMBOL_PL_SEPARATOR = "\ue0b0"            // PowerLine: Triangle-Right Separator
-const SYMBOL_PL_BULLNOSE = ""                  // PowerLine: Triangle-Right Separator
+const SYMBOL_PL_BULLNOSE = "\ue0b6"             // PowerLine: Bullnose ()
+const SYMBOL_PL_CHECK = "\uf00c"                // PowerLine: Check-mark ()
+const SYMBOL_PL_X = "\uf00d"                    // PowerLine: X ()
 
 const COLOR_BG_DEFAULT = "#000000"
 const COLOR_FG_DEFAULT = "#ffffff"
@@ -60,6 +63,11 @@ var STYLE_GIT_INFO_DIRTY = promptStyleT{
 	ColorHexFGPowerline: "#000000",
 	ColorHexBGPowerline: "#E2D47D",
 	ColorHexFGText:      "#E2D47D",
+}
+var STYLE_GIT_INFO_DETACHED = promptStyleT{
+	ColorHexFGPowerline: "#000000",
+	ColorHexBGPowerline: "#FFAA55",
+	ColorHexFGText:      "#FF8000",
 }
 var STYLE_GITSUB = promptStyleT{
 	ColorHexFGPowerline: "#c0c0c0",
@@ -180,9 +188,16 @@ func (prompt *promptT) renderPrompt(promptInfo promptInfoT) {
 		if promptInfo.GitStatus != "" {
 			style = STYLE_GIT_INFO_DIRTY
 		}
+		if promptInfo.IsDetached {
+			style = STYLE_GIT_INFO_DETACHED
+		}
 		var segmentText string
 		if prompt.isPowerline {
-			segmentText = fmt.Sprintf("%s %s", SYMBOL_PL_GIT_BRANCH, promptInfo.GitBranch)
+			symbol := SYMBOL_PL_GIT_BRANCH
+			if promptInfo.IsDetached {
+				symbol = SYMBOL_PL_GIT_DETACHED
+			}
+			segmentText = fmt.Sprintf("%s %s", symbol, promptInfo.GitBranch)
 			if promptInfo.GitStatus != "" {
 				segmentText += " " + promptInfo.GitStatus
 			}
@@ -251,7 +266,7 @@ func buildPromptInfo(path string) (promptInfoT, error) {
 	// ---------------------
 	// Git
 	// ---------------------
-	promptInfo.GitBranch = getGitBranch(path)
+	promptInfo.GitBranch, promptInfo.IsDetached = getGitBranch(path)
 	if promptInfo.GitBranch != "" {
 		promptInfo.GitStatus = getGitStatus(path)
 	}
@@ -317,12 +332,13 @@ func splitGitPath(path string) (string, string) {
 	return pathGitRoot, pathGitSub
 }
 
-func getGitBranch(path string) string {
+func getGitBranch(path string) (string, bool) {
 	var cmd *exec.Cmd
 	var e bytes.Buffer
 	var out []byte
 	var err error
 	var reference string
+	var isDetached bool
 
 	cmd = exec.Command("git", "rev-parse", "--is-inside-work-tree")
 	cmd.Stderr = &e
@@ -330,11 +346,11 @@ func getGitBranch(path string) string {
 	out, err = cmd.Output()
 	if err != nil {
 		// This is not a git repo
-		return ""
+		return "", isDetached
 	}
 	if strings.TrimSpace(string(out)) != "true" {
 		// This is not a git repo
-		return ""
+		return "", isDetached
 	}
 
 	cmd = exec.Command("git", "symbolic-ref", "HEAD")
@@ -355,11 +371,12 @@ func getGitBranch(path string) string {
 		out, err = cmd.Output()
 		if err != nil {
 			// This is not a git repo
-			return ""
+			return "", isDetached
 		}
 		reference = "(" + strings.TrimSpace(string(out)) + ")"
+		isDetached = true
 	}
-	return reference
+	return reference, isDetached
 }
 
 func getGitStatus(path string) string {
