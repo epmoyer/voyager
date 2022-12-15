@@ -25,12 +25,14 @@ const SYMBOL_PL_CHECK = "\uf00c"                // PowerLine: Check-mark ()
 const SYMBOL_PL_X = "\uf00d"                    // PowerLine: X ()
 
 var SYMBOLS_POWERLINE = map[string]string{
-	"staged":   SYMBOL_PL_GIT_STAGED + " ",
-	"modified": SYMBOL_PL_GIT_MODIFIED + " ",
+	"staged":    SYMBOL_PL_GIT_STAGED + " ",
+	"modified":  SYMBOL_PL_GIT_MODIFIED + " ",
+	"untracked": SYMBOL_PL_GIT_BRANCH_UNTRACKED + " ",
 }
 var SYMBOLS_TEXT = map[string]string{
-	"staged":   "+",
-	"modified": "!",
+	"staged":    "+",
+	"modified":  "!",
+	"untracked": "?",
 }
 
 const COLOR_BG_DEFAULT = "#000000"
@@ -201,25 +203,17 @@ func (prompt *promptT) renderPrompt(promptInfo promptInfoT) {
 		if git.IsDetached {
 			style = STYLE_GIT_INFO_DETACHED
 		}
-		var segmentText string
+		text := ""
 		if prompt.isPowerline {
 			symbol := SYMBOL_PL_GIT_BRANCH
 			if git.IsDetached {
 				symbol = SYMBOL_PL_GIT_DETACHED
 			}
-			segmentText = fmt.Sprintf("%s %s", symbol, git.Branch)
-			if promptInfo.GitStatus != "" {
-				segmentText += " " + promptInfo.GitStatus
-			}
-		} else {
-			segmentText = fmt.Sprint(git.Branch)
-			// TODO: Probably don't use powerline fonts here. Find a way to do ASCII instead
-			if promptInfo.GitStatus != "" {
-				segmentText += " " + promptInfo.GitStatus
-			}
+			text += symbol + " "
 		}
+		text += git.Branch + " " + git.renderStatus(prompt.isPowerline)
 		prompt.addSegment(
-			segmentText,
+			text,
 			style)
 	}
 

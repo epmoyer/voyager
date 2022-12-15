@@ -201,3 +201,22 @@ func (gitInfo *gitInfoT) update(path string) {
 		gitInfo.IsStaged ||
 		gitInfo.IsModified)
 }
+func (git gitInfoT) renderStatus(isPowerline bool) string {
+	var symbols map[string]string
+	if isPowerline {
+		symbols = SYMBOLS_POWERLINE
+	} else {
+		symbols = SYMBOLS_TEXT
+	}
+	text := ""
+	if git.IsStaged {
+		text += symbols["staged"]
+	}
+	if git.IsModified {
+		text += symbols["modified"]
+	}
+	if git.IsUntracked {
+		text += symbols["untracked"]
+	}
+	return text
+}
