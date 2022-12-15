@@ -70,7 +70,7 @@ var STYLE_GITSUB = promptStyleT{
 func main() {
 	optDump := flag.Bool("dump", false,
 		"Show all prompt components and all prompts in all formatting styles.")
-	optIsPowerline := flag.Bool("powerline", true,
+	optPowerline := flag.Bool("powerline", false,
 		"Render prompt using PowerLine font.")
 	optShell := flag.String("shell", "zsh", "The shell to format the prompt for.")
 	optPrintable := flag.Bool("printable", false,
@@ -92,7 +92,7 @@ func main() {
 	promptInfo, _ := buildPromptInfo(path)
 
 	prompt := promptT{}
-	prompt.init(*optIsPowerline, *optShell)
+	prompt.init(*optPowerline, *optShell)
 
 	if *optDump {
 		fmt.Printf("ENV:GP_FORMAT=%#v\n", os.Getenv("GP_FORMAT"))
