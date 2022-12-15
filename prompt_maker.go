@@ -90,10 +90,11 @@ func main() {
 	var prompt promptT
 
 	if *optDump {
+		fmt.Println("-------------------------------------------------")
 		fmt.Println("Dump:")
-		fmt.Printf("ENV:GP_FORMAT=%#v\n", os.Getenv("GP_FORMAT"))
-		fmt.Println(path)
-		fmt.Printf("%#v\n", promptInfo)
+		fmt.Printf("   ENV:GP_FORMAT=%#v\n", os.Getenv("GP_FORMAT"))
+		fmt.Printf("   path:%#v\n", path)
+		fmt.Printf("   promptInfo:%#v\n", promptInfo)
 		fmt.Println("-------------------------------------------------")
 
 		isPowerline = false
