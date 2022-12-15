@@ -9,6 +9,7 @@ import (
 )
 
 type gitInfoT struct {
+	IsRepo      bool
 	Branch      string
 	IsDetached  bool
 	IsDirty     bool
@@ -170,8 +171,10 @@ func (gitInfo *gitInfoT) update(path string) {
 		gitInfo.IsDetached = true
 	}
 	if branchName == "" {
+		// This is not a git repo
 		return
 	}
+	gitInfo.IsRepo = true
 	gitInfo.Branch = branchName
 
 	// ---------------------------
@@ -194,4 +197,7 @@ func (gitInfo *gitInfoT) update(path string) {
 			gitInfo.IsModified = true
 		}
 	}
+	gitInfo.IsDirty = (gitInfo.IsUntracked ||
+		gitInfo.IsStaged ||
+		gitInfo.IsModified)
 }

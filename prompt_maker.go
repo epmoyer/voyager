@@ -192,26 +192,27 @@ func (prompt *promptT) renderPrompt(promptInfo promptInfoT) {
 	// -----------------------
 	// TODO: Detect clean/dirty
 	// TODO: Do nothing if not in a git dir
-	if promptInfo.GitBranch != "" {
+	git := promptInfo.Git
+	if git.IsRepo {
 		style := STYLE_GIT_INFO_CLEAN
-		if promptInfo.GitStatus != "" {
+		if git.IsDirty {
 			style = STYLE_GIT_INFO_DIRTY
 		}
-		if promptInfo.IsDetached {
+		if git.IsDetached {
 			style = STYLE_GIT_INFO_DETACHED
 		}
 		var segmentText string
 		if prompt.isPowerline {
 			symbol := SYMBOL_PL_GIT_BRANCH
-			if promptInfo.IsDetached {
+			if git.IsDetached {
 				symbol = SYMBOL_PL_GIT_DETACHED
 			}
-			segmentText = fmt.Sprintf("%s %s", symbol, promptInfo.GitBranch)
+			segmentText = fmt.Sprintf("%s %s", symbol, git.Branch)
 			if promptInfo.GitStatus != "" {
 				segmentText += " " + promptInfo.GitStatus
 			}
 		} else {
-			segmentText = fmt.Sprint(promptInfo.GitBranch)
+			segmentText = fmt.Sprint(git.Branch)
 			// TODO: Probably don't use powerline fonts here. Find a way to do ASCII instead
 			if promptInfo.GitStatus != "" {
 				segmentText += " " + promptInfo.GitStatus
