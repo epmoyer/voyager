@@ -28,9 +28,6 @@ type promptInfoT struct {
 	PathGitRootFinal     string
 	PathGitSub           string
 	Git                  gitInfoT
-	GitBranch            string
-	GitStatus            string
-	IsDetached           bool
 }
 
 type promptT struct {

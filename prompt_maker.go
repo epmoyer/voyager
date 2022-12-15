@@ -272,12 +272,6 @@ func buildPromptInfo(path string) (promptInfoT, error) {
 	// ---------------------
 	promptInfo.Git.update(path)
 
-	// TODO: OLD.  Deprecate this
-	promptInfo.GitBranch, promptInfo.IsDetached = getGitBranch(path)
-	if promptInfo.GitBranch != "" {
-		promptInfo.GitStatus = getGitStatus(path)
-	}
-
 	return promptInfo, nil
 }
 
@@ -337,83 +331,6 @@ func splitGitPath(path string) (string, string) {
 	}
 
 	return pathGitRoot, pathGitSub
-}
-
-func getGitBranch(path string) (string, bool) {
-	var cmd *exec.Cmd
-	var e bytes.Buffer
-	var out []byte
-	var err error
-	var reference string
-	var isDetached bool
-
-	cmd = exec.Command("git", "rev-parse", "--is-inside-work-tree")
-	cmd.Stderr = &e
-	cmd.Dir = path
-	out, err = cmd.Output()
-	if err != nil {
-		// This is not a git repo
-		return "", isDetached
-	}
-	if strings.TrimSpace(string(out)) != "true" {
-		// This is not a git repo
-		return "", isDetached
-	}
-
-	cmd = exec.Command("git", "symbolic-ref", "HEAD")
-	cmd.Stderr = &e
-	cmd.Dir = path
-	out, err = cmd.Output()
-	if err == nil {
-		reference = strings.TrimSpace(string(out))
-	}
-	if reference != "" {
-		reference = finalComponent(reference)
-	} else {
-		// reference = "(other)"
-		cmd = exec.Command("git", "rev-parse", "--short", "HEAD")
-		var e bytes.Buffer
-		cmd.Stderr = &e
-		cmd.Dir = path
-		out, err = cmd.Output()
-		if err != nil {
-			// This is not a git repo
-			return "", isDetached
-		}
-		reference = "(" + strings.TrimSpace(string(out)) + ")"
-		isDetached = true
-	}
-	return reference, isDetached
-}
-
-func getGitStatus(path string) string {
-	var cmd *exec.Cmd
-	var e bytes.Buffer
-	var out []byte
-	var err error
-	var status string
-
-	cmd = exec.Command("git", "status", "--porcelain")
-	cmd.Stderr = &e
-	cmd.Dir = path
-	out, err = cmd.Output()
-	if err == nil {
-		result := string(out)
-		// TODO: These are sloppy checks.  Use proper regexes
-		if strings.Contains(result, "??") {
-			// UNTRACKED
-			status += " "
-		}
-		if strings.Contains(result, "A ") {
-			// STAGED
-			status += " "
-		}
-		if strings.Contains(result, " M") {
-			// MODIFIED
-			status += " "
-		}
-	}
-	return status
 }
 
 func finalComponent(path string) string {

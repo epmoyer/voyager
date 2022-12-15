@@ -6,6 +6,7 @@
         "gookit",
         "Powerline",
         "toplevel",
-        "unstaged"
+        "unstaged",
+        "unstarted"
     ]
 }
