@@ -1,12 +1,7 @@
 package main
 
-const (
-	SHELL_ZSH  = iota
-	SHELL_BASH = iota
-)
-
 type colorizerT struct {
-	shell int
+	shell string
 }
 
 func (colorizer colorizerT) colorize(text string, colorHexFG string, colorHexBG string) string {

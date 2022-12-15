@@ -30,8 +30,9 @@ type promptStyleT struct {
 	Bold                bool
 }
 
-func (prompt *promptT) init(isPowerline bool) {
+func (prompt *promptT) init(isPowerline bool, shell string) {
 	prompt.colorizer = colorizerT{}
+	prompt.colorizer.shell = shell
 	prompt.isPowerline = isPowerline
 }
 

@@ -70,6 +70,11 @@ var STYLE_GITSUB = promptStyleT{
 func main() {
 	optDump := flag.Bool("dump", false,
 		"Show all prompt components and all prompts in all formatting styles.")
+	optIsPowerline := flag.Bool("powerline", true,
+		"Render prompt using PowerLine font.")
+	optShell := flag.String("shell", "zsh", "The shell to format the prompt for.")
+	optPrintable := flag.Bool("printable", false,
+		"Return a printable (ASCII Esc) string rather than a shell $PROMPT/$PS1 string.")
 	// requestGitSub := flag.Bool("gitsub", false,
 	// 	"Get subdirectory relative to the git root.")
 	// requestBoth := flag.Bool("both", false,
@@ -86,24 +91,21 @@ func main() {
 
 	promptInfo, _ := buildPromptInfo(path)
 
-	var isPowerline bool
-	var prompt promptT
+	prompt := promptT{}
+	prompt.init(*optIsPowerline, *optShell)
 
 	if *optDump {
-		fmt.Println("-------------------------------------------------")
-		fmt.Println("Dump:")
-		fmt.Printf("   ENV:GP_FORMAT=%#v\n", os.Getenv("GP_FORMAT"))
-		fmt.Printf("   path:%#v\n", path)
-		fmt.Printf("   promptInfo:%#v\n", promptInfo)
-		fmt.Println("-------------------------------------------------")
+		fmt.Printf("ENV:GP_FORMAT=%#v\n", os.Getenv("GP_FORMAT"))
+		fmt.Printf("path:%#v\n", path)
+		fmt.Printf("promptInfo:%#v\n", promptInfo)
 
-		isPowerline = false
-		prompt = renderPrompt(promptInfo, isPowerline)
-		fmt.Printf("TEXT PROMPT:\n%s\n%s\n", prompt.TextShell, prompt.TextPrintable)
+		// isPowerline = false
+		// prompt = renderPrompt(promptInfo, isPowerline)
+		// fmt.Printf("TEXT PROMPT:\n%s\n%s\n", prompt.TextShell, prompt.TextPrintable)
 
-		isPowerline = true
-		prompt = renderPrompt(promptInfo, isPowerline)
-		fmt.Printf("POWERLINE PROMPT:\n%s\n%s\n", prompt.TextShell, prompt.TextPrintable)
+		// isPowerline = true
+		// prompt = renderPrompt(promptInfo, isPowerline)
+		// fmt.Printf("POWERLINE PROMPT:\n%s\n%s\n", prompt.TextShell, prompt.TextPrintable)
 
 		// prompt := promptT{}
 		// prompt = prompt.addSegment(" conda ", STYLE_POWERLINE_CONDA, false)
@@ -115,21 +117,22 @@ func main() {
 		// prompt = prompt.endSegments()
 		// fmt.Printf("PROMPT POWERLINE SEGMENT TEST:\n%s\n", prompt.Prompt)
 
-		fmt.Println("-------------------------------------------------")
+		// fmt.Println("-------------------------------------------------")
 		os.Exit(0)
 	}
 
-	isPowerline = (os.Getenv("GP_FORMAT") == "POWERLINE")
-	prompt = renderPrompt(promptInfo, isPowerline)
-	fmt.Print(prompt.TextShell)
+	// isPowerline = (os.Getenv("GP_FORMAT") == "POWERLINE")
+	prompt.renderPrompt(promptInfo)
+	if *optPrintable {
+		fmt.Print(prompt.TextPrintable)
+	} else {
+		fmt.Print(prompt.TextShell)
+	}
 
 	os.Exit(0)
 }
 
-func renderPrompt(promptInfo promptInfoT, isPowerline bool) promptT {
-	prompt := promptT{}
-	prompt.init(isPowerline)
-
+func (prompt *promptT) renderPrompt(promptInfo promptInfoT) {
 	// -----------------------
 	// Debug
 	// -----------------------
@@ -178,7 +181,7 @@ func renderPrompt(promptInfo promptInfoT, isPowerline bool) promptT {
 			style = STYLE_GIT_INFO_DIRTY
 		}
 		var segmentText string
-		if isPowerline {
+		if prompt.isPowerline {
 			segmentText = fmt.Sprintf("%s %s", SYMBOL_PL_GIT_BRANCH, promptInfo.GitBranch)
 			if promptInfo.GitStatus != "" {
 				segmentText += " " + promptInfo.GitStatus
@@ -205,8 +208,6 @@ func renderPrompt(promptInfo promptInfoT, isPowerline bool) promptT {
 	}
 
 	prompt.endSegments()
-
-	return prompt
 }
 
 func buildPromptInfo(path string) (promptInfoT, error) {
