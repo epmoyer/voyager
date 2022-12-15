@@ -15,7 +15,7 @@ const ENABLE_DEBUG_INDICATOR = false
 const SYMBOL_PL_GIT_BRANCH = "\uf418"           // PowerLine: VCS Branch ()
 const SYMBOL_PL_GIT_DETACHED = "\uf995"         // PowerLine: VCS Detached (秊)
 const SYMBOL_PL_GIT_STAGED = "\uF0C7"           // PowerLine: Floppy Disk ()
-const SYMBOL_PL_GIT_UNSTAGED = "\uF448"         // PowerLine: Pencil ()
+const SYMBOL_PL_GIT_MODIFIED = "\uF448"         // PowerLine: Pencil ()
 const SYMBOL_PL_GIT_BRANCH_AHEAD = "\uF0DE"     // PowerLine: Up-arrow
 const SYMBOL_PL_GIT_BRANCH_BEHIND = "\uF0DD"    // PowerLine: Down-arrow
 const SYMBOL_PL_GIT_BRANCH_UNTRACKED = "\uF128" // PowerLine: Question-mark ()
@@ -23,6 +23,15 @@ const SYMBOL_PL_SEPARATOR = "\ue0b0"            // PowerLine: Triangle-Right Sep
 const SYMBOL_PL_BULLNOSE = "\ue0b6"             // PowerLine: Bullnose ()
 const SYMBOL_PL_CHECK = "\uf00c"                // PowerLine: Check-mark ()
 const SYMBOL_PL_X = "\uf00d"                    // PowerLine: X ()
+
+var SYMBOLS_POWERLINE = map[string]string{
+	"staged":   SYMBOL_PL_GIT_STAGED,
+	"modified": SYMBOL_PL_GIT_MODIFIED,
+}
+var SYMBOLS_TEXT = map[string]string{
+	"staged":   "+",
+	"modified": "!",
+}
 
 const COLOR_BG_DEFAULT = "#000000"
 const COLOR_FG_DEFAULT = "#ffffff"
