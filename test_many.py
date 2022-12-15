@@ -2,8 +2,6 @@
 import os
 
 TEST_PATHS = [
-    # "/Users/eric/temp/git_test_cases/normal",
-    # r"/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/prompt_maker",
     r"/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/prompt_maker/untracked/git_test_cases/normal",
     r"/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/prompt_maker/untracked/git_test_cases/normal/subdir1",
     r"/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/prompt_maker/untracked/git_test_cases/normal/subdir1/subdir2",
