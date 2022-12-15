@@ -2,14 +2,16 @@
 import os
 
 TEST_PATHS = [
-    "/Users/eric/temp/prompt_examples/normal",
-    "/Users/eric/temp/prompt_examples/normal/subdir1",
-    "/Users/eric/temp/prompt_examples/normal/subdir1/subdir2",
-    "/Users/eric/temp/prompt_examples/detatched",
-    "/Users/eric/temp/prompt_examples/unstarted",
-    "/Users/eric/temp/prompt_examples/untracked",
-    "/Users/eric/temp/prompt_examples/edited",
-    "/Users/eric/temp/prompt_examples/staged",
+    # "/Users/eric/temp/git_test_cases/normal",
+    # r"/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/prompt_maker",
+    r"/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/prompt_maker/untracked/git_test_cases/normal",
+    r"/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/prompt_maker/untracked/git_test_cases/normal/subdir1",
+    r"/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/prompt_maker/untracked/git_test_cases/normal/subdir1/subdir2",
+    r"/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/prompt_maker/untracked/git_test_cases/detatched",
+    r"/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/prompt_maker/untracked/git_test_cases/unstarted",
+    r"/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/prompt_maker/untracked/git_test_cases/untracked",
+    r"/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/prompt_maker/untracked/git_test_cases/edited",
+    r"/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/prompt_maker/untracked/git_test_cases/staged",
 ]
 
 def main():
