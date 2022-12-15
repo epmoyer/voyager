@@ -196,8 +196,6 @@ func (prompt *promptT) renderPrompt(promptInfo promptInfoT) {
 	// -----------------------
 	// Git Info
 	// -----------------------
-	// TODO: Detect clean/dirty
-	// TODO: Do nothing if not in a git dir
 	git := promptInfo.Git
 	if git.IsRepo {
 		style := STYLE_GIT_INFO_CLEAN
@@ -207,14 +205,6 @@ func (prompt *promptT) renderPrompt(promptInfo promptInfoT) {
 		if git.IsDetached {
 			style = STYLE_GIT_INFO_DETACHED
 		}
-		// text := ""
-		// if prompt.isPowerline {
-		// 	symbol := SYMBOL_PL_GIT_BRANCH
-		// 	if git.IsDetached {
-		// 		symbol = SYMBOL_PL_GIT_DETACHED
-		// 	}
-		// 	text += symbol + " "
-		// }
 		text := git.render(prompt.isPowerline)
 		prompt.addSegment(
 			text,
