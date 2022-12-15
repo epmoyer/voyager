@@ -35,6 +35,10 @@ echo
 echo "AS ZSH PROMPT STRING (TEXT):"
 go run . $TARGET_PATH
 echo
+echo
+echo "RENDERED PROMPT STRING (POWERLINE):"
+print -P $(go run . $TARGET_PATH)
+echo
 echo "AS PRINTABLE (TEXT):"
 go run . --printable $TARGET_PATH
 echo

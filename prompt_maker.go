@@ -24,6 +24,8 @@ const SYMBOL_PL_BULLNOSE = "\ue0b6"             // PowerLine: Bullnose ()
 const SYMBOL_PL_CHECK = "\uf00c"                // PowerLine: Check-mark ()
 const SYMBOL_PL_X = "\uf00d"                    // PowerLine: X ()
 
+const SYMBOL_TEXT_SEPARATOR = " ⟫ "
+
 var SYMBOLS_POWERLINE = map[string]string{
 	"branch":    SYMBOL_PL_GIT_BRANCH,
 	"detached":  SYMBOL_PL_GIT_DETACHED,

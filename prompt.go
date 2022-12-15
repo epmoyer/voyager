@@ -84,7 +84,10 @@ func (prompt *promptT) addSegment(text string, style promptStyleT) {
 		} else {
 			separatorColor := color.HEX(COLOR_TEXT_FG_SEPARATOR)
 			// prompt.Prompt += separatorColor.Sprintf(" ⟫ ")
-			prompt.TextPrintable += separatorColor.Sprintf("⟫")
+			prompt.TextPrintable += separatorColor.Sprintf(SYMBOL_TEXT_SEPARATOR)
+
+			// SHELL
+			prompt.TextShell += prompt.colorizer.colorize(SYMBOL_TEXT_SEPARATOR, COLOR_TEXT_FG_SEPARATOR, "")
 		}
 	}
 	prompt.appendToSegment(text, style)
@@ -104,6 +107,9 @@ func (prompt *promptT) appendToSegment(text string, style promptStyleT) {
 	} else {
 		appendColor := color.HEX(style.ColorHexFGText)
 		prompt.TextPrintable += appendColor.Sprintf("%s", text)
+
+		// SHELL
+		prompt.TextShell += prompt.colorizer.colorize(text, style.ColorHexFGText, "")
 	}
 }
 
@@ -121,6 +127,8 @@ func (prompt *promptT) endSegments() {
 		prompt.TextShell += prompt.colorizer.reset()
 	} else {
 		prompt.TextPrintable += " $ "
+		// SHELL
+		prompt.TextShell += prompt.colorizer.reset() + " $  "
 	}
 }
 
@@ -198,6 +206,7 @@ func (gitInfo *gitInfoT) update(path string) {
 		gitInfo.IsStaged ||
 		gitInfo.IsModified)
 }
+
 func (git gitInfoT) render(isPowerline bool) string {
 	var symbols map[string]string
 	if isPowerline {
