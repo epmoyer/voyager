@@ -1,10 +1,15 @@
 package main
 
+import (
+	"fmt"
+	"image/color"
+)
+
 // ANSII Terminal Escape codes
 const ESC_CODE_RESET = "0"
 const ESC_CODE_BOLD = "1"
-const ESC_CODE_FG_RGB = "38"
-const ESC_CODE_BG_RGB = "48"
+const ESC_CODE_FG_RGB = "38;2"
+const ESC_CODE_BG_RGB = "48;2"
 
 type colorizerT struct {
 	shell string
@@ -49,11 +54,23 @@ func (colorizer colorizerT) _colorize_bash(text string, colorHexFG string, color
 	var formatFG string
 	var formatBG string
 	var formatBold string
+	var err error
+	var colorFG color.RGBA
+	var colorBG color.RGBA
+
 	if colorHexFG != "" {
-		formatFG = bash_esc(ESC_CODE_FG_RGB + ";255;128;0")
+		colorFG, err = ParseHexColor(colorHexFG)
+		if err != nil {
+			return "(fg color err)"
+		}
+		formatFG = bash_esc(ESC_CODE_FG_RGB + fmt.Sprintf(";%d;%d;%d", colorFG.R, colorFG.G, colorFG.B))
 	}
 	if colorHexBG != "" {
-		formatFG = bash_esc(ESC_CODE_BG_RGB + ";200;200;255")
+		colorBG, err = ParseHexColor(colorHexBG)
+		if err != nil {
+			return "(fg color err)"
+		}
+		formatBG = bash_esc(ESC_CODE_BG_RGB + fmt.Sprintf(";%d;%d;%d", colorBG.R, colorBG.G, colorBG.B))
 	}
 	if bold {
 		formatBold = bash_esc(ESC_CODE_BOLD)
@@ -64,5 +81,24 @@ func (colorizer colorizerT) _colorize_bash(text string, colorHexFG string, color
 
 func bash_esc(text string) string {
 	// return "[\u001b[" + text + "m]"
-	return "\u001b[" + text + "m"
+	// return "\[\u001b[" + text + "m\]"
+	return "\\[\\e[" + text + "m\\]"
+}
+
+func ParseHexColor(s string) (c color.RGBA, err error) {
+	c.A = 0xff
+	switch len(s) {
+	case 7:
+		_, err = fmt.Sscanf(s, "#%02x%02x%02x", &c.R, &c.G, &c.B)
+	case 4:
+		_, err = fmt.Sscanf(s, "#%1x%1x%1x", &c.R, &c.G, &c.B)
+		// Double the hex digits:
+		c.R *= 17
+		c.G *= 17
+		c.B *= 17
+	default:
+		err = fmt.Errorf("invalid length, must be 7 or 4")
+
+	}
+	return
 }
