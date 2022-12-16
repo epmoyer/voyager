@@ -65,7 +65,7 @@ func (prompt *promptT) addSegment(text string, style promptStyleT) {
 			prompt.TextPrintable += bullnoseStyle.Sprint(SYMBOL_PL_BULLNOSE)
 
 			// SHELL
-			prompt.TextShell += " "
+			// prompt.TextShell += " "
 			prompt.TextShell += prompt.colorizer.colorize(SYMBOL_PL_BULLNOSE, style.ColorHexBGPowerline, "", style.Bold)
 		}
 	} else {
