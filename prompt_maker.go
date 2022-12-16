@@ -123,26 +123,6 @@ func main() {
 		fmt.Printf("ENV:GP_FORMAT=%#v\n", os.Getenv("GP_FORMAT"))
 		fmt.Printf("path:%#v\n", path)
 		fmt.Printf("promptInfo:%#v\n", promptInfo)
-
-		// isPowerline = false
-		// prompt = renderPrompt(promptInfo, isPowerline)
-		// fmt.Printf("TEXT PROMPT:\n%s\n%s\n", prompt.TextShell, prompt.TextPrintable)
-
-		// isPowerline = true
-		// prompt = renderPrompt(promptInfo, isPowerline)
-		// fmt.Printf("POWERLINE PROMPT:\n%s\n%s\n", prompt.TextShell, prompt.TextPrintable)
-
-		// prompt := promptT{}
-		// prompt = prompt.addSegment(" conda ", STYLE_POWERLINE_CONDA, false)
-		// prompt = prompt.addSegment(" context ", STYLE_POWERLINE_CONTEXT, true)
-		// prompt = prompt.addSegment(" gitroot_pre/", STYLE_GITROOT_PRE, true)
-		// prompt = prompt.addSegment("final ", STYLE_GITROOT, false)
-		// prompt = prompt.addSegment(" "+SYMBOL_PL_GIT_BRANCH+" git_info "+SYMBOL_PL_GIT_UNSTAGED+" ", STYLE_GIT_INFO_DIRTY, true)
-		// prompt = prompt.addSegment(" gitsub ", STYLE_GITSUB, true)
-		// prompt = prompt.endSegments()
-		// fmt.Printf("PROMPT POWERLINE SEGMENT TEST:\n%s\n", prompt.Prompt)
-
-		// fmt.Println("-------------------------------------------------")
 		os.Exit(0)
 	}
 
