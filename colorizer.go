@@ -7,6 +7,7 @@ import (
 
 // ANSII Terminal Escape codes
 const ESC_CODE_RESET = "0"
+const ESC_CODE_RESET_BOLD_DIM = "22"
 const ESC_CODE_BOLD = "1"
 const ESC_CODE_FG_RGB = "38;2"
 const ESC_CODE_BG_RGB = "48;2"
@@ -75,7 +76,7 @@ func (colorizer colorizerT) _colorize_bash(text string, colorHexFG string, color
 	if bold {
 		formatBold = bash_esc(ESC_CODE_BOLD)
 	}
-	result := formatFG + formatBG + formatBold + text + bash_esc(ESC_CODE_RESET)
+	result := formatFG + formatBG + formatBold + text + bash_esc(ESC_CODE_RESET_BOLD_DIM)
 	return result
 }
 

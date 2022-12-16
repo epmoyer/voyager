@@ -21,24 +21,27 @@ const SYMBOL_PL_GIT_BRANCH_BEHIND = "\uF0DD"    // PowerLine: Down-arrow
 const SYMBOL_PL_GIT_BRANCH_UNTRACKED = "\uF128" // PowerLine: Question-mark ()
 const SYMBOL_PL_SEPARATOR = "\ue0b0"            // PowerLine: Triangle-Right Separator
 const SYMBOL_PL_BULLNOSE = "\ue0b6"             // PowerLine: Bullnose ()
+const SYMBOL_PL_DOLLAR = "\uf155"               // Powerline: Dollar ()
 const SYMBOL_PL_CHECK = "\uf00c"                // PowerLine: Check-mark ()
 const SYMBOL_PL_X = "\uf00d"                    // PowerLine: X ()
 
 const SYMBOL_TEXT_SEPARATOR = " ⟫ "
 
 var SYMBOLS_POWERLINE = map[string]string{
-	"branch":    SYMBOL_PL_GIT_BRANCH,
-	"detached":  SYMBOL_PL_GIT_DETACHED,
-	"staged":    SYMBOL_PL_GIT_STAGED + " ",
-	"modified":  SYMBOL_PL_GIT_MODIFIED + " ",
-	"untracked": SYMBOL_PL_GIT_BRANCH_UNTRACKED + " ",
+	"branch":     SYMBOL_PL_GIT_BRANCH,
+	"detached":   SYMBOL_PL_GIT_DETACHED,
+	"staged":     SYMBOL_PL_GIT_STAGED + " ",
+	"modified":   SYMBOL_PL_GIT_MODIFIED + " ",
+	"untracked":  SYMBOL_PL_GIT_BRANCH_UNTRACKED + " ",
+	"shell_bash": SYMBOL_PL_DOLLAR,
 }
 var SYMBOLS_TEXT = map[string]string{
-	"branch":    "ʎ",
-	"detached":  "➦",
-	"staged":    "+",
-	"modified":  "!",
-	"untracked": "?",
+	"branch":     "ʎ",
+	"detached":   "➦",
+	"staged":     "+",
+	"modified":   "!",
+	"untracked":  "?",
+	"shell_bash": "$",
 }
 
 const COLOR_BG_DEFAULT = "#000000"
@@ -46,6 +49,11 @@ const COLOR_FG_DEFAULT = "#ffffff"
 const COLOR_TEXT_FG_SEPARATOR = "#707070"
 
 var STYLE_DEBUG = promptStyleT{
+	ColorHexFGPowerline: "#000000",
+	ColorHexBGPowerline: "#B7E2B7",
+	ColorHexFGText:      "#B7E2B7",
+}
+var STYLE_SHELL = promptStyleT{
 	ColorHexFGPowerline: "#000000",
 	ColorHexBGPowerline: "#B8E3B8",
 	ColorHexFGText:      "#B8E3B8",
@@ -108,6 +116,8 @@ func main() {
 		os.Exit(1)
 	}
 	path := strings.TrimSpace(args[0])
+	// fmt.Fprintf(os.Stderr, "args[0]:%#v\n", args[0])
+	// fmt.Fprintf(os.Stderr, "path:%#v\n", path)
 
 	promptInfo, _ := buildPromptInfo(path)
 
@@ -132,6 +142,13 @@ func main() {
 }
 
 func (prompt *promptT) renderPrompt(promptInfo promptInfoT) {
+	var symbols map[string]string
+	if prompt.isPowerline {
+		symbols = SYMBOLS_POWERLINE
+	} else {
+		symbols = SYMBOLS_TEXT
+	}
+
 	// -----------------------
 	// Debug
 	// -----------------------
@@ -139,6 +156,12 @@ func (prompt *promptT) renderPrompt(promptInfo promptInfoT) {
 		prompt.addSegment(
 			"",
 			STYLE_DEBUG)
+	}
+
+	if prompt.colorizer.shell == "bash" {
+		prompt.addSegment(
+			symbols["shell_bash"],
+			STYLE_SHELL)
 	}
 
 	// -----------------------
