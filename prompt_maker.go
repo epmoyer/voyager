@@ -100,10 +100,6 @@ func main() {
 	optShell := flag.String("shell", "zsh", "The shell to format the prompt for.")
 	optPrintable := flag.Bool("printable", false,
 		"Return a printable (ASCII Esc) string rather than a shell $PROMPT/$PS1 string.")
-	// requestGitSub := flag.Bool("gitsub", false,
-	// 	"Get subdirectory relative to the git root.")
-	// requestBoth := flag.Bool("both", false,
-	// 	"Get current git root dir, and subdirectory relative to the git root, separated by `|`")
 	flag.Parse()
 
 	args := flag.Args()
@@ -112,7 +108,6 @@ func main() {
 		os.Exit(1)
 	}
 	path := strings.TrimSpace(args[0])
-	// getPath(path)
 
 	promptInfo, _ := buildPromptInfo(path)
 
@@ -126,7 +121,6 @@ func main() {
 		os.Exit(0)
 	}
 
-	// isPowerline = (os.Getenv("GP_FORMAT") == "POWERLINE")
 	prompt.renderPrompt(promptInfo)
 	if *optPrintable {
 		fmt.Print(prompt.TextPrintable)
