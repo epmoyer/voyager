@@ -1,14 +1,14 @@
 #!/bin/zsh
 
-# echo "================================================================================="
-# TARGET_PATH="/Users/eric/Dropbox (Personal)/cab_dbx/code/go/prompt_maker/test1/test2"
+echo "================================================================================="
+TARGET_PATH="/Users/eric/Dropbox (Personal)/cab_dbx/code/go/prompt_maker/test1/test2"
 # echo "DUMP:"
 # go run . --dump --powerline $TARGET_PATH
 # echo
-# echo "AS PROMPT STRING (ZSH, POWERLINE):"
-# go run . --powerline $TARGET_PATH
-# echo
-# echo
+echo "AS PROMPT STRING (ZSH, POWERLINE):"
+go run . --powerline $TARGET_PATH
+echo
+echo
 # echo "RENDERED PROMPT STRING (ZSH, POWERLINE):"
 # print -P $(go run . --powerline $TARGET_PATH)
 # echo
@@ -26,7 +26,7 @@
 # echo "AS PRINTABLE (TEXT):"
 # go run . --printable $TARGET_PATH
 # echo
-echo "================================================================================="
+# echo "================================================================================="
 echo "AS PROMPT STRING (BASH, POWERLINE):"
 go run . --shell=bash --powerline $TARGET_PATH
 echo
