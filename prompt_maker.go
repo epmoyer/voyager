@@ -10,6 +10,8 @@ import (
 	"strings"
 )
 
+const VERSION = "1.0.0"
+
 const ENABLE_DEBUG_INDICATOR = false
 
 const SYMBOL_PL_GIT_BRANCH = "\uf418"           // PowerLine: VCS Branch ()
@@ -101,6 +103,8 @@ var STYLE_GITSUB = promptStyleT{
 }
 
 func main() {
+	optVersion := flag.Bool("version", false,
+		"Show version.")
 	optDump := flag.Bool("dump", false,
 		"Show all prompt components and all prompts in all formatting styles.")
 	optPowerline := flag.Bool("powerline", false,
@@ -109,6 +113,11 @@ func main() {
 	optPrintable := flag.Bool("printable", false,
 		"Return a printable (ASCII Esc) string rather than a shell $PROMPT/$PS1 string.")
 	flag.Parse()
+
+	if *optVersion {
+		fmt.Println(VERSION)
+		os.Exit(0)
+	}
 
 	args := flag.Args()
 	if len(args) > 1 {
