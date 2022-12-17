@@ -52,7 +52,7 @@ func (prompt *promptT) init(isPowerline bool, shell string) {
 }
 
 func (prompt *promptT) addSegment(text string, style promptStyleT) {
-	if prompt.isPowerline && prompt.TextPrintable != "" {
+	if prompt.isPowerline && !(prompt.TextPrintable == "" && ENABLE_BULLNOSE) {
 		// Powerline prompt gets a leading space
 		text = " " + text
 	}
@@ -60,7 +60,7 @@ func (prompt *promptT) addSegment(text string, style promptStyleT) {
 		// -------------------
 		//  First segment: Start with bull-nose
 		// -------------------
-		if prompt.isPowerline {
+		if prompt.isPowerline && ENABLE_BULLNOSE {
 			bullnoseStyle := color.HEXStyle(style.ColorHexBGPowerline)
 			prompt.TextPrintable += bullnoseStyle.Sprint(SYMBOL_PL_BULLNOSE)
 

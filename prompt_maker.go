@@ -10,9 +10,10 @@ import (
 	"strings"
 )
 
-const VERSION = "1.0.0"
+const VERSION = "1.1.0"
 
 const ENABLE_DEBUG_INDICATOR = false
+const ENABLE_BULLNOSE = false
 
 const SYMBOL_PL_GIT_BRANCH = "\uf418"           // PowerLine: VCS Branch ()
 const SYMBOL_PL_GIT_DETACHED = "\uf995"         // PowerLine: VCS Detached (秊)
