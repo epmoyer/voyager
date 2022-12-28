@@ -197,23 +197,38 @@ func (gitInfo *gitInfoT) update(path string) {
 	out, err = cmd.Output()
 	if err == nil {
 		result := string(out)
-		// TODO: These are sloppy checks.  Use proper regexes
-		if strings.Contains(result, "??") {
+		statusIndex, statusWorking := extractPorcelainStatus(result)
+		switch statusIndex {
+		case " ":
+			// Nothing Staged
+			break
+		case "?":
 			gitInfo.IsUntracked = true
-		}
-		if strings.Contains(result, "A ") {
+		default:
 			gitInfo.IsStaged = true
 		}
-		if strings.Contains(result, "R ") {
-			gitInfo.IsStaged = true
-		}
-		if strings.Contains(result, " M") {
+		switch statusWorking {
+		case " ":
+			// Nothing Modified
+			break
+		case "?":
+			gitInfo.IsUntracked = true
+		default:
 			gitInfo.IsModified = true
 		}
 	}
 	gitInfo.IsDirty = (gitInfo.IsUntracked ||
 		gitInfo.IsStaged ||
 		gitInfo.IsModified)
+}
+
+func extractPorcelainStatus(line string) (string, string) {
+	if len(line) < 2 {
+		return " ", " "
+	}
+	statusIndex := line[0:1]
+	statusWorking := line[1:2]
+	return statusIndex, statusWorking
 }
 
 func (git gitInfoT) render(isPowerline bool) string {

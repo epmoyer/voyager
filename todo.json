@@ -63,6 +63,16 @@
         {
             "name": "Backlog",
             "id": 2,
+            "cards": []
+        },
+        {
+            "name": "Doing",
+            "id": 3,
+            "cards": []
+        },
+        {
+            "name": "Done",
+            "id": 4,
             "cards": [
                 {
                     "name": "Pending rename does not mark repo dirty",
@@ -74,16 +84,6 @@
                     "repeat": null
                 }
             ]
-        },
-        {
-            "name": "Doing",
-            "id": 3,
-            "cards": []
-        },
-        {
-            "name": "Done",
-            "id": 4,
-            "cards": []
         }
     ]
 }
