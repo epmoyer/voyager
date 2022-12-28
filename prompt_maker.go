@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-const VERSION = "1.1.0"
+const VERSION = "1.2.0"
 
 const ENABLE_DEBUG_INDICATOR = false
 const ENABLE_BULLNOSE = false

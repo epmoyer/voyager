@@ -204,6 +204,9 @@ func (gitInfo *gitInfoT) update(path string) {
 		if strings.Contains(result, "A ") {
 			gitInfo.IsStaged = true
 		}
+		if strings.Contains(result, "R ") {
+			gitInfo.IsStaged = true
+		}
 		if strings.Contains(result, " M") {
 			gitInfo.IsModified = true
 		}
