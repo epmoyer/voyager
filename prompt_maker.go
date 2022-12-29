@@ -71,6 +71,11 @@ var STYLE_CONTEXT = promptStyleT{
 	ColorHexBGPowerline: "#B294BF",
 	ColorHexFGText:      "#C040BE",
 }
+var STYLE_CONTEXT_ROOT = promptStyleT{
+	ColorHexFGPowerline: "#000000",
+	ColorHexBGPowerline: "#ff8080",
+	ColorHexFGText:      "#ff3030",
+}
 var STYLE_GITROOT_PRE = promptStyleT{
 	ColorHexFGPowerline: "#c0c0c0",
 	ColorHexBGPowerline: "#4F6D6F",
@@ -187,10 +192,15 @@ func (prompt *promptT) renderPrompt(promptInfo promptInfoT) {
 	// -----------------------
 	// Context
 	// -----------------------
-	if promptInfo.ShowContext {
+	isRoot := (promptInfo.Username == "root")
+	if promptInfo.ShowContext || isRoot {
+		styleContext := STYLE_CONTEXT
+		if isRoot {
+			styleContext = STYLE_CONTEXT_ROOT
+		}
 		prompt.addSegment(
 			fmt.Sprintf("%s@%s", promptInfo.Username, promptInfo.Hostname),
-			STYLE_CONTEXT)
+			styleContext)
 	}
 
 	// -----------------------
