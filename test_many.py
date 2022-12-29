@@ -7,6 +7,10 @@ TEST_CASES = [
     },
     {
         'path': r'/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/prompt_maker/untracked/git_test_cases/normal',
+        'username': 'eric',
+    },
+    {
+        'path': r'/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/prompt_maker/untracked/git_test_cases/normal',
         'username': 'root',
     },
     {
@@ -54,10 +58,10 @@ def main():
             f'"/Users/eric/Dropbox (Personal)/cab_dbx/code/go/prompt_maker/prompt_maker" --printable {options} {path}'
         )
         print(f'      {stream.read()}')
-        stream = os.popen(
-            f'"/Users/eric/Dropbox (Personal)/cab_dbx/code/go/prompt_maker/prompt_maker" --dump {options} {path}'
-        )
-        print(f'      {stream.read()}')
+        # stream = os.popen(
+        #     f'"/Users/eric/Dropbox (Personal)/cab_dbx/code/go/prompt_maker/prompt_maker" --dump {options} {path}'
+        # )
+        # print(f'      {stream.read()}')
     print()
 
 

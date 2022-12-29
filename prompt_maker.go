@@ -130,12 +130,7 @@ func main() {
 	// fmt.Fprintf(os.Stderr, "args[0]:%#v\n", args[0])
 	// fmt.Fprintf(os.Stderr, "path:%#v\n", path)
 
-	promptInfo, _ := buildPromptInfo(path)
-
-	// Override username (for testing)
-	if *optUsername != "" {
-		promptInfo.Username = *optUsername
-	}
+	promptInfo, _ := buildPromptInfo(path, *optUsername)
 
 	prompt := promptT{}
 	prompt.init(*optPowerline, *optShell)
@@ -238,7 +233,7 @@ func (prompt *promptT) renderPrompt(promptInfo promptInfoT) {
 	prompt.endSegments()
 }
 
-func buildPromptInfo(path string) (promptInfoT, error) {
+func buildPromptInfo(path string, optUsername string) (promptInfoT, error) {
 
 	promptInfo := promptInfoT{}
 
@@ -255,7 +250,12 @@ func buildPromptInfo(path string) (promptInfoT, error) {
 	if err != nil {
 		return promptInfo, err
 	}
-	promptInfo.Username = user.Username
+	if optUsername != "" {
+		// Override username as specified on command line (for testing)
+		promptInfo.Username = optUsername
+	} else {
+		promptInfo.Username = user.Username
+	}
 	promptInfo.UserHomeDir = user.HomeDir
 
 	hostname, err := os.Hostname()
@@ -268,7 +268,7 @@ func buildPromptInfo(path string) (promptInfoT, error) {
 	promptInfo.Hostname = hostname
 	sshClient := os.Getenv("SSH_CLIENT")
 	// fmt.Printf("sshClient:%#v", sshClient)
-	if sshClient == "" {
+	if sshClient == "" && optUsername == "" {
 		defaultUser := os.Getenv("DEFAULT_USER")
 		// fmt.Printf("defaultUser:%#v", defaultUser)
 		if defaultUser == promptInfo.Username {
