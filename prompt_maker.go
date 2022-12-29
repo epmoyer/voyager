@@ -111,6 +111,7 @@ func main() {
 	optPowerline := flag.Bool("powerline", false,
 		"Render prompt using PowerLine font.")
 	optShell := flag.String("shell", "zsh", "The shell to format the prompt for.")
+	optUsername := flag.String("username", "", "Force the prompt username (for testing).")
 	optPrintable := flag.Bool("printable", false,
 		"Return a printable (ASCII Esc) string rather than a shell $PROMPT/$PS1 string.")
 	flag.Parse()
@@ -130,6 +131,11 @@ func main() {
 	// fmt.Fprintf(os.Stderr, "path:%#v\n", path)
 
 	promptInfo, _ := buildPromptInfo(path)
+
+	// Override username (for testing)
+	if *optUsername != "" {
+		promptInfo.Username = *optUsername
+	}
 
 	prompt := promptT{}
 	prompt.init(*optPowerline, *optShell)
