@@ -192,10 +192,9 @@ func (prompt *promptT) renderPrompt(promptInfo promptInfoT) {
 	// -----------------------
 	// Context
 	// -----------------------
-	isRoot := (promptInfo.Username == "root")
-	if promptInfo.ShowContext || isRoot {
+	if promptInfo.ShowContext || promptInfo.IsRoot {
 		styleContext := STYLE_CONTEXT
-		if isRoot {
+		if promptInfo.IsRoot {
 			styleContext = STYLE_CONTEXT_ROOT
 		}
 		prompt.addSegment(
@@ -265,6 +264,9 @@ func buildPromptInfo(path string, optUsername string) (promptInfoT, error) {
 		promptInfo.Username = optUsername
 	} else {
 		promptInfo.Username = user.Username
+	}
+	if promptInfo.Username == "root" {
+		promptInfo.IsRoot = true
 	}
 	promptInfo.UserHomeDir = user.HomeDir
 
