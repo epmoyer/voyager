@@ -123,7 +123,7 @@ func main() {
 	flag.Parse()
 
 	if *optVersion {
-		fmt.Printf("%s %s", APP_NAME, APP_VERSION)
+		fmt.Printf("%s %s\n", APP_NAME, APP_VERSION)
 		os.Exit(0)
 	}
 

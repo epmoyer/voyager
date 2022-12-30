@@ -9,7 +9,7 @@ from rich.theme import Theme
 # --------------------
 # fmt: off
 THEME = Theme({
-    "case": "#c0c0c0",
+    "case": "#d0d0d0",
     "path": "#808080",
 })
 # fmt: on
@@ -24,41 +24,47 @@ TEST_CASES = [
     {
         'name': 'With Context',
         'path': r'/usr/local/bin',
-        # 'path': r'/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/voyager/untracked/git_test_cases/normal',
         'username': 'eric',
     },
     {
         'name': 'With Context (as root)',
         'path': r'/usr/local/bin',
-        # 'path': r'/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/voyager/untracked/git_test_cases/normal',
         'username': 'root',
     },
     {
-        'name': 'Normal, git repo',
+        'name': 'Git repo',
         'path': r'/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/voyager/untracked/git_test_cases/normal',
     },
     {
+        'name': 'Git repo, in subdirectory',
         'path': r'/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/voyager/untracked/git_test_cases/normal/subdir1',
     },
     {
+        'name': 'Git repo, in second subdirectory',
         'path': r'/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/voyager/untracked/git_test_cases/normal/subdir1/subdir2',
     },
     {
+        'name': 'Git repo, w/ detached head',
         'path': r'/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/voyager/untracked/git_test_cases/detached',
     },
     {
+        'name': 'Git repo, unstarted (new repo, no check-ins)',
         'path': r'/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/voyager/untracked/git_test_cases/unstarted',
     },
     {
+        'name': 'Git repo, untracked change',
         'path': r'/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/voyager/untracked/git_test_cases/untracked',
     },
     {
+        'name': 'Git repo, edited file',
         'path': r'/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/voyager/untracked/git_test_cases/edited',
     },
     {
+        'name': 'Git repo, staged file',
         'path': r'/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/voyager/untracked/git_test_cases/staged',
     },
     {
+        'name': 'Git repo, renamed file',
         'path': r'/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/voyager/untracked/git_test_cases/renamed',
     },
 ]
@@ -69,7 +75,7 @@ def main():
     print()
     for test_case in TEST_CASES:
         name = test_case.get('name', '(unnamed test case)')
-        rprint(f'[case]{name}[/case]')
+        rprint(f'[case]{name}:[/case]')
         path = test_case["path"]
         rprint(f'   [path]{path}[/path]')
         options = ''
