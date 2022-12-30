@@ -5,6 +5,6 @@ go.sum
 untracked
 
 # Binaries
-prompt_maker
-prompt_maker.production
-prompt_maker.linux
+voyager
+voyager.production
+voyager.linux

@@ -1,7 +1,7 @@
 #!/bin/zsh
 
 echo "================================================================================="
-TARGET_PATH="/Users/eric/Dropbox (Personal)/cab_dbx/code/go/prompt_maker/test1/test2"
+TARGET_PATH="/Users/eric/Dropbox (Personal)/cab_dbx/code/go/voyager/test1/test2"
 # echo "DUMP:"
 # go run . --dump --powerline $TARGET_PATH
 # echo

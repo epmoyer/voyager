@@ -3,39 +3,39 @@ import os
 
 TEST_CASES = [
     {
-        'path': r'/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/prompt_maker/untracked/git_test_cases/normal',
+        'path': r'/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/voyager/untracked/git_test_cases/normal',
     },
     {
-        'path': r'/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/prompt_maker/untracked/git_test_cases/normal',
+        'path': r'/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/voyager/untracked/git_test_cases/normal',
         'username': 'eric',
     },
     {
-        'path': r'/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/prompt_maker/untracked/git_test_cases/normal',
+        'path': r'/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/voyager/untracked/git_test_cases/normal',
         'username': 'root',
     },
     {
-        'path': r'/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/prompt_maker/untracked/git_test_cases/normal/subdir1',
+        'path': r'/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/voyager/untracked/git_test_cases/normal/subdir1',
     },
     {
-        'path': r'/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/prompt_maker/untracked/git_test_cases/normal/subdir1/subdir2',
+        'path': r'/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/voyager/untracked/git_test_cases/normal/subdir1/subdir2',
     },
     {
-        'path': r'/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/prompt_maker/untracked/git_test_cases/detached',
+        'path': r'/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/voyager/untracked/git_test_cases/detached',
     },
     {
-        'path': r'/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/prompt_maker/untracked/git_test_cases/unstarted',
+        'path': r'/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/voyager/untracked/git_test_cases/unstarted',
     },
     {
-        'path': r'/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/prompt_maker/untracked/git_test_cases/untracked',
+        'path': r'/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/voyager/untracked/git_test_cases/untracked',
     },
     {
-        'path': r'/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/prompt_maker/untracked/git_test_cases/edited',
+        'path': r'/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/voyager/untracked/git_test_cases/edited',
     },
     {
-        'path': r'/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/prompt_maker/untracked/git_test_cases/staged',
+        'path': r'/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/voyager/untracked/git_test_cases/staged',
     },
     {
-        'path': r'/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/prompt_maker/untracked/git_test_cases/renamed',
+        'path': r'/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/voyager/untracked/git_test_cases/renamed',
     },
 ]
 
@@ -51,15 +51,15 @@ def main():
         if username:
             options = f'--username={username}'
         stream = os.popen(
-            f'"/Users/eric/Dropbox (Personal)/cab_dbx/code/go/prompt_maker/prompt_maker" --printable --powerline {options} {path}'
+            f'"/Users/eric/Dropbox (Personal)/cab_dbx/code/go/voyager/voyager" --printable --powerline {options} {path}'
         )
         print(f'      {stream.read()}')
         stream = os.popen(
-            f'"/Users/eric/Dropbox (Personal)/cab_dbx/code/go/prompt_maker/prompt_maker" --printable {options} {path}'
+            f'"/Users/eric/Dropbox (Personal)/cab_dbx/code/go/voyager/voyager" --printable {options} {path}'
         )
         print(f'      {stream.read()}')
         # stream = os.popen(
-        #     f'"/Users/eric/Dropbox (Personal)/cab_dbx/code/go/prompt_maker/prompt_maker" --dump {options} {path}'
+        #     f'"/Users/eric/Dropbox (Personal)/cab_dbx/code/go/voyager/voyager" --dump {options} {path}'
         # )
         # print(f'      {stream.read()}')
     print()

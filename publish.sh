@@ -1,2 +1,2 @@
 #!/bin/zsh
-cp prompt_maker prompt_maker.production
+cp voyager voyager.production

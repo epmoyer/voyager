@@ -1,4 +1,4 @@
-module prompt_maker
+module voyager
 
 go 1.18
 

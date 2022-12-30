@@ -2,7 +2,7 @@
     "version": 1,
     "app_id": "trellis",
     "board": {
-        "name": "prompt_maker",
+        "name": "Voyager prompt",
         "preferences": {
             "backgroundColor": "#ffa57d"
         }
