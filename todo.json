@@ -4,7 +4,7 @@
     "board": {
         "name": "Voyager prompt",
         "preferences": {
-            "backgroundColor": "#ffa57d"
+            "backgroundColor": "#4d826d"
         }
     },
     "labels": [
@@ -63,7 +63,33 @@
         {
             "name": "Backlog",
             "id": 2,
-            "cards": []
+            "cards": [
+                {
+                    "name": "Running with no args should show version and help",
+                    "id": 104,
+                    "id_labels": [],
+                    "description": "Today it panics.\nIf we show version and help, then the \"voyager --version\" and \"vger_ver()\" bash func can go away.",
+                    "due": null,
+                    "due_complete": false,
+                    "repeat": null
+                },
+                {
+                    "name": "use .bin extension on all binaries",
+                    "id": 102,
+                    "id_labels": [],
+                    "description": "",
+                    "due": null,
+                    "due_complete": false
+                },
+                {
+                    "name": "unify deploy/install somehow",
+                    "id": 103,
+                    "id_labels": [],
+                    "description": "",
+                    "due": null,
+                    "due_complete": false
+                }
+            ]
         },
         {
             "name": "Doing",
