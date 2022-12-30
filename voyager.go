@@ -10,7 +10,8 @@ import (
 	"strings"
 )
 
-const VERSION = "1.4.0"
+const APP_NAME = "voyager prompt"
+const APP_VERSION = "1.5.0b"
 
 const ENABLE_DEBUG_INDICATOR = false
 const ENABLE_BULLNOSE = false
@@ -122,7 +123,7 @@ func main() {
 	flag.Parse()
 
 	if *optVersion {
-		fmt.Println(VERSION)
+		fmt.Printf("%s %s", APP_NAME, APP_VERSION)
 		os.Exit(0)
 	}
 
