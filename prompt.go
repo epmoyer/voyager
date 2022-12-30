@@ -119,8 +119,13 @@ func (prompt *promptT) appendToSegment(text string, style promptStyleT) {
 	}
 }
 
-func (prompt *promptT) endSegments() {
+func (prompt *promptT) endSegments(promptInfo promptInfoT) {
 	if prompt.isPowerline {
+		// --------------------
+		// Powerline
+		// --------------------
+
+		// PRINTABLE
 		separatorStyle := color.HEXStyle(COLOR_BG_DEFAULT, prompt.CurrentBGColorHex)
 		prompt.TextPrintable += separatorStyle.Sprint(" ")
 		separatorStyle = color.HEXStyle(prompt.CurrentBGColorHex)
@@ -132,10 +137,39 @@ func (prompt *promptT) endSegments() {
 		prompt.TextShell += prompt.colorizer.colorize(SYMBOL_PL_SEPARATOR+" ", prompt.CurrentBGColorHex, "", false)
 		prompt.TextShell += prompt.colorizer.reset()
 	} else {
-		prompt.TextPrintable += " $ "
+		// --------------------
+		// Text
+		// --------------------
+		promptSymbol := "%"
+		if prompt.colorizer.shell == "bash" {
+			promptSymbol = "$"
+		}
+		if promptInfo.IsRoot {
+			promptSymbol = "#"
+		}
+		promptSymbol = " " + promptSymbol + " "
+
+		// PRINTABLE
+		if promptInfo.IsRoot {
+			promptStyle := color.HEXStyle(STYLE_CONTEXT_ROOT.ColorHexFGText)
+			prompt.TextPrintable += promptStyle.Sprint(promptSymbol)
+		} else {
+			prompt.TextPrintable += promptSymbol
+		}
+
 		// SHELL
+		// Escape the % symbol for zsh
+		if prompt.colorizer.shell == "zsh" {
+			promptSymbol = strings.Replace(promptSymbol, "%", "%%", -1)
+		}
+		prompt.TextShell += prompt.colorizer.reset()
+		if promptInfo.IsRoot {
+			prompt.TextShell += prompt.colorizer.colorize(promptSymbol, STYLE_CONTEXT_ROOT.ColorHexFGText, "", false)
+		} else {
+			prompt.TextShell += promptSymbol
+		}
 		// TODO: The final reset should not be necessary (but is).  Is a trim() removing the final spaces somewhere?
-		prompt.TextShell += prompt.colorizer.reset() + " $ " + prompt.colorizer.reset()
+		prompt.TextShell += prompt.colorizer.reset()
 	}
 }
 

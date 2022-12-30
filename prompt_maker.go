@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-const VERSION = "1.3.0"
+const VERSION = "1.4.0"
 
 const ENABLE_DEBUG_INDICATOR = false
 const ENABLE_BULLNOSE = false
@@ -239,7 +239,7 @@ func (prompt *promptT) renderPrompt(promptInfo promptInfoT) {
 			STYLE_GITSUB)
 	}
 
-	prompt.endSegments()
+	prompt.endSegments(promptInfo)
 }
 
 func buildPromptInfo(path string, optUsername string) (promptInfoT, error) {
