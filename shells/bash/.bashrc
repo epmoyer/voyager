@@ -13,5 +13,5 @@ vger_pl() {
     export VGER_OPT_POWERLINE="--powerline"
 }
 vger_ver() {
-    echo $(voyager --version)
+    voyager --version
 }
