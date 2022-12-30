@@ -9,7 +9,8 @@ from rich.theme import Theme
 # --------------------
 # fmt: off
 THEME = Theme({
-    "gray": "#808080",
+    "case": "#c0c0c0",
+    "path": "#808080",
 })
 # fmt: on
 CONSOLE = Console(highlight=False, color_system='256', theme=THEME)
@@ -21,19 +22,20 @@ TEST_CASES = [
         'path': r'/usr/local/bin',
     },
     {
-        'name': 'Normal, git repo, with context',
+        'name': 'With Context',
         'path': r'/usr/local/bin',
         # 'path': r'/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/voyager/untracked/git_test_cases/normal',
         'username': 'eric',
     },
     {
-        'name': 'Normal, git repo',
-        'path': r'/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/voyager/untracked/git_test_cases/normal',
+        'name': 'With Context (as root)',
+        'path': r'/usr/local/bin',
+        # 'path': r'/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/voyager/untracked/git_test_cases/normal',
+        'username': 'root',
     },
     {
-        'name': 'Normal, git repo, with context',
+        'name': 'Normal, git repo',
         'path': r'/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/voyager/untracked/git_test_cases/normal',
-        'username': 'root',
     },
     {
         'path': r'/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/voyager/untracked/git_test_cases/normal/subdir1',
@@ -67,9 +69,9 @@ def main():
     print()
     for test_case in TEST_CASES:
         name = test_case.get('name', '(unnamed test case)')
-        rprint(f'[gray]{name}[/gray]')
+        rprint(f'[case]{name}[/case]')
         path = test_case["path"]
-        rprint(f'   [gray]{path}[/gray]')
+        rprint(f'   [path]{path}[/path]')
         options = ''
         username = test_case.get('username')
         if username:
