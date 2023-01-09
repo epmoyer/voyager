@@ -1,11 +1,17 @@
+.DS_Store
+go.sum
+untracked/
+
 test1
 test2
 
-go.sum
-untracked
 
 # Binaries
 voyager
 voyager.production
 voyager.linux
 voyager.linux.arm.bin
+
+# Distribution content
+dist/builds
+dist/images
