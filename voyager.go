@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-const APP_NAME = "voyager prompt"
+const APP_NAME = "voyager"
 const APP_VERSION = "1.5.0"
 
 const ENABLE_DEBUG_INDICATOR = false
