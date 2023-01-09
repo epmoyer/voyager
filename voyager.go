@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/exec"
 	"os/user"
+	"strconv"
 	"strings"
 )
 
@@ -360,15 +361,34 @@ func finalComponent(path string) string {
 	return pieces[len(pieces)-1]
 }
 
+func getPathTruncationStartDepth() int {
+	truncationStartDepthStr := os.Getenv("VGER_TRUNCATION_START_DEPTH")
+	if truncationStartDepthStr == "" {
+		return 1000
+	}
+	truncationStartDepth, err := strconv.Atoi(truncationStartDepthStr)
+	if err != nil {
+		return 1000
+	}
+	return truncationStartDepth
+}
+
 func chopPath(path string) (string, string) {
+	truncationStartDepth := getPathTruncationStartDepth()
 	pieces := strings.Split(path, "/")
 	newPieces := []string{}
 	var piece string
 	var finalComponent string
 	for i := 0; i < len(pieces); i++ {
 		piece = pieces[i]
+		depth := len(pieces) - 1 - i
 		if i < (len(pieces) - 1) {
-			newPieces = append(newPieces, piece)
+			if depth >= truncationStartDepth{
+				newPieces = append(newPieces, piece)
+			}
+			else {
+				newPieces = append(newPieces, piece)
+			}
 		} else {
 			finalComponent = piece
 		}
