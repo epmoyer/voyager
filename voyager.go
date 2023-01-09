@@ -301,15 +301,15 @@ func buildPromptInfo(path string, optUsername string) (promptInfoT, error) {
 func getPath(path string) (string, string) {
 
 	usr, _ := user.Current()
-	dir := usr.HomeDir
+	homeDir := usr.HomeDir
 	if strings.HasPrefix(path, "~") {
-		path = strings.Replace(path, "~", dir, 1)
+		path = strings.Replace(path, "~", homeDir, 1)
 	}
 
 	pathGitRoot, pathGitSub := splitGitPath(path)
 
-	if strings.HasPrefix(pathGitRoot, dir) {
-		pathGitRoot = strings.Replace(pathGitRoot, dir, "~", 1)
+	if strings.HasPrefix(pathGitRoot, homeDir) {
+		pathGitRoot = strings.Replace(pathGitRoot, homeDir, "~", 1)
 	}
 	pathGitRoot = shortenPath(pathGitRoot)
 
@@ -317,12 +317,14 @@ func getPath(path string) (string, string) {
 }
 
 func shortenPath(path string) string {
+	truncationStartDepth := getPathTruncationStartDepth()
 	pieces := strings.Split(path, "/")
 	newPieces := []string{}
 	var piece string
 	for i := 0; i < len(pieces); i++ {
 		piece = pieces[i]
-		if i < (len(pieces) - 1) {
+		depth := len(pieces) - 1 - i
+		if depth >= truncationStartDepth {
 			piece = shorten(piece)
 		}
 		newPieces = append(newPieces, piece)
@@ -364,31 +366,24 @@ func finalComponent(path string) string {
 func getPathTruncationStartDepth() int {
 	truncationStartDepthStr := os.Getenv("VGER_TRUNCATION_START_DEPTH")
 	if truncationStartDepthStr == "" {
-		return 1000
+		return 1
 	}
 	truncationStartDepth, err := strconv.Atoi(truncationStartDepthStr)
 	if err != nil {
-		return 1000
+		return 1
 	}
 	return truncationStartDepth
 }
 
 func chopPath(path string) (string, string) {
-	truncationStartDepth := getPathTruncationStartDepth()
 	pieces := strings.Split(path, "/")
 	newPieces := []string{}
 	var piece string
 	var finalComponent string
 	for i := 0; i < len(pieces); i++ {
 		piece = pieces[i]
-		depth := len(pieces) - 1 - i
 		if i < (len(pieces) - 1) {
-			if depth >= truncationStartDepth{
-				newPieces = append(newPieces, piece)
-			}
-			else {
-				newPieces = append(newPieces, piece)
-			}
+			newPieces = append(newPieces, piece)
 		} else {
 			finalComponent = piece
 		}
