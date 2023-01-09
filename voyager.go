@@ -12,7 +12,7 @@ import (
 )
 
 const APP_NAME = "voyager prompt"
-const APP_VERSION = "1.5.0b"
+const APP_VERSION = "1.5.0"
 
 const ENABLE_DEBUG_INDICATOR = false
 const ENABLE_BULLNOSE = false
