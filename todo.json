@@ -65,6 +65,14 @@
             "id": 2,
             "cards": [
                 {
+                    "name": "Don't show branch name if master or main.",
+                    "id": 105,
+                    "id_labels": [],
+                    "description": "",
+                    "due": null,
+                    "due_complete": false
+                },
+                {
                     "name": "Running with no args should show version and help",
                     "id": 104,
                     "id_labels": [],
