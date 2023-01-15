@@ -104,6 +104,14 @@
             "id": 3,
             "cards": [
                 {
+                    "name": ".bashrc code needs to be different from .zshrc. &nbsp;See Notable for bash code (as deployed on s2)",
+                    "id": 107,
+                    "id_labels": [],
+                    "description": "",
+                    "due": null,
+                    "due_complete": false
+                },
+                {
                     "name": "When un-taring on linux go warnings",
                     "id": 106,
                     "id_labels": [],
