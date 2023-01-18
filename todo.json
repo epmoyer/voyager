@@ -90,7 +90,7 @@
                     "id_labels": [
                         4
                     ],
-                    "description": "Command text gets jumbled on ziggy test user (MacOS, zsh) when autocompleting. Can't replicate on eric (MacOs, zsh) or linu (bash).\n\nHappens in text OR power line mode.\n\n`ziggy@c5-eric \u27eb ~ % ls .` then hit tab gives this:\n`ziggy@c5-eric \u27eb ~ % lsls .`\n\nSeems like some aspect of the prompt must not be getting escaped properly.",
+                    "description": "Command text gets jumbled on ziggy test user (MacOS, zsh) when autocompleting. Can't replicate on eric (MacOs, zsh) or linu (bash).\n\nHappens in text OR power line mode.\n\n`ziggy@c5-eric \u27eb ~ % ls .` then hit tab gives this:\n`ziggy@c5-eric \u27eb ~ % lsls .`\n\nSeems like some aspect of the prompt must not be getting escaped properly.\n\n```\nziggy@c5-eric \u27eb ~ % voyager /Users/ziggy\n%{%F{#C040BE}%}ziggy@c5-eric%b%{%F{#707070}%} \u27eb %b%{%F{#729E72}%}%b%{%F{#9EFF9E}%B%}~%b%{%f%b%k%} %% %{%f%b%k%}%\nziggy@c5-eric \u27eb ~ %\n```",
                     "due": null,
                     "due_complete": false,
                     "repeat": null
