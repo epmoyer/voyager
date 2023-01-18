@@ -5,7 +5,7 @@ YELLOW=$'\033[33m'
 GREEN=$'\033[32m'
 ENDCOLOR=$'\033[0m'
 
-$APP_NAME="voyager"
+APP_NAME="voyager"
 
 echo "Installing to /usr/local/bin.  You may be prompted for sudo permissions..."
 sudo cp $APP_NAME /usr/local/bin
