@@ -55,7 +55,8 @@ do_build () {
 
     # Copy supporting files
     cp dist/resources/install.sh $TARGET_DIR
-    cp dist/resources/shell_init_snippet.sh $TARGET_DIR
+    cp dist/resources/shell_init_snippet_bash.sh $TARGET_DIR
+    cp dist/resources/shell_init_snippet_zsh.sh $TARGET_DIR
 
     # I don't really like the non-determinism of this sleep command, but without it the tar below
     # would sometimes throw the warning "gtar: [executable] file changed as we read it".
