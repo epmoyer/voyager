@@ -5,9 +5,11 @@ YELLOW=$'\033[33m'
 GREEN=$'\033[32m'
 ENDCOLOR=$'\033[0m'
 
+$APP_NAME="voyager"
+
 echo "Installing to /usr/local/bin.  You may be prompted for sudo permissions..."
-sudo cp voyager /usr/local/bin
-sudo chmod 755 /usr/local/bin/voyager
+sudo cp $APP_NAME /usr/local/bin
+sudo chmod 755 /usr/local/bin/$APP_NAME
 echo "${GREEN}   Copied.${ENDCOLOR}"
 
 install_shell_snippet() {
@@ -29,7 +31,7 @@ query_install_shell_snippet() {
 
 check_shell_init_script () {
     echo "      looking for existing shell init snippet..."
-    if grep -Fxq "# voyager:start" $SHELL_INIT_SCRIPT
+    if grep -Eq "^# $APP_NAME:start" $SHELL_INIT_SCRIPT
     then
         echo "         ${GREEN}Found.${ENDCOLOR}"
     else
