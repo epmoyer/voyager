@@ -6,8 +6,8 @@ ENDCOLOR=$'\033[0m'
 PROJECT_FILENAME='voyager'
 
 # Extract the app name and version number from the main go file by brute force
-APP_VERSION=`awk '/^const APP_VERSION/{print $4}' voyager.go | sed -e 's/"//g'`
-APP_NAME=`awk '/^const APP_NAME/{print $4}' voyager.go | sed -e 's/"//g'`
+APP_VERSION=`awk '/^const APP_VERSION/{print $4}' $PROJECT_FILENAME.go | sed -e 's/"//g'`
+APP_NAME=`awk '/^const APP_NAME/{print $4}' $PROJECT_FILENAME.go | sed -e 's/"//g'`
 
 echo "Building $APP_NAME version $APP_VERSION..."
 
@@ -51,7 +51,7 @@ do_build () {
     mkdir -p $TARGET_DIR
 
     # Build executable
-    GOOS=$USE_GOOS GOARCH=$USE_GOARCH go build -o $TARGET_DIR/voyager
+    GOOS=$USE_GOOS GOARCH=$USE_GOARCH go build -o $TARGET_DIR/$APP_NAME
 
     # Copy supporting files
     cp dist/resources/install.sh $TARGET_DIR
@@ -80,8 +80,8 @@ do_build () {
 
 # Run builds for all target platforms
 do_build darwin amd64 zip
-# do_build darwin arm64 zip
-# do_build linux amd64 tar
-# do_build linux arm tar
+do_build darwin arm64 zip
+do_build linux amd64 tar
+do_build linux arm tar
 
 echo "${GREEN}Done.${ENDCOLOR}"

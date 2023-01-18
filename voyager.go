@@ -143,7 +143,6 @@ func main() {
 	prompt.init(*optPowerline, *optShell)
 
 	if *optDump {
-		fmt.Printf("ENV:GP_FORMAT=%#v\n", os.Getenv("GP_FORMAT"))
 		fmt.Printf("path:%#v\n", path)
 		fmt.Printf("promptInfo:%#v\n", promptInfo)
 		os.Exit(0)
