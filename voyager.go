@@ -12,7 +12,7 @@ import (
 )
 
 const APP_NAME = "voyager"
-const APP_VERSION = "1.5.0"
+const APP_VERSION = "1.5.1"
 
 const ENABLE_DEBUG_INDICATOR = false
 const ENABLE_BULLNOSE = false
