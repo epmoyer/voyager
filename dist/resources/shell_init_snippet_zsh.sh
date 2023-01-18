@@ -10,6 +10,12 @@ vger_build_prompt() {
 }
 export PROMPT='$(vger_build_prompt)'
 
+# By default Voyager will truncate all but the last directory of your base (pre-git-repo) path.
+# To truncate at a different start depth, uncomment the following.  For example, setting it to
+# 3 will show the final 3 path components.  To show all path components, set it to a large
+# number (e.g. 1000).
+# export VGER_TRUNCATION_START_DEPTH=3
+
 # --------------------
 # Helper aliases
 # --------------------

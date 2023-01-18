@@ -17,7 +17,7 @@ install_shell_snippet() {
 }
 
 query_install_shell_snippet() {
-    read -p "      Add to() function to $SHELL_INIT_SCRIPT ? " -n 1 -r
+    read -p "      Add shell snippet to $SHELL_INIT_SCRIPT ? " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]
     then
