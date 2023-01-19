@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## 1.5.2 - 2023-01-19
+### Changed
+- Adopt pink for `STYLE_ERROR`
+
+## 1.5.2 - 2023-01-19
 ### Added
 - Indicate errors with "X" prefix in dedicated error section. (via `VGER_RETVAL` environment variable).
 

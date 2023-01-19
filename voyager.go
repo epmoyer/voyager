@@ -64,7 +64,7 @@ var STYLE_DEBUG = promptStyleT{
 var STYLE_ERROR = promptStyleT{
 	ColorHexFGPowerline: "#000000",
 	ColorHexBGPowerline: "#ff92c5",
-	ColorHexFGText:      "#ff3030",
+	ColorHexFGText:      "#ff92c5",
 }
 var STYLE_SHELL = promptStyleT{
 	ColorHexFGPowerline: "#000000",
