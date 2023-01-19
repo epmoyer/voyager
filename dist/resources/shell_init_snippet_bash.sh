@@ -3,7 +3,8 @@
 
 export VGER_OPT_POWERLINE="--powerline"
 vger_build_prompt() {
-  PS1=`voyager $VGER_OPT_POWERLINE --shell=bash "$(pwd)"`
+   export VGER_RETVAL=$?
+   PS1=`voyager $VGER_OPT_POWERLINE --shell=bash "$(pwd)"`
 }
 export PROMPT_COMMAND=vger_build_prompt
 

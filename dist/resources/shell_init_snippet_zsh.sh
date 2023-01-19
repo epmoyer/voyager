@@ -6,7 +6,8 @@ setopt prompt_subst
 
 export VGER_OPT_POWERLINE="--powerline"
 vger_build_prompt() {
-  echo $(voyager $VGER_OPT_POWERLINE "$(pwd)")
+   export VGER_RETVAL=$?
+   echo $(voyager $VGER_OPT_POWERLINE "$(pwd)")
 }
 export PROMPT='$(vger_build_prompt)'
 

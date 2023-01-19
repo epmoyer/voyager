@@ -291,8 +291,8 @@ func buildPromptInfo(path string, optUsername string) (promptInfoT, error) {
 	// ---------------------
 	// Previous command return value
 	// ---------------------
-	returnValue := os.Getenv("RETVAL")
-	// fmt.Fprintf(os.Stderr, "RETVAL: %s\n", returnValue)
+	returnValue := os.Getenv("VGER_RETVAL")
+	// fmt.Fprintf(os.Stderr, "VGER_RETVAL: %s\n", returnValue)
 	if returnValue != "" {
 		value, err := strconv.Atoi(returnValue)
 		if err == nil {
