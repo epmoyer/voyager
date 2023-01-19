@@ -40,6 +40,7 @@ var SYMBOLS_POWERLINE = map[string]string{
 	"modified":   SYMBOL_PL_GIT_MODIFIED + " ",
 	"untracked":  SYMBOL_PL_GIT_BRANCH_UNTRACKED + " ",
 	"shell_bash": SYMBOL_PL_DOLLAR,
+	"error":      SYMBOL_PL_X,
 }
 var SYMBOLS_TEXT = map[string]string{
 	"branch":     "ʎ",
@@ -48,6 +49,7 @@ var SYMBOLS_TEXT = map[string]string{
 	"modified":   "!",
 	"untracked":  "?",
 	"shell_bash": "$",
+	"error":      "",
 }
 
 const COLOR_BG_DEFAULT = "#000000"
@@ -58,6 +60,11 @@ var STYLE_DEBUG = promptStyleT{
 	ColorHexFGPowerline: "#000000",
 	ColorHexBGPowerline: "#B7E2B7",
 	ColorHexFGText:      "#B7E2B7",
+}
+var STYLE_ERROR = promptStyleT{
+	ColorHexFGPowerline: "#ff3030",
+	ColorHexBGPowerline: "#ffffff",
+	ColorHexFGText:      "#ff3030",
 }
 var STYLE_SHELL = promptStyleT{
 	ColorHexFGPowerline: "#000000",
@@ -192,6 +199,18 @@ func (prompt *promptT) renderPrompt(promptInfo promptInfoT) {
 			STYLE_DEBUG)
 	}
 
+	// -----------------------
+	// Error
+	// -----------------------
+	if promptInfo.ReturnValue != 0 {
+		prompt.addSegment(
+			symbols["error"],
+			STYLE_ERROR)
+	}
+
+	// -----------------------
+	// Shell
+	// -----------------------
 	if prompt.colorizer.shell == "bash" {
 		prompt.addSegment(
 			symbols["shell_bash"],
@@ -261,7 +280,6 @@ func (prompt *promptT) renderPrompt(promptInfo promptInfoT) {
 }
 
 func buildPromptInfo(path string, optUsername string) (promptInfoT, error) {
-
 	promptInfo := promptInfoT{}
 
 	promptInfo.ShowContext = true
@@ -269,6 +287,19 @@ func buildPromptInfo(path string, optUsername string) (promptInfoT, error) {
 	pathGitRoot, pathGitSub := getPath(path)
 	promptInfo.PathGitRootBeginning, promptInfo.PathGitRootFinal = chopPath(pathGitRoot)
 	promptInfo.PathGitSub = pathGitSub
+
+	// ---------------------
+	// Previous command return value
+	// ---------------------
+	returnValue := os.Getenv("RETVAL")
+	// fmt.Fprintf(os.Stderr, "RETVAL: %s\n", returnValue)
+	if returnValue != "" {
+		value, err := strconv.Atoi(returnValue)
+		if err == nil {
+			promptInfo.ReturnValue = value
+			// fmt.Fprintf(os.Stderr, "value: %d\n", value)
+		}
+	}
 
 	// ---------------------
 	// User and Host

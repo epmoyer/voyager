@@ -29,6 +29,7 @@ type promptInfoT struct {
 	PathGitSub           string
 	Git                  gitInfoT
 	IsRoot               bool
+	ReturnValue          int
 }
 
 type promptT struct {
