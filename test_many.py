@@ -90,10 +90,8 @@ def main():
             '/Users/eric/Dropbox (Personal)/cab_dbx/code/go/voyager/voyager', 
             '--printable', 
         ]
-        options = ''
         username = test_case.get('username')
         if username:
-            options = f'--username={username}'
             command_line_args.append(f'--username={username}')
         
         environment = os.environ.copy()
@@ -102,47 +100,17 @@ def main():
             for key, value in environment_vars.items():
                 environment[key] = value
         
-        
-        # stream = subprocess.Popen(
-        stream = subprocess.check_output(
-            # f'"/Users/eric/Dropbox (Personal)/cab_dbx/code/go/voyager/voyager" --printable --powerline {options} {path}', 
-            # f'./voyager --printable --powerline {options} {path}', 
-            # ['./voyager', '--printable', '--powerline', path],
-            # ['/Users/eric/Dropbox (Personal)/cab_dbx/code/go/voyager/voyager', '--printable', '--powerline', path],
+        output = subprocess.check_output(
             command_line_args + ['--powerline', path],
             env=environment,
-            # shell=True
         )
-        # print(f'   {stream.read()}')
-        # print(f'   {stream}')
-        print(f'   {stream.decode("utf-8")}')
+        print(f'   {output.decode("utf-8")}')
 
-        # ---------
-        # Legacy
-        # ---------
-        # stream = os.popen(
-        #     f'"/Users/eric/Dropbox (Personal)/cab_dbx/code/go/voyager/voyager" --printable --powerline {options} {path}'
-        # )
-        # print(f'   {stream.read()}')
-
-
-
-        # stream = subprocess.Popen(
-        stream = subprocess.check_output(
-            # f'"/Users/eric/Dropbox (Personal)/cab_dbx/code/go/voyager/voyager" --printable {options} {path}',
-            # f'./voyager --printable {options} {path}', 
-            # ['voyager', '--printable', path],
+        output = subprocess.check_output(
             command_line_args + [path],
             env=environment,
-            # shell=True
         )
-        # print(f'   {stream.read()}')
-        # print(f'   {stream}')
-        print(f'   {stream.decode("utf-8")}')
-        # stream = os.popen(
-        #     f'"/Users/eric/Dropbox (Personal)/cab_dbx/code/go/voyager/voyager" --dump {options} {path}'
-        # )
-        # print(f'   {stream.read()}')
+        print(f'   {output.decode("utf-8")}')
     print()
 
 
