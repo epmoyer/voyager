@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 import os
+import subprocess
+
 # from rich import print as rprint
 from rich.console import Console
 from rich.theme import Theme
@@ -22,6 +24,11 @@ TEST_CASES = [
         'path': r'/usr/local/bin',
     },
     {
+        'name': 'Error',
+        'path': r'/usr/local/bin',
+        'environment_vars': {'VGER_RETVAL': "1"}
+    },
+    {
         'name': 'With Context',
         'path': r'/usr/local/bin',
         'username': 'eric',
@@ -33,39 +40,39 @@ TEST_CASES = [
     },
     {
         'name': 'Git repo',
-        'path': r'/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/voyager/untracked/git_test_cases/normal',
+        'path': r'./untracked/git_test_cases/normal',
     },
     {
         'name': 'Git repo, in subdirectory',
-        'path': r'/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/voyager/untracked/git_test_cases/normal/subdir1',
+        'path': r'./untracked/git_test_cases/normal/subdir1',
     },
     {
         'name': 'Git repo, in second subdirectory',
-        'path': r'/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/voyager/untracked/git_test_cases/normal/subdir1/subdir2',
+        'path': r'./untracked/git_test_cases/normal/subdir1/subdir2',
     },
     {
         'name': 'Git repo, w/ detached head',
-        'path': r'/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/voyager/untracked/git_test_cases/detached',
+        'path': r'./untracked/git_test_cases/detached',
     },
     {
         'name': 'Git repo, unstarted (new repo, no check-ins)',
-        'path': r'/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/voyager/untracked/git_test_cases/unstarted',
+        'path': r'./untracked/git_test_cases/unstarted',
     },
     {
         'name': 'Git repo, untracked change',
-        'path': r'/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/voyager/untracked/git_test_cases/untracked',
+        'path': r'./untracked/git_test_cases/untracked',
     },
     {
         'name': 'Git repo, edited file',
-        'path': r'/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/voyager/untracked/git_test_cases/edited',
+        'path': r'./untracked/git_test_cases/edited',
     },
     {
         'name': 'Git repo, staged file',
-        'path': r'/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/voyager/untracked/git_test_cases/staged',
+        'path': r'./untracked/git_test_cases/staged',
     },
     {
         'name': 'Git repo, renamed file',
-        'path': r'/Users/eric/Dropbox\ \(Personal\)/cab_dbx/code/go/voyager/untracked/git_test_cases/renamed',
+        'path': r'./untracked/git_test_cases/renamed',
     },
 ]
 
@@ -82,14 +89,45 @@ def main():
         username = test_case.get('username')
         if username:
             options = f'--username={username}'
-        stream = os.popen(
-            f'"/Users/eric/Dropbox (Personal)/cab_dbx/code/go/voyager/voyager" --printable --powerline {options} {path}'
+        environment = os.environ.copy()
+        environment_vars = test_case.get('environment_vars')
+        if environment_vars:
+            for key, value in environment_vars.items():
+                environment[key] = value
+        # stream = subprocess.Popen(
+        stream = subprocess.check_output(
+            # f'"/Users/eric/Dropbox (Personal)/cab_dbx/code/go/voyager/voyager" --printable --powerline {options} {path}', 
+            # f'./voyager --printable --powerline {options} {path}', 
+            # ['./voyager', '--printable', '--powerline', path],
+            ['/Users/eric/Dropbox (Personal)/cab_dbx/code/go/voyager/voyager', '--printable', '--powerline', path],
+            env=environment,
+            # shell=True
         )
-        print(f'   {stream.read()}')
-        stream = os.popen(
-            f'"/Users/eric/Dropbox (Personal)/cab_dbx/code/go/voyager/voyager" --printable {options} {path}'
+        # print(f'   {stream.read()}')
+        # print(f'   {stream}')
+        print(f'   {stream.decode("utf-8")}')
+
+        # ---------
+        # Legacy
+        # ---------
+        # stream = os.popen(
+        #     f'"/Users/eric/Dropbox (Personal)/cab_dbx/code/go/voyager/voyager" --printable --powerline {options} {path}'
+        # )
+        # print(f'   {stream.read()}')
+
+
+
+        # stream = subprocess.Popen(
+        stream = subprocess.check_output(
+            # f'"/Users/eric/Dropbox (Personal)/cab_dbx/code/go/voyager/voyager" --printable {options} {path}',
+            # f'./voyager --printable {options} {path}', 
+            ['voyager', '--printable', path],
+            env=environment,
+            # shell=True
         )
-        print(f'   {stream.read()}')
+        # print(f'   {stream.read()}')
+        # print(f'   {stream}')
+        print(f'   {stream.decode("utf-8")}')
         # stream = os.popen(
         #     f'"/Users/eric/Dropbox (Personal)/cab_dbx/code/go/voyager/voyager" --dump {options} {path}'
         # )
