@@ -1,6 +1,5 @@
 
 # voyager:start ---------------------------------------------------------------
-
 # Allow substitutions and expansions in the prompt
 setopt prompt_subst
 
@@ -31,5 +30,4 @@ alias vger_pl="export VGER_OPT_POWERLINE=--powerline"
 alias vger_short="export VGER_TRUNCATION_START_DEPTH=1"
 # Don't truncate any path elements.
 alias vger_long="export VGER_TRUNCATION_START_DEPTH=1000"
-
 # voyager:end -----------------------------------------------------------------
