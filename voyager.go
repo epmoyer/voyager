@@ -13,7 +13,7 @@ import (
 )
 
 const APP_NAME = "voyager"
-const APP_VERSION = "1.5.2"
+const APP_VERSION = "1.5.3"
 
 const ENABLE_DEBUG_INDICATOR = false
 const ENABLE_BULLNOSE = false
@@ -63,7 +63,7 @@ var STYLE_DEBUG = promptStyleT{
 }
 var STYLE_ERROR = promptStyleT{
 	ColorHexFGPowerline: "#000000",
-	ColorHexBGPowerline: "#ff6060",
+	ColorHexBGPowerline: "#ff92c5",
 	ColorHexFGText:      "#ff3030",
 }
 var STYLE_SHELL = promptStyleT{
