@@ -7,12 +7,13 @@ import (
 	"os"
 	"os/exec"
 	"os/user"
+	"path/filepath"
 	"strconv"
 	"strings"
 )
 
 const APP_NAME = "voyager"
-const APP_VERSION = "1.5.1"
+const APP_VERSION = "1.5.2"
 
 const ENABLE_DEBUG_INDICATOR = false
 const ENABLE_BULLNOSE = false
@@ -111,6 +112,14 @@ var STYLE_GITSUB = promptStyleT{
 }
 
 func main() {
+	flag.Usage = func() {
+		w := flag.CommandLine.Output() // may be os.Stderr - but not necessarily
+		executable := filepath.Base(os.Args[0])
+		fmt.Fprintf(w, "Usage of %s:\n", executable)
+		fmt.Fprintf(w, "%s [options] <path>\n", executable)
+		flag.PrintDefaults()
+	}
+
 	optVersion := flag.Bool("version", false,
 		"Show version.")
 	optDump := flag.Bool("dump", false,
@@ -124,7 +133,7 @@ func main() {
 	flag.Parse()
 
 	if *optVersion {
-		fmt.Printf("%s %s\n", APP_NAME, APP_VERSION)
+		showVersion()
 		os.Exit(0)
 	}
 
@@ -132,6 +141,10 @@ func main() {
 	if len(args) > 1 {
 		// Too many args.
 		os.Exit(1)
+	}
+	if len(args) == 0 {
+		flag.Usage()
+		os.Exit(0)
 	}
 	path := strings.TrimSpace(args[0])
 	// fmt.Fprintf(os.Stderr, "args[0]:%#v\n", args[0])
@@ -156,6 +169,10 @@ func main() {
 	}
 
 	os.Exit(0)
+}
+
+func showVersion() {
+	fmt.Printf("%s %s\n", APP_NAME, APP_VERSION)
 }
 
 func (prompt *promptT) renderPrompt(promptInfo promptInfoT) {
