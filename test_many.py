@@ -85,21 +85,31 @@ def main():
         rprint(f'[case]{name}:[/case]')
         path = test_case["path"]
         rprint(f'   [path]{path}[/path]')
+
+        command_line_args = [
+            '/Users/eric/Dropbox (Personal)/cab_dbx/code/go/voyager/voyager', 
+            '--printable', 
+        ]
         options = ''
         username = test_case.get('username')
         if username:
             options = f'--username={username}'
+            command_line_args.append(f'--username={username}')
+        
         environment = os.environ.copy()
         environment_vars = test_case.get('environment_vars')
         if environment_vars:
             for key, value in environment_vars.items():
                 environment[key] = value
+        
+        
         # stream = subprocess.Popen(
         stream = subprocess.check_output(
             # f'"/Users/eric/Dropbox (Personal)/cab_dbx/code/go/voyager/voyager" --printable --powerline {options} {path}', 
             # f'./voyager --printable --powerline {options} {path}', 
             # ['./voyager', '--printable', '--powerline', path],
-            ['/Users/eric/Dropbox (Personal)/cab_dbx/code/go/voyager/voyager', '--printable', '--powerline', path],
+            # ['/Users/eric/Dropbox (Personal)/cab_dbx/code/go/voyager/voyager', '--printable', '--powerline', path],
+            command_line_args + ['--powerline', path],
             env=environment,
             # shell=True
         )
@@ -121,7 +131,8 @@ def main():
         stream = subprocess.check_output(
             # f'"/Users/eric/Dropbox (Personal)/cab_dbx/code/go/voyager/voyager" --printable {options} {path}',
             # f'./voyager --printable {options} {path}', 
-            ['voyager', '--printable', path],
+            # ['voyager', '--printable', path],
+            command_line_args + [path],
             env=environment,
             # shell=True
         )
