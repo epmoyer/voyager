@@ -17,33 +17,71 @@ THEME = Theme({
 })
 # fmt: on
 CONSOLE = Console(highlight=False, color_system='256', theme=THEME)
-rprint = CONSOLE.print
+rprint = CONSOLE.print  # rich print
 
+# fmt:off
 TEST_CASES = [
-    {'name': 'Normal', 'path': r'/usr/local/bin',},
-    {'name': 'Error', 'path': r'/usr/local/bin', 'environment_vars': {'VGER_RETVAL': "1"}},
-    {'name': 'With Context', 'path': r'/usr/local/bin', 'username': 'eric',},
-    {'name': 'With Context (as root)', 'path': r'/usr/local/bin', 'username': 'root',},
-    {'name': 'Git repo', 'path': r'./untracked/git_test_cases/normal',},
-    {'name': 'Git repo, in subdirectory', 'path': r'./untracked/git_test_cases/normal/subdir1',},
+    {
+        'name': 'Normal',
+        'path': r'/usr/local/bin',
+    },
+    {
+        'name': 'Error',
+        'path': r'/usr/local/bin',
+        'environment_vars': {
+            'VGER_RETVAL': "1"
+        }
+    },
+    {
+        'name': 'With Context',
+        'path': r'/usr/local/bin',
+        'username': 'eric',
+    },
+    {
+        'name': 'With Context (as root)',
+        'path': r'/usr/local/bin',
+        'username': 'root',
+    },
+    {
+        'name': 'Git repo',
+        'path': r'./git_test_cases/normal',
+    },
+    {
+        'name': 'Git repo, in subdirectory',
+        'path': r'./git_test_cases/normal/subdir1',
+    },
     {
         'name': 'Git repo, in second subdirectory',
-        'path': r'./untracked/git_test_cases/normal/subdir1/subdir2',
+        'path': r'./git_test_cases/normal/subdir1/subdir2',
     },
-    {'name': 'Git repo, w/ detached head', 'path': r'./untracked/git_test_cases/detached',},
+    {
+        'name': 'Git repo, w/ detached head',
+        'path': r'./git_test_cases/detached',
+    },
     {
         'name': 'Git repo, unstarted (new repo, no check-ins)',
-        'path': r'./untracked/git_test_cases/unstarted',
+        'path': r'./git_test_cases/unstarted',
     },
-    {'name': 'Git repo, untracked change', 'path': r'./untracked/git_test_cases/untracked',},
-    {'name': 'Git repo, edited file', 'path': r'./untracked/git_test_cases/edited',},
-    {'name': 'Git repo, staged file', 'path': r'./untracked/git_test_cases/staged',},
-    {'name': 'Git repo, renamed file', 'path': r'./untracked/git_test_cases/renamed',},
+    {
+        'name': 'Git repo, untracked change',
+        'path': r'./git_test_cases/untracked',
+    },
+    {
+        'name': 'Git repo, edited file',
+        'path': r'./git_test_cases/edited',
+    },
+    {
+        'name': 'Git repo, staged file',
+        'path': r'./git_test_cases/staged',
+    },
+    {
+        'name': 'Git repo, renamed file',
+        'path': r'./git_test_cases/renamed',
+    },
 ]
-
+# fmt: on
 
 def main():
-    # print("hello")
     print()
     for test_case in TEST_CASES:
         name = test_case.get('name', '(unnamed test case)')

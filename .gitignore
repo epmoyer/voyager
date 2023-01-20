@@ -2,9 +2,9 @@
 go.sum
 untracked/
 
-test1
-test2
 
+# Test
+git_test_cases/
 
 # Binaries
 voyager
