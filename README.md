@@ -1,4 +1,8 @@
+![](docs/img/voyager_banner.png)
 
+A git-aware prompt for `zsh` and `bash`.
+
+Like [Starship](https://starship.rs), but smaller, and with a single mission.
 
 ## TODO
 - Need to run `setopt prompt_subst` per https://stackoverflow.com/questions/15212152/zsh-prompt-function-not-running
