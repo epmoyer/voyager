@@ -20,61 +20,25 @@ CONSOLE = Console(highlight=False, color_system='256', theme=THEME)
 rprint = CONSOLE.print
 
 TEST_CASES = [
-    {
-        'name': 'Normal',
-        'path': r'/usr/local/bin',
-    },
-    {
-        'name': 'Error',
-        'path': r'/usr/local/bin',
-        'environment_vars': {'VGER_RETVAL': "1"}
-    },
-    {
-        'name': 'With Context',
-        'path': r'/usr/local/bin',
-        'username': 'eric',
-    },
-    {
-        'name': 'With Context (as root)',
-        'path': r'/usr/local/bin',
-        'username': 'root',
-    },
-    {
-        'name': 'Git repo',
-        'path': r'./untracked/git_test_cases/normal',
-    },
-    {
-        'name': 'Git repo, in subdirectory',
-        'path': r'./untracked/git_test_cases/normal/subdir1',
-    },
+    {'name': 'Normal', 'path': r'/usr/local/bin',},
+    {'name': 'Error', 'path': r'/usr/local/bin', 'environment_vars': {'VGER_RETVAL': "1"}},
+    {'name': 'With Context', 'path': r'/usr/local/bin', 'username': 'eric',},
+    {'name': 'With Context (as root)', 'path': r'/usr/local/bin', 'username': 'root',},
+    {'name': 'Git repo', 'path': r'./untracked/git_test_cases/normal',},
+    {'name': 'Git repo, in subdirectory', 'path': r'./untracked/git_test_cases/normal/subdir1',},
     {
         'name': 'Git repo, in second subdirectory',
         'path': r'./untracked/git_test_cases/normal/subdir1/subdir2',
     },
-    {
-        'name': 'Git repo, w/ detached head',
-        'path': r'./untracked/git_test_cases/detached',
-    },
+    {'name': 'Git repo, w/ detached head', 'path': r'./untracked/git_test_cases/detached',},
     {
         'name': 'Git repo, unstarted (new repo, no check-ins)',
         'path': r'./untracked/git_test_cases/unstarted',
     },
-    {
-        'name': 'Git repo, untracked change',
-        'path': r'./untracked/git_test_cases/untracked',
-    },
-    {
-        'name': 'Git repo, edited file',
-        'path': r'./untracked/git_test_cases/edited',
-    },
-    {
-        'name': 'Git repo, staged file',
-        'path': r'./untracked/git_test_cases/staged',
-    },
-    {
-        'name': 'Git repo, renamed file',
-        'path': r'./untracked/git_test_cases/renamed',
-    },
+    {'name': 'Git repo, untracked change', 'path': r'./untracked/git_test_cases/untracked',},
+    {'name': 'Git repo, edited file', 'path': r'./untracked/git_test_cases/edited',},
+    {'name': 'Git repo, staged file', 'path': r'./untracked/git_test_cases/staged',},
+    {'name': 'Git repo, renamed file', 'path': r'./untracked/git_test_cases/renamed',},
 ]
 
 
@@ -89,39 +53,32 @@ def main():
         rprint(f'   [path]{path}[/path]')
 
         command_line_args = [
-            # '/Users/eric/Dropbox (Personal)/cab_dbx/code/go/voyager/voyager', 
-            './voyager', 
-            '--printable', 
-            '--powerline'
+            './voyager',
+            '--printable',
+            '--powerline',
         ]
         username = test_case.get('username')
         if username:
             command_line_args.append(f'--username={username}')
         command_line_args.append(path)
-        
+
         environment = os.environ.copy()
         environment_vars = test_case.get('environment_vars')
         if environment_vars:
             for key, value in environment_vars.items():
                 environment[key] = value
-        
+
         # ------------------------
         # Render Powerline Prompt
         # ------------------------
-        output = subprocess.check_output(
-            command_line_args,
-            env=environment,
-        )
+        output = subprocess.check_output(command_line_args, env=environment,)
         print(f'   {output.decode("utf-8")}')
 
         # ------------------------
         # Render Text Prompt
         # ------------------------
         command_line_args.remove('--powerline')
-        output = subprocess.check_output(
-            command_line_args,
-            env=environment,
-        )
+        output = subprocess.check_output(command_line_args, env=environment,)
         print(f'   {output.decode("utf-8")}')
     print()
 
