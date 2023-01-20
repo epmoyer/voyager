@@ -26,6 +26,13 @@ TEST_CASES = [
         'path': r'/usr/local/bin',
     },
     {
+        'name': 'Normal, No path truncation',
+        'path': r'/usr/local/bin',
+        'environment_vars': {
+            'VGER_TRUNCATION_START_DEPTH': "1000"
+        }
+    },
+    {
         'name': 'Error',
         'path': r'/usr/local/bin',
         'environment_vars': {
