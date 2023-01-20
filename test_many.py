@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import os
 import subprocess
+from pathlib import Path
 
 # from rich import print as rprint
 from rich.console import Console
@@ -84,15 +85,19 @@ def main():
         name = test_case.get('name', '(unnamed test case)')
         rprint(f'[case]{name}:[/case]')
         path = test_case["path"]
+        path = str(Path(path).absolute())
         rprint(f'   [path]{path}[/path]')
 
         command_line_args = [
-            '/Users/eric/Dropbox (Personal)/cab_dbx/code/go/voyager/voyager', 
+            # '/Users/eric/Dropbox (Personal)/cab_dbx/code/go/voyager/voyager', 
+            './voyager', 
             '--printable', 
+            '--powerline'
         ]
         username = test_case.get('username')
         if username:
             command_line_args.append(f'--username={username}')
+        command_line_args.append(path)
         
         environment = os.environ.copy()
         environment_vars = test_case.get('environment_vars')
@@ -100,14 +105,21 @@ def main():
             for key, value in environment_vars.items():
                 environment[key] = value
         
+        # ------------------------
+        # Render Powerline Prompt
+        # ------------------------
         output = subprocess.check_output(
-            command_line_args + ['--powerline', path],
+            command_line_args,
             env=environment,
         )
         print(f'   {output.decode("utf-8")}')
 
+        # ------------------------
+        # Render Text Prompt
+        # ------------------------
+        command_line_args.remove('--powerline')
         output = subprocess.check_output(
-            command_line_args + [path],
+            command_line_args,
             env=environment,
         )
         print(f'   {output.decode("utf-8")}')
