@@ -44,7 +44,12 @@ type promptStyleT struct {
 	ColorHexFGPowerline string
 	ColorHexBGPowerline string
 	ColorHexFGText      string
-	Bold                bool
+
+	Color256FGPowerline int
+	Color256BGPowerline int
+	Color256FGText      int
+
+	Bold bool
 }
 
 func (prompt *promptT) init(isPowerline bool, shell string) {

@@ -90,6 +90,10 @@ var STYLE_GITROOT_PRE = promptStyleT{
 	ColorHexFGPowerline: "#c0c0c0",
 	ColorHexBGPowerline: "#4F6D6F",
 	ColorHexFGText:      "#729E72",
+
+	Color256FGPowerline: 247, // Gray
+	Color256BGPowerline: 66,  // Pale Green
+	Color256FGText:      70,  // Brighter Green
 }
 var STYLE_GITROOT = promptStyleT{
 	ColorHexFGPowerline: "#ffffff",
