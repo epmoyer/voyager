@@ -212,12 +212,18 @@ func (prompt *promptT) colorSprintF(style promptStyleT, format string, args ...i
 		// --------------------
 		switch prompt.ColorMode {
 		case ColorMode16m:
-			return style.colorRGB.Sprintf(format, args...)
+			st := color.HEXStyle(style.ColorHexFGPowerline, style.ColorHexBGPowerline)
+			return st.Sprintf(format, args...)
 		case ColorMode16:
-			return style.color16.Sprintf(format, args...)
+			// TODO: sed BG
+			st := color.C256(uint8(style.Color256FGPowerline))
+			return st.Sprintf(format, args...)
 		case ColorMode256:
-			return style.color256.Sprintf(format, args...)
+			// TODO: load color
+			st := color.Magenta
+			return st.Sprintf(format, args...)
 		default:
+			// No color
 			return fmt.Sprintf(format, args...)
 		}
 	} else {
