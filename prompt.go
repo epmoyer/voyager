@@ -32,12 +32,20 @@ type promptInfoT struct {
 	ReturnValue          int
 }
 
+const (
+	ColorMode16m = iota
+	ColorMode256
+	ColorMode16
+	ColorModeNone
+)
+
 type promptT struct {
 	TextPrintable     string
 	TextShell         string
 	CurrentBGColorHex string
-	isPowerline       bool
-	colorizer         colorizerT
+	IsPowerLone       bool
+	ColorMode         int
+	Colorizer         colorizerT
 }
 
 type promptStyleT struct {
@@ -52,14 +60,30 @@ type promptStyleT struct {
 	Bold bool
 }
 
-func (prompt *promptT) init(isPowerline bool, shell string) {
-	prompt.colorizer = colorizerT{}
-	prompt.colorizer.shell = shell
-	prompt.isPowerline = isPowerline
+func (prompt *promptT) init(isPowerline bool, shell string, optNoColor bool, optColor string) {
+	prompt.Colorizer = colorizerT{}
+	prompt.Colorizer.shell = shell
+	prompt.IsPowerLone = isPowerline
+
+	// --------------------
+	// Set color mode
+	// --------------------
+	if optNoColor {
+		prompt.ColorMode = ColorModeNone
+		return
+	}
+	switch optColor {
+	case "16":
+		prompt.ColorMode = ColorMode16
+	case "256":
+		prompt.ColorMode = ColorMode256
+	case "16m":
+		prompt.ColorMode = ColorMode16m
+	}
 }
 
 func (prompt *promptT) addSegment(text string, style promptStyleT) {
-	if prompt.isPowerline && !(prompt.TextPrintable == "" && ENABLE_BULLNOSE) {
+	if prompt.IsPowerLone && !(prompt.TextPrintable == "" && ENABLE_BULLNOSE) {
 		// Powerline prompt gets a leading space
 		text = " " + text
 	}
@@ -67,19 +91,19 @@ func (prompt *promptT) addSegment(text string, style promptStyleT) {
 		// -------------------
 		//  First segment: Start with bull-nose
 		// -------------------
-		if prompt.isPowerline && ENABLE_BULLNOSE {
+		if prompt.IsPowerLone && ENABLE_BULLNOSE {
 			bullnoseStyle := color.HEXStyle(style.ColorHexBGPowerline)
 			prompt.TextPrintable += bullnoseStyle.Sprint(SYMBOL_PL_BULLNOSE)
 
 			// SHELL
 			// prompt.TextShell += " "
-			prompt.TextShell += prompt.colorizer.colorize(SYMBOL_PL_BULLNOSE, style.ColorHexBGPowerline, "", style.Bold)
+			prompt.TextShell += prompt.Colorizer.colorize(SYMBOL_PL_BULLNOSE, style.ColorHexBGPowerline, "", style.Bold)
 		}
 	} else {
 		// -------------------
 		//  Add Separator
 		// -------------------
-		if prompt.isPowerline {
+		if prompt.IsPowerLone {
 			separatorStyle := color.HEXStyle(COLOR_FG_DEFAULT, prompt.CurrentBGColorHex)
 			prompt.TextPrintable += separatorStyle.Sprint(" ")
 			separatorStyle = color.HEXStyle(prompt.CurrentBGColorHex, style.ColorHexBGPowerline)
@@ -87,7 +111,7 @@ func (prompt *promptT) addSegment(text string, style promptStyleT) {
 
 			// SHELL
 			prompt.TextShell += " "
-			prompt.TextShell += prompt.colorizer.colorize(SYMBOL_PL_SEPARATOR, prompt.CurrentBGColorHex, style.ColorHexBGPowerline, style.Bold)
+			prompt.TextShell += prompt.Colorizer.colorize(SYMBOL_PL_SEPARATOR, prompt.CurrentBGColorHex, style.ColorHexBGPowerline, style.Bold)
 		} else {
 			separatorColor := color.HEX(COLOR_TEXT_FG_SEPARATOR)
 			// prompt.Prompt += separatorColor.Sprintf(" ⟫ ")
@@ -95,14 +119,14 @@ func (prompt *promptT) addSegment(text string, style promptStyleT) {
 
 			// SHELL
 			// TODO: Should probably declare a style for this
-			prompt.TextShell += prompt.colorizer.colorize(SYMBOL_TEXT_SEPARATOR, COLOR_TEXT_FG_SEPARATOR, "", false)
+			prompt.TextShell += prompt.Colorizer.colorize(SYMBOL_TEXT_SEPARATOR, COLOR_TEXT_FG_SEPARATOR, "", false)
 		}
 	}
 	prompt.appendToSegment(text, style)
 }
 
 func (prompt *promptT) appendToSegment(text string, style promptStyleT) {
-	if prompt.isPowerline {
+	if prompt.IsPowerLone {
 		prompt.CurrentBGColorHex = style.ColorHexBGPowerline
 		appendStyle := color.HEXStyle(style.ColorHexFGPowerline, style.ColorHexBGPowerline)
 		if style.Bold {
@@ -111,7 +135,7 @@ func (prompt *promptT) appendToSegment(text string, style promptStyleT) {
 		prompt.TextPrintable += appendStyle.Sprintf("%s", text)
 
 		// SHELL
-		prompt.TextShell += prompt.colorizer.colorize(text, style.ColorHexFGPowerline, style.ColorHexBGPowerline, style.Bold)
+		prompt.TextShell += prompt.Colorizer.colorize(text, style.ColorHexFGPowerline, style.ColorHexBGPowerline, style.Bold)
 	} else {
 		// appendColor := color.HEX(style.ColorHexFGText)
 		appendStyle := color.HEXStyle(style.ColorHexFGText)
@@ -121,12 +145,12 @@ func (prompt *promptT) appendToSegment(text string, style promptStyleT) {
 		prompt.TextPrintable += appendStyle.Sprintf("%s", text)
 
 		// SHELL
-		prompt.TextShell += prompt.colorizer.colorize(text, style.ColorHexFGText, "", style.Bold)
+		prompt.TextShell += prompt.Colorizer.colorize(text, style.ColorHexFGText, "", style.Bold)
 	}
 }
 
 func (prompt *promptT) endSegments(promptInfo promptInfoT) {
-	if prompt.isPowerline {
+	if prompt.IsPowerLone {
 		// --------------------
 		// Powerline
 		// --------------------
@@ -139,15 +163,15 @@ func (prompt *promptT) endSegments(promptInfo promptInfoT) {
 
 		// SHELL
 		prompt.TextShell += " "
-		prompt.TextShell += prompt.colorizer.reset()
-		prompt.TextShell += prompt.colorizer.colorize(SYMBOL_PL_SEPARATOR+" ", prompt.CurrentBGColorHex, "", false)
-		prompt.TextShell += prompt.colorizer.reset()
+		prompt.TextShell += prompt.Colorizer.reset()
+		prompt.TextShell += prompt.Colorizer.colorize(SYMBOL_PL_SEPARATOR+" ", prompt.CurrentBGColorHex, "", false)
+		prompt.TextShell += prompt.Colorizer.reset()
 	} else {
 		// --------------------
 		// Text
 		// --------------------
 		promptSymbol := "%"
-		if prompt.colorizer.shell == "bash" {
+		if prompt.Colorizer.shell == "bash" {
 			promptSymbol = "$"
 		}
 		if promptInfo.IsRoot {
@@ -165,17 +189,17 @@ func (prompt *promptT) endSegments(promptInfo promptInfoT) {
 
 		// SHELL
 		// Escape the % symbol for zsh
-		if prompt.colorizer.shell == "zsh" {
+		if prompt.Colorizer.shell == "zsh" {
 			promptSymbol = strings.Replace(promptSymbol, "%", "%%", -1)
 		}
-		prompt.TextShell += prompt.colorizer.reset()
+		prompt.TextShell += prompt.Colorizer.reset()
 		if promptInfo.IsRoot {
-			prompt.TextShell += prompt.colorizer.colorize(promptSymbol, STYLE_CONTEXT_ROOT.ColorHexFGText, "", false)
+			prompt.TextShell += prompt.Colorizer.colorize(promptSymbol, STYLE_CONTEXT_ROOT.ColorHexFGText, "", false)
 		} else {
 			prompt.TextShell += promptSymbol
 		}
 		// TODO: The final reset should not be necessary (but is).  Is a trim() removing the final spaces somewhere?
-		prompt.TextShell += prompt.colorizer.reset()
+		prompt.TextShell += prompt.Colorizer.reset()
 	}
 }
 

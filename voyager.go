@@ -141,6 +141,10 @@ func main() {
 	optUsername := flag.String("username", "", "Force the prompt username (for testing).")
 	optPrintable := flag.Bool("printable", false,
 		"Return a printable (ASCII Esc) string rather than a shell $PROMPT/$PS1 string.")
+	optNoColor := flag.Bool("no-color", false,
+		"Disable colorization")
+	optColor := flag.String("color", "16m",
+		"Set color mode. Can be set to any of: 16, 256, 16m.")
 	flag.Parse()
 
 	if *optVersion {
@@ -164,7 +168,7 @@ func main() {
 	promptInfo, _ := buildPromptInfo(path, *optUsername)
 
 	prompt := promptT{}
-	prompt.init(*optPowerline, *optShell)
+	prompt.init(*optPowerline, *optShell, *optNoColor, *optColor)
 
 	if *optDump {
 		fmt.Printf("path:%#v\n", path)
@@ -188,7 +192,7 @@ func showVersion() {
 
 func (prompt *promptT) renderPrompt(promptInfo promptInfoT) {
 	var symbols map[string]string
-	if prompt.isPowerline {
+	if prompt.IsPowerLone {
 		symbols = SYMBOLS_POWERLINE
 	} else {
 		symbols = SYMBOLS_TEXT
@@ -215,7 +219,7 @@ func (prompt *promptT) renderPrompt(promptInfo promptInfoT) {
 	// -----------------------
 	// Shell
 	// -----------------------
-	if prompt.colorizer.shell == "bash" {
+	if prompt.Colorizer.shell == "bash" {
 		prompt.addSegment(
 			symbols["shell_bash"],
 			STYLE_SHELL)
@@ -265,7 +269,7 @@ func (prompt *promptT) renderPrompt(promptInfo promptInfoT) {
 		if git.IsDetached {
 			style = STYLE_GIT_INFO_DETACHED
 		}
-		text := git.render(prompt.isPowerline)
+		text := git.render(prompt.IsPowerLone)
 		prompt.addSegment(
 			text,
 			style)
