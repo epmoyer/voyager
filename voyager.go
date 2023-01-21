@@ -10,6 +10,8 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+
+	"github.com/gookit/color"
 )
 
 const APP_NAME = "voyager"
@@ -94,6 +96,10 @@ var STYLE_GITROOT_PRE = promptStyleT{
 	Color256FGPowerline: 247, // Gray
 	Color256BGPowerline: 66,  // Pale Green
 	Color256FGText:      70,  // Brighter Green
+
+	Color16FGPowerLine: color.FgBlack,
+	Color16BGPowerLine: color.BgGreen,
+	Color16Text:        color.Green,
 }
 var STYLE_GITROOT = promptStyleT{
 	ColorHexFGPowerline: "#ffffff",

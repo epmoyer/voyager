@@ -54,9 +54,13 @@ type promptStyleT struct {
 	ColorHexBGPowerline string
 	ColorHexFGText      string
 
-	Color256FGPowerline int
-	Color256BGPowerline int
-	Color256FGText      int
+	Color256FGPowerline uint8
+	Color256BGPowerline uint8
+	Color256FGText      uint8
+
+	Color16FGPowerLine color.Color
+	Color16BGPowerLine color.Color
+	Color16Text        color.Color
 
 	Bold bool
 }
@@ -212,15 +216,20 @@ func (prompt *promptT) colorSprintF(style promptStyleT, format string, args ...i
 		// --------------------
 		switch prompt.ColorMode {
 		case ColorMode16m:
+			// TODO: handle bold
 			st := color.HEXStyle(style.ColorHexFGPowerline, style.ColorHexBGPowerline)
 			return st.Sprintf(format, args...)
-		case ColorMode16:
-			// TODO: sed BG
-			st := color.C256(uint8(style.Color256FGPowerline))
-			return st.Sprintf(format, args...)
 		case ColorMode256:
-			// TODO: load color
-			st := color.Magenta
+			// TODO: handle bold
+			st := color.S256(style.Color256FGPowerline, style.Color256BGPowerline)
+			return st.Sprintf(format, args...)
+		case ColorMode16:
+			var st color.Style
+			if style.Bold {
+				st = color.New(style.Color16FGPowerLine, style.Color16BGPowerLine, color.OpBold)
+			} else {
+				st = color.New(style.Color16FGPowerLine, style.Color16BGPowerLine)
+			}
 			return st.Sprintf(format, args...)
 		default:
 			// No color
