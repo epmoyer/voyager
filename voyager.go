@@ -192,7 +192,7 @@ func showVersion() {
 
 func (prompt *promptT) renderPrompt(promptInfo promptInfoT) {
 	var symbols map[string]string
-	if prompt.IsPowerLone {
+	if prompt.IsPowerLine {
 		symbols = SYMBOLS_POWERLINE
 	} else {
 		symbols = SYMBOLS_TEXT
@@ -269,7 +269,7 @@ func (prompt *promptT) renderPrompt(promptInfo promptInfoT) {
 		if git.IsDetached {
 			style = STYLE_GIT_INFO_DETACHED
 		}
-		text := git.render(prompt.IsPowerLone)
+		text := git.render(prompt.IsPowerLine)
 		prompt.addSegment(
 			text,
 			style)

@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"fmt"
 	"os/exec"
 	"strings"
 
@@ -43,7 +44,7 @@ type promptT struct {
 	TextPrintable     string
 	TextShell         string
 	CurrentBGColorHex string
-	IsPowerLone       bool
+	IsPowerLine       bool
 	ColorMode         int
 	Colorizer         colorizerT
 }
@@ -63,7 +64,7 @@ type promptStyleT struct {
 func (prompt *promptT) init(isPowerline bool, shell string, optNoColor bool, optColor string) {
 	prompt.Colorizer = colorizerT{}
 	prompt.Colorizer.shell = shell
-	prompt.IsPowerLone = isPowerline
+	prompt.IsPowerLine = isPowerline
 
 	// --------------------
 	// Set color mode
@@ -83,7 +84,7 @@ func (prompt *promptT) init(isPowerline bool, shell string, optNoColor bool, opt
 }
 
 func (prompt *promptT) addSegment(text string, style promptStyleT) {
-	if prompt.IsPowerLone && !(prompt.TextPrintable == "" && ENABLE_BULLNOSE) {
+	if prompt.IsPowerLine && !(prompt.TextPrintable == "" && ENABLE_BULLNOSE) {
 		// Powerline prompt gets a leading space
 		text = " " + text
 	}
@@ -91,7 +92,7 @@ func (prompt *promptT) addSegment(text string, style promptStyleT) {
 		// -------------------
 		//  First segment: Start with bull-nose
 		// -------------------
-		if prompt.IsPowerLone && ENABLE_BULLNOSE {
+		if prompt.IsPowerLine && ENABLE_BULLNOSE {
 			bullnoseStyle := color.HEXStyle(style.ColorHexBGPowerline)
 			prompt.TextPrintable += bullnoseStyle.Sprint(SYMBOL_PL_BULLNOSE)
 
@@ -103,7 +104,7 @@ func (prompt *promptT) addSegment(text string, style promptStyleT) {
 		// -------------------
 		//  Add Separator
 		// -------------------
-		if prompt.IsPowerLone {
+		if prompt.IsPowerLine {
 			separatorStyle := color.HEXStyle(COLOR_FG_DEFAULT, prompt.CurrentBGColorHex)
 			prompt.TextPrintable += separatorStyle.Sprint(" ")
 			separatorStyle = color.HEXStyle(prompt.CurrentBGColorHex, style.ColorHexBGPowerline)
@@ -126,7 +127,7 @@ func (prompt *promptT) addSegment(text string, style promptStyleT) {
 }
 
 func (prompt *promptT) appendToSegment(text string, style promptStyleT) {
-	if prompt.IsPowerLone {
+	if prompt.IsPowerLine {
 		prompt.CurrentBGColorHex = style.ColorHexBGPowerline
 		appendStyle := color.HEXStyle(style.ColorHexFGPowerline, style.ColorHexBGPowerline)
 		if style.Bold {
@@ -150,7 +151,7 @@ func (prompt *promptT) appendToSegment(text string, style promptStyleT) {
 }
 
 func (prompt *promptT) endSegments(promptInfo promptInfoT) {
-	if prompt.IsPowerLone {
+	if prompt.IsPowerLine {
 		// --------------------
 		// Powerline
 		// --------------------
@@ -200,6 +201,30 @@ func (prompt *promptT) endSegments(promptInfo promptInfoT) {
 		}
 		// TODO: The final reset should not be necessary (but is).  Is a trim() removing the final spaces somewhere?
 		prompt.TextShell += prompt.Colorizer.reset()
+	}
+}
+
+// String print a colorized formatted string
+func (prompt *promptT) colorSprintF(style promptStyleT, format string, args ...interface{}) string {
+	if prompt.IsPowerLine {
+		// --------------------
+		// PowerLine Mode
+		// --------------------
+		switch prompt.ColorMode {
+		case ColorMode16m:
+			return style.colorRGB.Sprintf(format, args...)
+		case ColorMode16:
+			return style.color16.Sprintf(format, args...)
+		case ColorMode256:
+			return style.color256.Sprintf(format, args...)
+		default:
+			return fmt.Sprintf(format, args...)
+		}
+	} else {
+		// --------------------
+		// Text Mode
+		// --------------------
+		return ""
 	}
 }
 
