@@ -100,6 +100,10 @@ var STYLE_GITROOT_PRE = promptStyleT{
 	Color16FGPowerLine: color.FgBlack,
 	Color16BGPowerLine: color.BgGreen,
 	Color16Text:        color.Green,
+
+	ICSColorFGPowerline: "black:247:#c0c0c0",
+	ICSColorBGPowerline: "green:66:#4F6D6F",
+	ICSColorFGText:      "green:70:#729E72",
 }
 var STYLE_GITROOT = promptStyleT{
 	ColorHexFGPowerline: "#ffffff",

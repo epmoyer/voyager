@@ -62,6 +62,10 @@ type promptStyleT struct {
 	Color16BGPowerLine color.Color
 	Color16Text        color.Color
 
+	ICSColorFGPowerline string
+	ICSColorBGPowerline string
+	ICSColorFGText      string
+
 	Bold bool
 }
 
