@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"strings"
 
 	"github.com/gookit/color"
@@ -197,40 +196,5 @@ func (prompt *promptT) endSegments(promptInfo promptInfoT) {
 		}
 		// TODO: The final reset should not be necessary (but is).  Is a trim() removing the final spaces somewhere?
 		prompt.TextShell += prompt.Colorizer.reset()
-	}
-}
-
-// String print a colorized formatted string
-func (prompt *promptT) colorSprintF(style promptStyleT, format string, args ...interface{}) string {
-	if prompt.IsPowerLine {
-		// --------------------
-		// PowerLine Mode
-		// --------------------
-		switch prompt.ColorMode {
-		case ColorMode16m:
-			// TODO: handle bold
-			st := color.HEXStyle(style.ColorHexFGPowerline, style.ColorHexBGPowerline)
-			return st.Sprintf(format, args...)
-		case ColorMode256:
-			// TODO: handle bold
-			st := color.S256(style.Color256FGPowerline, style.Color256BGPowerline)
-			return st.Sprintf(format, args...)
-		case ColorMode16:
-			var st color.Style
-			if style.Bold {
-				st = color.New(style.Color16FGPowerLine, style.Color16BGPowerLine, color.OpBold)
-			} else {
-				st = color.New(style.Color16FGPowerLine, style.Color16BGPowerLine)
-			}
-			return st.Sprintf(format, args...)
-		default:
-			// No color
-			return fmt.Sprintf(format, args...)
-		}
-	} else {
-		// --------------------
-		// Text Mode
-		// --------------------
-		return ""
 	}
 }
