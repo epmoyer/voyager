@@ -16,6 +16,21 @@ type colorizerT struct {
 	shell string
 }
 
+func colorizeICS(text string, ICSColorFG string, ICSColorBG string, bold bool) string {
+	result := "%{"
+	if ICSColorFG != "" {
+		result += "%F{" + ICSColorFG + "}"
+	}
+	if ICSColorBG != "" {
+		result += "%K{" + ICSColorBG + "}"
+	}
+	if bold {
+		result += "%B"
+	}
+	result += "%}"
+	return result
+}
+
 func (colorizer colorizerT) colorize(text string, colorHexFG string, colorHexBG string, bold bool) string {
 	if colorizer.shell == "zsh" {
 		return colorizer._colorize_zsh(text, colorHexFG, colorHexBG, bold)

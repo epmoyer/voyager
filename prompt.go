@@ -28,12 +28,16 @@ const (
 )
 
 type promptT struct {
-	TextPrintable     string
-	TextShell         string
-	CurrentBGColorHex string
-	IsPowerLine       bool
-	ColorMode         int
-	Colorizer         colorizerT
+	PromptTextICS     string
+	CurrentBGColorICS string
+
+	// TODO: These will be removed
+	// TextPrintable string
+	// TextShell     string
+
+	IsPowerLine bool
+	ColorMode   int
+	Colorizer   colorizerT
 }
 
 type promptStyleT struct {
@@ -67,21 +71,16 @@ func (prompt *promptT) init(isPowerline bool, shell string, optNoColor bool, opt
 }
 
 func (prompt *promptT) addSegment(text string, style promptStyleT) {
-	if prompt.IsPowerLine && !(prompt.TextPrintable == "" && ENABLE_BULLNOSE) {
+	if prompt.IsPowerLine && !(prompt.PromptTextICS == "" && ENABLE_BULLNOSE) {
 		// Powerline prompt gets a leading space
 		text = " " + text
 	}
-	if prompt.TextPrintable == "" {
+	if prompt.PromptTextICS == "" {
 		// -------------------
 		//  First segment: Start with bull-nose
 		// -------------------
 		if prompt.IsPowerLine && ENABLE_BULLNOSE {
-			bullnoseStyle := color.HEXStyle(style.ColorHexBGPowerline)
-			prompt.TextPrintable += bullnoseStyle.Sprint(SYMBOL_PL_BULLNOSE)
-
-			// SHELL
-			// prompt.TextShell += " "
-			prompt.TextShell += prompt.Colorizer.colorize(SYMBOL_PL_BULLNOSE, style.ColorHexBGPowerline, "", style.Bold)
+			prompt.PromptTextICS += colorizeICS(SYMBOL_PL_BULLNOSE, style.ICSColorBGPowerline, "", style.Bold)
 		}
 	} else {
 		// -------------------
