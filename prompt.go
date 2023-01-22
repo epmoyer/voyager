@@ -37,18 +37,6 @@ type promptT struct {
 }
 
 type promptStyleT struct {
-	ColorHexFGPowerline string
-	ColorHexBGPowerline string
-	ColorHexFGText      string
-
-	Color256FGPowerline uint8
-	Color256BGPowerline uint8
-	Color256FGText      uint8
-
-	Color16FGPowerLine color.Color
-	Color16BGPowerLine color.Color
-	Color16Text        color.Color
-
 	ICSColorFGPowerline string
 	ICSColorBGPowerline string
 	ICSColorFGText      string

@@ -10,8 +10,6 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
-
-	"github.com/gookit/color"
 )
 
 const APP_NAME = "voyager"
@@ -59,77 +57,65 @@ const COLOR_FG_DEFAULT = "#ffffff"
 const COLOR_TEXT_FG_SEPARATOR = "#707070"
 
 var STYLE_DEBUG = promptStyleT{
-	ColorHexFGPowerline: "#000000",
-	ColorHexBGPowerline: "#B7E2B7",
-	ColorHexFGText:      "#B7E2B7",
+	ICSColorBGPowerline: "white:151:#B7E2B7",
+	ICSColorFGPowerline: "black:16:#000000",
+	ICSColorFGText:      "white:151:#B7E2B7",
 }
 var STYLE_ERROR = promptStyleT{
-	ColorHexFGPowerline: "#000000",
-	ColorHexBGPowerline: "#ff92c5",
-	ColorHexFGText:      "#ff92c5",
+	ICSColorBGPowerline: "white:212:#ff92c5",
+	ICSColorFGPowerline: "black:16:#000000",
+	ICSColorFGText:      "white:212:#ff92c5",
 }
 var STYLE_SHELL = promptStyleT{
-	ColorHexFGPowerline: "#000000",
-	ColorHexBGPowerline: "#B8E3B8",
-	ColorHexFGText:      "#B8E3B8",
+	ICSColorBGPowerline: "white:151:#B8E3B8",
+	ICSColorFGPowerline: "black:16:#000000",
+	ICSColorFGText:      "white:151:#B8E3B8",
 }
 var STYLE_CONDA = promptStyleT{
-	ColorHexFGPowerline: "#202020",
-	ColorHexBGPowerline: "#5EABF7",
-	ColorHexFGText:      "#4040ff",
+	ICSColorBGPowerline: "white:75:#5EABF7",
+	ICSColorFGPowerline: "black:16:#202020",
+	ICSColorFGText:      "brightblue:63:#4040ff",
 }
 var STYLE_CONTEXT = promptStyleT{
-	ColorHexFGPowerline: "#000000",
-	ColorHexBGPowerline: "#B294BF",
-	ColorHexFGText:      "#C040BE",
+	ICSColorBGPowerline: "white:139:#B294BF",
+	ICSColorFGPowerline: "black:16:#000000",
+	ICSColorFGText:      "white:133:#C040BE",
 }
 var STYLE_CONTEXT_ROOT = promptStyleT{
-	ColorHexFGPowerline: "#000000",
-	ColorHexBGPowerline: "#ff8080",
-	ColorHexFGText:      "#ff3030",
+	ICSColorBGPowerline: "brightblack:210:#ff8080",
+	ICSColorFGPowerline: "black:16:#000000",
+	ICSColorFGText:      "brightred:203:#ff3030",
 }
 var STYLE_GITROOT_PRE = promptStyleT{
 	ICSColorBGPowerline: "green:66:#4F6D6F",
-	ICSColorFGText:      "green:70:#729E72",
 	ICSColorFGPowerline: "black:247:#c0c0c0",
-
-	ColorHexFGPowerline: "#c0c0c0",
-	ColorHexBGPowerline: "#4F6D6F",
-	ColorHexFGText:      "#729E72",
-
-	Color256FGPowerline: 247, // Gray
-	Color256BGPowerline: 66,  // Pale Green
-	Color256FGText:      70,  // Brighter Green
-
-	Color16FGPowerLine: color.FgBlack,
-	Color16BGPowerLine: color.BgGreen,
-	Color16Text:        color.Green,
+	ICSColorFGText:      "green:70:#729E72",
 }
 var STYLE_GITROOT = promptStyleT{
-	ColorHexFGPowerline: "#ffffff",
-	ColorHexBGPowerline: "#4F6D6F",
-	ColorHexFGText:      "#9EFF9E",
+	ICSColorBGPowerline: "brightblack:59:#4F6D6F",
+	ICSColorFGPowerline: "brightwhite:231:#ffffff",
+	ICSColorFGText:      "white:157:#9EFF9E",
 	Bold:                true,
 }
 var STYLE_GIT_INFO_CLEAN = promptStyleT{
-	ColorHexFGPowerline: "#000000",
-	ColorHexBGPowerline: "#A2C3C7",
-	ColorHexFGText:      "#5EABF7",
+	ICSColorBGPowerline: "white:152:#A2C3C7",
+	ICSColorFGPowerline: "black:16:#000000",
+	ICSColorFGText:      "white:75:#5EABF7",
 }
 var STYLE_GIT_INFO_DIRTY = promptStyleT{
-	ColorHexFGPowerline: "#000000",
-	ColorHexBGPowerline: "#E2D47D",
-	ColorHexFGText:      "#E2D47D",
+	ICSColorBGPowerline: "white:186:#E2D47D",
+	ICSColorFGPowerline: "black:16:#000000",
+	ICSColorFGText:      "white:186:#E2D47D",
 }
 var STYLE_GIT_INFO_DETACHED = promptStyleT{
-	ColorHexFGPowerline: "#000000",
-	ColorHexBGPowerline: "#FFAA55",
-	ColorHexFGText:      "#FF8000",
+	ICSColorBGPowerline: "brightyellow:215:#FFAA55",
+	ICSColorFGPowerline: "black:16:#000000",
+	ICSColorFGText:      "yellow:208:#FF8000",
 }
 var STYLE_GITSUB = promptStyleT{
-	ColorHexFGPowerline: "#c0c0c0",
-	ColorHexBGPowerline: "#515151",
-	ColorHexFGText:      "#7A9CA1",
+	ICSColorBGPowerline: "brightblack:59:#515151",
+	ICSColorFGPowerline: "white:145:#c0c0c0",
+	ICSColorFGText:      "brightblack:109:#7A9CA1",
 }
 
 func main() {
