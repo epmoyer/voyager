@@ -87,7 +87,7 @@ var STYLE_CONTEXT = promptStyleT{
 var STYLE_CONTEXT_ROOT = promptStyleT{
 	ICSColorBGPowerline: "brightred:210:#ff8080",
 	ICSColorFGPowerline: "black:16:#000000",
-	ICSColorFGText:      "red:203:#ff3030",
+	ICSColorFGText:      "red:197:#ff3030",
 }
 var STYLE_GITROOT_PRE = promptStyleT{
 	ICSColorBGPowerline: "green:66:#4F6D6F",
