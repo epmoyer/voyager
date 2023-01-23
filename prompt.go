@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"strings"
 )
 
@@ -134,7 +135,7 @@ func (prompt *promptT) appendToSegment(text string, style promptStyleT) {
 		// // SHELL
 		// prompt.TextShell += prompt.Colorizer.colorize(text, style.ColorHexFGText, "", style.Bold)
 		// prompt.PromptTextICS += colorizeICS(text, style.ICSColorFGPowerline, "", style.Bold)
-		prompt.PromptTextICS += icsFormat(style.ICSColorFGPowerline, "", icsBoldBoolToString(style.Bold)) + text
+		prompt.PromptTextICS += icsFormat(style.ICSColorFGText, "", icsBoldBoolToString(style.Bold)) + text
 	}
 	if style.Bold {
 		// Clear Bold
@@ -162,7 +163,7 @@ func (prompt *promptT) endSegments(promptInfo promptInfoT) {
 
 		prompt.PromptTextICS += " "
 		// prompt.PromptTextICS += colorizeICS(SYMBOL_PL_SEPARATOR+" ", prompt.CurrentBGColorICS, "", false)
-		prompt.PromptTextICS += icsFormat(prompt.CurrentBGColorICS, "", "clear") + SYMBOL_PL_SEPARATOR + " "
+		prompt.PromptTextICS += icsFormat(prompt.CurrentBGColorICS, "clear", "clear") + SYMBOL_PL_SEPARATOR + " "
 		prompt.PromptTextICS += ICS_RESET_ALL
 	} else {
 		// --------------------
@@ -214,8 +215,21 @@ func (prompt *promptT) endSegments(promptInfo promptInfoT) {
 func (prompt *promptT) render(optPrintable bool) string {
 	// TODO: Implement ColorMode
 	if optPrintable {
-		return icsRenderDisplay(prompt.PromptTextICS, ColorMode256)
+		display := icsRenderDisplay(prompt.PromptTextICS, ColorMode16m)
+		debugDump(display)
+		return display
 	} else {
-		return icsRenderPrompt(prompt.PromptTextICS, ColorMode256, prompt.Shell)
+		return icsRenderPrompt(prompt.PromptTextICS, ColorMode16m, prompt.Shell)
 	}
+}
+
+func debugDump(text string) {
+	for _, character := range text {
+		if character == '\033' {
+			fmt.Printf("^")
+		} else {
+			fmt.Printf("%c", character)
+		}
+	}
+	fmt.Println()
 }

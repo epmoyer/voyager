@@ -18,7 +18,7 @@ const (
 var ESCAPE_RESET_FOREGROUND = "\033[39m"
 var ESCAPE_RESET_BACKGROUND = "\033[49m"
 var ESCAPE_BOLD = "\033[1m"
-var ESCAPE_RESET_BOLD = "\033[0m"
+var ESCAPE_RESET_BOLD = "\033[22m"
 
 var COLOR_CODES_16 = map[string]uint8{
 	"black":         30,

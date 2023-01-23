@@ -13,7 +13,7 @@ import (
 )
 
 const APP_NAME = "voyager"
-const APP_VERSION = "1.5.3"
+const APP_VERSION = "1.6.0"
 
 const ENABLE_DEBUG_INDICATOR = false
 const ENABLE_BULLNOSE = false
@@ -58,14 +58,14 @@ const ICS_COLOR_TEXT_FG_SEPARATOR = "white:241:#707070"
 const ICS_RESET_ALL = "%{%f%k%b%}"
 
 var STYLE_DEBUG = promptStyleT{
-	ICSColorBGPowerline: "white:151:#B7E2B7",
-	ICSColorFGPowerline: "black:16:#000000",
-	ICSColorFGText:      "white:151:#B7E2B7",
+	ICSColorBGPowerline: "brightgreen:151:#B7E2B7",
+	ICSColorFGPowerline: "black:0:#000000",
+	ICSColorFGText:      "brightgreen:151:#B7E2B7",
 }
 var STYLE_ERROR = promptStyleT{
-	ICSColorBGPowerline: "white:212:#ff92c5",
+	ICSColorBGPowerline: "brightred:212:#ff92c5",
 	ICSColorFGPowerline: "black:16:#000000",
-	ICSColorFGText:      "white:212:#ff92c5",
+	ICSColorFGText:      "brightred:212:#ff92c5",
 }
 var STYLE_SHELL = promptStyleT{
 	ICSColorBGPowerline: "white:151:#B8E3B8",
