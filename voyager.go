@@ -52,9 +52,10 @@ var SYMBOLS_TEXT = map[string]string{
 	"error":      "",
 }
 
-const COLOR_BG_DEFAULT = "#000000"
-const COLOR_FG_DEFAULT = "#ffffff"
-const COLOR_TEXT_FG_SEPARATOR = "#707070"
+// const COLOR_BG_DEFAULT = "#000000"
+// const COLOR_FG_DEFAULT = "#ffffff"
+const ICS_COLOR_TEXT_FG_SEPARATOR = "white:241:#707070"
+const ICS_RESET_ALL = "%{%f%k%b%}"
 
 var STYLE_DEBUG = promptStyleT{
 	ICSColorBGPowerline: "white:151:#B7E2B7",
@@ -172,12 +173,8 @@ func main() {
 		os.Exit(0)
 	}
 
-	prompt.renderPrompt(promptInfo)
-	if *optPrintable {
-		fmt.Print(prompt.TextPrintable)
-	} else {
-		fmt.Print(prompt.TextShell)
-	}
+	prompt.build(promptInfo)
+	fmt.Print(prompt.render(*optPrintable))
 
 	os.Exit(0)
 }
@@ -186,7 +183,7 @@ func showVersion() {
 	fmt.Printf("%s %s\n", APP_NAME, APP_VERSION)
 }
 
-func (prompt *promptT) renderPrompt(promptInfo promptInfoT) {
+func (prompt *promptT) build(promptInfo promptInfoT) {
 	var symbols map[string]string
 	if prompt.IsPowerLine {
 		symbols = SYMBOLS_POWERLINE
@@ -215,7 +212,7 @@ func (prompt *promptT) renderPrompt(promptInfo promptInfoT) {
 	// -----------------------
 	// Shell
 	// -----------------------
-	if prompt.Colorizer.shell == "bash" {
+	if prompt.Shell == "bash" {
 		prompt.addSegment(
 			symbols["shell_bash"],
 			STYLE_SHELL)
