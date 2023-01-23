@@ -67,7 +67,6 @@ func (prompt *promptT) addSegment(text string, style promptStyleT) {
 		//  First segment: Start with bull-nose
 		// -------------------
 		if prompt.IsPowerLine && ENABLE_BULLNOSE {
-			// prompt.PromptTextICS += colorizeICS(SYMBOL_PL_BULLNOSE, style.ICSColorBGPowerline, "", style.Bold)
 			prompt.PromptTextICS += icsFormat(style.ICSColorBGPowerline, "", "") + SYMBOL_PL_BULLNOSE
 		}
 	} else {
@@ -75,29 +74,9 @@ func (prompt *promptT) addSegment(text string, style promptStyleT) {
 		//  Add Separator
 		// -------------------
 		if prompt.IsPowerLine {
-			// separatorStyle := color.HEXStyle(COLOR_FG_DEFAULT, prompt.CurrentBGColorHex)
-			// prompt.TextPrintable += separatorStyle.Sprint(" ")
-			// separatorStyle = color.HEXStyle(prompt.CurrentBGColorHex, style.ColorHexBGPowerline)
-			// prompt.TextPrintable += separatorStyle.Sprintf("%s", SYMBOL_PL_SEPARATOR)
-
-			// // SHELL
-			// prompt.TextShell += " "
-			// prompt.TextShell += prompt.Colorizer.colorize(SYMBOL_PL_SEPARATOR, prompt.CurrentBGColorHex, style.ColorHexBGPowerline, style.Bold)
-
-			// prompt.PromptTextICS += colorizeICS(" ", "", prompt.CurrentBGColorICS, false)
 			prompt.PromptTextICS += " "
-			// prompt.PromptTextICS += colorizeICS(SYMBOL_PL_SEPARATOR, prompt.CurrentBGColorICS, style.ICSColorBGPowerline, style.Bold)
 			prompt.PromptTextICS += icsFormat(prompt.CurrentBGColorICS, style.ICSColorBGPowerline, "") + SYMBOL_PL_SEPARATOR
 		} else {
-			// separatorColor := color.HEX(COLOR_TEXT_FG_SEPARATOR)
-			// // prompt.Prompt += separatorColor.Sprintf(" ⟫ ")
-			// prompt.TextPrintable += separatorColor.Sprintf(SYMBOL_TEXT_SEPARATOR)
-
-			// // SHELL
-			// // TODO: Should probably declare a style for this
-			// prompt.TextShell += prompt.Colorizer.colorize(SYMBOL_TEXT_SEPARATOR, COLOR_TEXT_FG_SEPARATOR, "", false)
-
-			// prompt.PromptTextICS += colorizeICS(SYMBOL_TEXT_SEPARATOR, ICS_COLOR_TEXT_FG_SEPARATOR, "", false)
 			prompt.PromptTextICS += icsFormat(ICS_COLOR_TEXT_FG_SEPARATOR, "", icsBoldBoolToString(style.Bold)) + SYMBOL_TEXT_SEPARATOR
 			if style.Bold {
 				// Clear Bold
@@ -110,31 +89,15 @@ func (prompt *promptT) addSegment(text string, style promptStyleT) {
 
 func (prompt *promptT) appendToSegment(text string, style promptStyleT) {
 	if prompt.IsPowerLine {
+		// --------------------
+		// Powerline
+		// --------------------
 		prompt.CurrentBGColorICS = style.ICSColorBGPowerline
-		// prompt.CurrentBGColorHex = style.ColorHexBGPowerline
-		// appendStyle := color.HEXStyle(style.ColorHexFGPowerline, style.ColorHexBGPowerline)
-		// if style.Bold {
-		// 	appendStyle.SetOpts(color.Opts{color.OpBold})
-		// }
-		// prompt.TextPrintable += appendStyle.Sprintf("%s", text)
-
-		// // SHELL
-		// prompt.TextShell += prompt.Colorizer.colorize(text, style.ColorHexFGPowerline, style.ColorHexBGPowerline, style.Bold)
-
-		// prompt.PromptTextICS += colorizeICS(text, style.ICSColorFGPowerline, style.ICSColorBGPowerline, style.Bold)
-		// prompt.PromptTextICS += colorizeICS(text, style.ICSColorFGPowerline, style.ICSColorBGPowerline, style.Bold)
 		prompt.PromptTextICS += icsFormat(style.ICSColorFGPowerline, style.ICSColorBGPowerline, icsBoldBoolToString(style.Bold)) + text
 	} else {
-		// appendColor := color.HEX(style.ColorHexFGText)
-		// appendStyle := color.HEXStyle(style.ColorHexFGText)
-		// if style.Bold {
-		// 	appendStyle.SetOpts(color.Opts{color.OpBold})
-		// }
-		// prompt.TextPrintable += appendStyle.Sprintf("%s", text)
-
-		// // SHELL
-		// prompt.TextShell += prompt.Colorizer.colorize(text, style.ColorHexFGText, "", style.Bold)
-		// prompt.PromptTextICS += colorizeICS(text, style.ICSColorFGPowerline, "", style.Bold)
+		// --------------------
+		// Text
+		// --------------------
 		prompt.PromptTextICS += icsFormat(style.ICSColorFGText, "", icsBoldBoolToString(style.Bold)) + text
 	}
 	if style.Bold {
@@ -148,21 +111,7 @@ func (prompt *promptT) endSegments(promptInfo promptInfoT) {
 		// --------------------
 		// Powerline
 		// --------------------
-
-		// // PRINTABLE
-		// separatorStyle := color.HEXStyle(COLOR_BG_DEFAULT, prompt.CurrentBGColorHex)
-		// prompt.TextPrintable += separatorStyle.Sprint(" ")
-		// separatorStyle = color.HEXStyle(prompt.CurrentBGColorHex)
-		// prompt.TextPrintable += separatorStyle.Sprintf("%s ", SYMBOL_PL_SEPARATOR)
-
-		// // SHELL
-		// prompt.TextShell += " "
-		// prompt.TextShell += prompt.Colorizer.reset()
-		// prompt.TextShell += prompt.Colorizer.colorize(SYMBOL_PL_SEPARATOR+" ", prompt.CurrentBGColorHex, "", false)
-		// prompt.TextShell += prompt.Colorizer.reset()
-
 		prompt.PromptTextICS += " "
-		// prompt.PromptTextICS += colorizeICS(SYMBOL_PL_SEPARATOR+" ", prompt.CurrentBGColorICS, "", false)
 		prompt.PromptTextICS += icsFormat(prompt.CurrentBGColorICS, "clear", "clear") + SYMBOL_PL_SEPARATOR + " "
 		prompt.PromptTextICS += ICS_RESET_ALL
 	} else {
@@ -182,26 +131,7 @@ func (prompt *promptT) endSegments(promptInfo promptInfoT) {
 			promptSymbol = strings.Replace(promptSymbol, "%", "%%", -1)
 		}
 
-		// // PRINTABLE
-		// if promptInfo.IsRoot {
-		// 	promptStyle := color.HEXStyle(STYLE_CONTEXT_ROOT.ColorHexFGText)
-		// 	prompt.TextPrintable += promptStyle.Sprint(promptSymbol)
-		// } else {
-		// 	prompt.TextPrintable += promptSymbol
-		// }
-
-		// // SHELL
-		// prompt.TextShell += prompt.Colorizer.reset()
-		// if promptInfo.IsRoot {
-		// 	prompt.TextShell += prompt.Colorizer.colorize(promptSymbol, STYLE_CONTEXT_ROOT.ColorHexFGText, "", false)
-		// } else {
-		// 	prompt.TextShell += promptSymbol
-		// }
-		// // TODO: The final reset should not be necessary (but is).  Is a trim() removing the final spaces somewhere?
-		// prompt.TextShell += prompt.Colorizer.reset()
-
 		if promptInfo.IsRoot {
-			// prompt.PromptTextICS += colorizeICS(promptSymbol, STYLE_CONTEXT_ROOT.ICSColorFGText, "", false)
 			prompt.PromptTextICS += icsFormat(STYLE_CONTEXT_ROOT.ICSColorFGText, "", icsBoldBoolToString(STYLE_CONTEXT_ROOT.Bold)) + promptSymbol
 		} else {
 			prompt.PromptTextICS += ICS_RESET_ALL
@@ -213,7 +143,6 @@ func (prompt *promptT) endSegments(promptInfo promptInfoT) {
 }
 
 func (prompt *promptT) render(optPrintable bool) string {
-	// TODO: Implement ColorMode
 	if optPrintable {
 		display := icsRenderDisplay(prompt.PromptTextICS, colorMode)
 		debugDump(display)
