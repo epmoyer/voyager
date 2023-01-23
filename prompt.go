@@ -215,11 +215,11 @@ func (prompt *promptT) endSegments(promptInfo promptInfoT) {
 func (prompt *promptT) render(optPrintable bool) string {
 	// TODO: Implement ColorMode
 	if optPrintable {
-		display := icsRenderDisplay(prompt.PromptTextICS, ColorMode16m)
+		display := icsRenderDisplay(prompt.PromptTextICS, colorMode)
 		debugDump(display)
 		return display
 	} else {
-		return icsRenderPrompt(prompt.PromptTextICS, ColorMode16m, prompt.Shell)
+		return icsRenderPrompt(prompt.PromptTextICS, colorMode, prompt.Shell)
 	}
 }
 

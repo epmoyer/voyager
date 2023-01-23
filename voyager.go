@@ -59,15 +59,17 @@ const ICS_RESET_ALL = "%{%f%k%b%}"
 
 const DEBUG_ENABLE = false
 
+var colorMode int = ColorMode16
+
 var STYLE_DEBUG = promptStyleT{
 	ICSColorBGPowerline: "brightgreen:151:#B7E2B7",
 	ICSColorFGPowerline: "black:0:#000000",
 	ICSColorFGText:      "brightgreen:151:#B7E2B7",
 }
 var STYLE_ERROR = promptStyleT{
-	ICSColorBGPowerline: "brightred:212:#ff92c5",
+	ICSColorBGPowerline: "red:212:#ff92c5",
 	ICSColorFGPowerline: "black:16:#000000",
-	ICSColorFGText:      "brightred:212:#ff92c5",
+	ICSColorFGText:      "red:212:#ff92c5",
 }
 var STYLE_SHELL = promptStyleT{
 	ICSColorBGPowerline: "white:151:#B8E3B8",
@@ -80,40 +82,42 @@ var STYLE_CONDA = promptStyleT{
 	ICSColorFGText:      "brightblue:63:#4040ff",
 }
 var STYLE_CONTEXT = promptStyleT{
-	ICSColorBGPowerline: "white:139:#B294BF",
+	ICSColorBGPowerline: "brightmagenta:139:#B294BF",
 	ICSColorFGPowerline: "black:16:#000000",
-	ICSColorFGText:      "white:133:#C040BE",
+	ICSColorFGText:      "brightmagenta:133:#C040BE",
 }
 var STYLE_CONTEXT_ROOT = promptStyleT{
-	ICSColorBGPowerline: "brightblack:210:#ff8080",
+	ICSColorBGPowerline: "brightred:210:#ff8080",
 	ICSColorFGPowerline: "black:16:#000000",
 	ICSColorFGText:      "brightred:203:#ff3030",
 }
 var STYLE_GITROOT_PRE = promptStyleT{
 	ICSColorBGPowerline: "green:66:#4F6D6F",
-	ICSColorFGPowerline: "black:247:#c0c0c0",
+	// ICSColorBGPowerline: "green:30:#4F6D6F",
+	// ICSColorFGPowerline: "black:250:#c0c0c0",
+	ICSColorFGPowerline: "brightblack:251:#c0c0c0",
 	ICSColorFGText:      "green:70:#729E72",
 }
 var STYLE_GITROOT = promptStyleT{
-	ICSColorBGPowerline: "brightblack:59:#4F6D6F",
+	ICSColorBGPowerline: "green:66:#4F6D6F",
 	ICSColorFGPowerline: "brightwhite:231:#ffffff",
 	ICSColorFGText:      "white:157:#9EFF9E",
 	Bold:                true,
 }
 var STYLE_GIT_INFO_CLEAN = promptStyleT{
-	ICSColorBGPowerline: "white:152:#A2C3C7",
+	ICSColorBGPowerline: "cyan:152:#A2C3C7",
 	ICSColorFGPowerline: "black:16:#000000",
-	ICSColorFGText:      "white:75:#5EABF7",
+	ICSColorFGText:      "cyan:75:#5EABF7",
 }
 var STYLE_GIT_INFO_DIRTY = promptStyleT{
-	ICSColorBGPowerline: "white:186:#E2D47D",
+	ICSColorBGPowerline: "brightyellow:186:#E2D47D",
 	ICSColorFGPowerline: "black:16:#000000",
-	ICSColorFGText:      "white:186:#E2D47D",
+	ICSColorFGText:      "brightyellow:186:#E2D47D",
 }
 var STYLE_GIT_INFO_DETACHED = promptStyleT{
-	ICSColorBGPowerline: "brightyellow:215:#FFAA55",
+	ICSColorBGPowerline: "magenta:215:#FFAA55",
 	ICSColorFGPowerline: "black:16:#000000",
-	ICSColorFGText:      "yellow:208:#FF8000",
+	ICSColorFGText:      "magenta:208:#FF8000",
 }
 var STYLE_GITSUB = promptStyleT{
 	ICSColorBGPowerline: "brightblack:59:#515151",
@@ -145,6 +149,8 @@ func main() {
 	optColor := flag.String("color", "16m",
 		"Set color mode. Can be set to any of: 16, 256, 16m.")
 	flag.Parse()
+
+	setColorMode(*optNoColor, *optColor)
 
 	if *optVersion {
 		showVersion()
@@ -443,4 +449,19 @@ func chopPath(path string) (string, string) {
 		newPieces = append(newPieces, "")
 	}
 	return strings.Join(newPieces, "/"), finalComponent
+}
+
+func setColorMode(optNoColor bool, optColor string) {
+	if optNoColor {
+		colorMode = ColorModeNone
+		return
+	}
+	switch optColor {
+	case "16":
+		colorMode = ColorMode16
+	case "256":
+		colorMode = ColorMode256
+	case "16m":
+		colorMode = ColorMode16m
+	}
 }

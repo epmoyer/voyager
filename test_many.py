@@ -3,7 +3,8 @@ import os
 import subprocess
 from pathlib import Path
 
-# from rich import print as rprint
+# Library
+import click
 from rich.console import Console
 from rich.theme import Theme
 
@@ -88,7 +89,17 @@ TEST_CASES = [
 ]
 # fmt: on
 
-def main():
+@click.command()
+@click.option('-c', '--colors', 'enable_color_modes', is_flag=True, help='Run test in all color modes')
+def main(enable_color_modes):
+    if not enable_color_modes:
+        run_tests()
+        return
+    for arg in ['--color=16m', '--color=256', '--color=16', '--no-color']:
+        print('-' * 50 + ' ' + arg)
+        run_tests([arg])
+
+def run_tests(extra_args=None):
     print()
     for test_case in TEST_CASES:
         name = test_case.get('name', '(unnamed test case)')
@@ -102,6 +113,8 @@ def main():
             '--printable',
             '--powerline',
         ]
+        if extra_args:
+            command_line_args += extra_args
         username = test_case.get('username')
         if username:
             command_line_args.append(f'--username={username}')
