@@ -224,6 +224,9 @@ func (prompt *promptT) render(optPrintable bool) string {
 }
 
 func debugDump(text string) {
+	if !DEBUG_ENABLE {
+		return
+	}
 	for _, character := range text {
 		if character == '\033' {
 			fmt.Printf("^")

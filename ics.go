@@ -123,6 +123,9 @@ func icsRenderDisplay(icsText string, colorMode int) string {
 		escapeText := icsToEscapeCodes(formatPayload, colorMode)
 		result = strings.Replace(result, formatRaw, escapeText, 1)
 	}
+	// Unescape zsh escaped items, if present
+	result = strings.Replace(result, "%%", "%", -1)
+
 	return result
 }
 

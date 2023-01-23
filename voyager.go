@@ -57,6 +57,8 @@ var SYMBOLS_TEXT = map[string]string{
 const ICS_COLOR_TEXT_FG_SEPARATOR = "white:241:#707070"
 const ICS_RESET_ALL = "%{%f%k%b%}"
 
+const DEBUG_ENABLE = false
+
 var STYLE_DEBUG = promptStyleT{
 	ICSColorBGPowerline: "brightgreen:151:#B7E2B7",
 	ICSColorFGPowerline: "black:0:#000000",
