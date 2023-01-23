@@ -143,6 +143,14 @@ func (prompt *promptT) endSegments(promptInfo promptInfoT) {
 }
 
 func (prompt *promptT) render(optPrintable bool) string {
+
+	// Remove the leading space from PowerLine prompts rendered in no-color mode.
+	if prompt.IsPowerLine && colorMode == ColorModeNone {
+		// The method is a little crude, but we look for the first space after the first
+		// ICS color directive (which ends in "%}") and remove it.
+		prompt.PromptTextICS = strings.Replace(prompt.PromptTextICS, "%} ", "%}", 1)
+	}
+
 	if optPrintable {
 		display := icsRenderDisplay(prompt.PromptTextICS, colorMode)
 		debugDump(display)
