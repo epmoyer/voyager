@@ -52,8 +52,6 @@ var SYMBOLS_TEXT = map[string]string{
 	"error":      "",
 }
 
-// const COLOR_BG_DEFAULT = "#000000"
-// const COLOR_FG_DEFAULT = "#ffffff"
 const ICS_COLOR_TEXT_FG_SEPARATOR = "white:241:#707070"
 const ICS_RESET_ALL = "%{%f%k%b%}"
 
