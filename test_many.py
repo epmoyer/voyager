@@ -190,8 +190,17 @@ def render_prompt(prompt_text, shell):
     if shell == 'bash':
         renderer = 'Simulated bash renderer'
         rendered_output = prompt_text.replace(r'\[', '').replace(r'\]', '')
-    # elif shell == 'zsh':
-    #     renderer = "(renderer not implemented)"
+    elif shell == 'zsh':
+        renderer = 'zsh (using "print -P")'
+        command_line_args = [
+            'zsh',
+            '-c',
+            # 'print',
+            # '-P',
+            f'print -P "{prompt_text}"'
+        ]
+        output = subprocess.check_output(command_line_args)
+        rendered_output = output.decode("utf-8")
 
     rprint(f'{indent(3)}[renderer]Renderer: {renderer}[/renderer]')
     return rendered_output
