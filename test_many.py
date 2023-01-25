@@ -153,14 +153,15 @@ def run_tests(extra_args=None):
 
 @cli.command()
 @click.option('-c', '--colors', 'enable_color_modes', is_flag=True, help='Run test in all color modes')
-def formats(enable_color_modes):
+@click.option('-n', '--nowrap', 'disable_text_wrap', is_flag=True, help='Do not text wrap.')
+def formats(enable_color_modes, disable_text_wrap):
     for shell in ['zsh', 'bash']:
         rprint(f'[shell]{shell}[/shell]')
         for presentation in ("PowerLine", "Text"):
             rprint(f'{indent(1)}[presentation]{presentation}[/presentation]')
-            show_formats(shell, presentation)
+            show_formats(shell, presentation, disable_text_wrap)
 
-def show_formats(shell, presentation):
+def show_formats(shell, presentation, disable_text_wrap):
     TARGET_PATH = str(Path("./test1/test2").absolute())
     for _format in ('ics', 'prompt_debug', 'prompt', 'display_debug', 'display'):
         rprint(f'{indent(2)}[format]{_format}[/format]')
@@ -181,7 +182,7 @@ def show_formats(shell, presentation):
         if _format == 'prompt':
             output = render_prompt(output, shell)
         
-        if _format in ('ics', 'prompt_debug', 'display_debug'):
+        if _format in ('ics', 'prompt_debug', 'display_debug') and not disable_text_wrap:
             wrapped = textwrap.wrap(output, width=80)
             for line in wrapped:
                 print(f'{indent(3)}{line}')
