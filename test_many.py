@@ -2,6 +2,7 @@
 import os
 import subprocess
 from pathlib import Path
+import textwrap
 
 # Library
 import click
@@ -180,7 +181,13 @@ def show_formats(shell, presentation):
         if _format == 'prompt':
             output = render_prompt(output, shell)
         
-        print(f'{indent(3)}{output}')
+        if _format in ('ics', 'prompt_debug', 'display_debug'):
+            wrapped = textwrap.wrap(output, width=80)
+            for line in wrapped:
+                print(f'{indent(3)}{line}')
+                # print(wrapped)
+        else:
+            print(f'{indent(3)}{output}')
 
 
 def render_prompt(prompt_text, shell):
