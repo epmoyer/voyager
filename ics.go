@@ -20,7 +20,7 @@ var ESCAPE_RESET_BACKGROUND = "\033[49m"
 var ESCAPE_BOLD = "\033[1m"
 var ESCAPE_RESET_BOLD = "\033[22m"
 
-var COLOR_CODES_16 = map[string]uint8{
+var ESCAPE_CODES_16 = map[string]uint8{
 	"black":         30,
 	"red":           31,
 	"green":         32,
@@ -37,6 +37,24 @@ var COLOR_CODES_16 = map[string]uint8{
 	"brightmagenta": 95,
 	"brightcyan":    96,
 	"brightwhite":   97,
+}
+var COLOR_CODES_16 = map[string]uint8{
+	"black":         0,
+	"red":           1,
+	"green":         2,
+	"yellow":        3,
+	"blue":          4,
+	"magenta":       5,
+	"cyan":          6,
+	"white":         7,
+	"brightblack":   8,
+	"brightred":     9,
+	"brightgreen":   10,
+	"brightyellow":  11,
+	"brightblue":    12,
+	"brightmagenta": 13,
+	"brightcyan":    14,
+	"brightwhite":   15,
 }
 
 func icsFormat(ICSColorFG string, ICSColorBG string, bold string) string {
@@ -260,16 +278,16 @@ func BGEscape256(color256 uint8) string {
 }
 
 func FGEscape16(colorName16 string) string {
-	colorCode16, ok := COLOR_CODES_16[colorName16]
+	escapeCode16, ok := ESCAPE_CODES_16[colorName16]
 	if ok {
-		return fmt.Sprintf("\033[%dm", colorCode16)
+		return fmt.Sprintf("\033[%dm", escapeCode16)
 	}
 
 	return ""
 }
 
 func BGEscape16(colorName16 string) string {
-	colorCode16, ok := COLOR_CODES_16[colorName16]
+	colorCode16, ok := ESCAPE_CODES_16[colorName16]
 	if ok {
 		return fmt.Sprintf("\033[%dm", colorCode16+10)
 	}
@@ -329,7 +347,14 @@ func icsColorToZshColor(icsColor string, colorMode int, zshPrefix string) string
 		return wrapZshColor(zshPrefix, colors[1])
 	}
 	if len(colors) >= 1 && colorMode != ColorModeNone {
-		return wrapZshColor(zshPrefix, colors[0])
+		colorName16 := colors[0]
+		colorCode16, ok := COLOR_CODES_16[colorName16]
+		if ok {
+			return wrapZshColor(zshPrefix, fmt.Sprintf("%d", colorCode16))
+		}
+		// Color code not found. Do nothing.
+		// TODO: Should we throw error or inject "(bad color)" string?
+		return ""
 	}
 	// No color
 	return ""
