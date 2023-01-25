@@ -160,6 +160,18 @@ func (prompt *promptT) render(optPrintable bool) string {
 	}
 }
 
+func renderPrintableDebug(text string) string {
+	result := ""
+	for _, character := range text {
+		if character == '\033' {
+			result += `\033`
+		} else {
+			result += fmt.Sprintf("%c", character)
+		}
+	}
+	return result
+}
+
 func debugDump(text string) {
 	if !DEBUG_ENABLE {
 		return

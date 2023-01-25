@@ -144,6 +144,8 @@ func main() {
 		"Disable colorization")
 	optColor := flag.String("color", "16m",
 		"Set color mode. Can be set to any of: 16, 256, 16m.")
+	optFormat := flag.String("format", "prompt",
+		"Output format: [prompt, printable, printable_debug, ics]")
 	flag.Parse()
 
 	setColorMode(*optNoColor, *optColor)
