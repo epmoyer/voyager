@@ -138,8 +138,6 @@ func main() {
 		"Render prompt using PowerLine font.")
 	optShell := flag.String("shell", "zsh", "The shell to format the prompt for.")
 	optUsername := flag.String("username", "", "Force the prompt username (for testing).")
-	optPrintable := flag.Bool("printable", false,
-		"Return a printable (ASCII Esc) string rather than a shell $PROMPT/$PS1 string.")
 	optNoColor := flag.Bool("no-color", false,
 		"Disable colorization")
 	optColor := flag.String("color", "16m",
@@ -180,7 +178,7 @@ func main() {
 	}
 
 	prompt.build(promptInfo)
-	fmt.Print(prompt.render(*optPrintable))
+	fmt.Print(prompt.render(*optFormat))
 
 	os.Exit(0)
 }

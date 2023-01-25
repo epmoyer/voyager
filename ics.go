@@ -129,6 +129,23 @@ func icsRenderDisplay(icsText string, colorMode int) string {
 	return result
 }
 
+func icsRenderDisplayDebug(icsText string, colorMode int) string {
+	display := icsRenderDisplay(icsText, colorMode)
+	return escapeToLiteral(display)
+}
+
+func escapeToLiteral(text string) string {
+	result := ""
+	for _, character := range text {
+		if character == '\033' {
+			result += `\033`
+		} else {
+			result += fmt.Sprintf("%c", character)
+		}
+	}
+	return result
+}
+
 func icsToEscapeCodes(formatPayload string, colorMode int) string {
 	result := formatPayload
 

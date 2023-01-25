@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"strings"
 )
 
@@ -142,7 +143,7 @@ func (prompt *promptT) endSegments(promptInfo promptInfoT) {
 	}
 }
 
-func (prompt *promptT) render(optPrintable bool) string {
+func (prompt *promptT) render(optFormat string) string {
 
 	// Remove the leading space from PowerLine prompts rendered in no-color mode.
 	if prompt.IsPowerLine && colorMode == ColorModeNone {
@@ -151,37 +152,18 @@ func (prompt *promptT) render(optPrintable bool) string {
 		prompt.PromptTextICS = strings.Replace(prompt.PromptTextICS, "%} ", "%}", 1)
 	}
 
-	if optPrintable {
-		display := icsRenderDisplay(prompt.PromptTextICS, colorMode)
-		debugDump(display)
-		return display
-	} else {
+	switch optFormat {
+	case "ics":
+		return prompt.PromptTextICS
+	case "display":
+		return icsRenderDisplay(prompt.PromptTextICS, colorMode)
+	case "display_debug":
+		return icsRenderDisplayDebug(prompt.PromptTextICS, colorMode)
+	case "prompt":
 		return icsRenderPrompt(prompt.PromptTextICS, colorMode, prompt.Shell)
 	}
-}
 
-func renderPrintableDebug(text string) string {
-	result := ""
-	for _, character := range text {
-		if character == '\033' {
-			result += `\033`
-		} else {
-			result += fmt.Sprintf("%c", character)
-		}
-	}
-	return result
-}
-
-func debugDump(text string) {
-	if !DEBUG_ENABLE {
-		return
-	}
-	for _, character := range text {
-		if character == '\033' {
-			fmt.Printf("^")
-		} else {
-			fmt.Printf("%c", character)
-		}
-	}
-	fmt.Println()
+	fmt.Printf("Unrecognized -format option: %s", optFormat)
+	os.Exit(1)
+	return "" // Never reached
 }
