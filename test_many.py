@@ -89,9 +89,13 @@ TEST_CASES = [
 ]
 # fmt: on
 
-@click.command()
+@click.group()
+def cli():
+    pass
+
+@cli.command()
 @click.option('-c', '--colors', 'enable_color_modes', is_flag=True, help='Run test in all color modes')
-def main(enable_color_modes):
+def cases(enable_color_modes):
     if not enable_color_modes:
         run_tests()
         return
@@ -110,7 +114,7 @@ def run_tests(extra_args=None):
 
         command_line_args = [
             './voyager',
-            '--printable',
+            '--format=display',
             '--powerline',
         ]
         if extra_args:
@@ -142,4 +146,4 @@ def run_tests(extra_args=None):
 
 
 if __name__ == "__main__":
-    main()
+    cli()
