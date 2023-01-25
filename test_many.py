@@ -16,8 +16,8 @@ THEME = Theme({
     "case": "#d0d0d0",
     "path": "#808080",
     "shell": "#00ff00",
-    # "shell": "#ffff00",
     "presentation": "#ff8000",
+    "color_option": "#ffff00",
     "format": "#ff00ff",
     "renderer": "#00ffff",
 })
@@ -94,12 +94,16 @@ TEST_CASES = [
 ]
 # fmt: on
 
+
 @click.group()
 def cli():
     pass
 
+
 @cli.command()
-@click.option('-c', '--colors', 'enable_color_modes', is_flag=True, help='Run test in all color modes')
+@click.option(
+    '-c', '--colors', 'enable_color_modes', is_flag=True, help='Run test in all color modes'
+)
 def cases(enable_color_modes):
     if not enable_color_modes:
         run_tests()
@@ -107,6 +111,7 @@ def cases(enable_color_modes):
     for arg in ['--color=16m', '--color=256', '--color=16', '--no-color']:
         print('-' * 50 + ' ' + arg)
         run_tests([arg])
+
 
 def run_tests(extra_args=None):
     print()
@@ -151,23 +156,35 @@ def run_tests(extra_args=None):
 
 
 @cli.command()
-@click.option('-c', '--colors', 'enable_color_modes', is_flag=True, help='Run test in all color modes')
+@click.option(
+    '-c', '--colors', 'enable_color_modes', is_flag=True, help='Run test in all color modes'
+)
 @click.option('-n', '--nowrap', 'disable_text_wrap', is_flag=True, help='Do not text wrap.')
 def formats(enable_color_modes, disable_text_wrap):
+    if enable_color_modes:
+        color_options = ('-color=16m', '-color=256', '-color=16', '-no-color')
+    else:
+        color_options = ('-color=16m',)
+
     for shell in ['zsh', 'bash']:
         rprint(f'[shell]{shell}[/shell]')
         for presentation in ("PowerLine", "Text"):
             rprint(f'{indent(1)}[presentation]{presentation}[/presentation]')
-            show_formats(shell, presentation, disable_text_wrap)
+            for color_option in color_options:
+                rprint(f'{indent(2)}[color_option]{color_option}[/color_option]')
+            
+                show_formats(shell, presentation, disable_text_wrap, color_option)
 
-def show_formats(shell, presentation, disable_text_wrap):
+
+def show_formats(shell, presentation, disable_text_wrap, color_option):
     TARGET_PATH = str(Path("./test1/test2").absolute())
     for _format in ('ics', 'prompt_debug', 'prompt', 'display_debug', 'display'):
-        rprint(f'{indent(2)}[format]{_format}[/format]')
+        rprint(f'{indent(3)}[format]{_format}[/format]')
         command_line_args = [
             './voyager',
             f'-format={_format}',
             f'-shell={shell}',
+            color_option
         ]
         if presentation == 'PowerLine':
             command_line_args.append('-powerline')
@@ -180,21 +197,12 @@ def show_formats(shell, presentation, disable_text_wrap):
         # Render prompt
         if _format == 'prompt':
             output = render_prompt(output, shell)
-        
+
         if _format in ('ics', 'prompt_debug', 'display_debug') and not disable_text_wrap:
             for line in wrap_text(output):
-                print(f'{indent(3)}{line}')
+                print(f'{indent(4)}{line}')
         else:
-            print(f'{indent(3)}{output}')
-
-def wrap_text(text, width=80):
-    lines = []
-    while len(text) > width:
-        lines.append(text[:width])
-        text = text[width:]
-    if text:
-        lines.append(text)
-    return lines
+            print(f'{indent(4)}{output}')
 
 
 def render_prompt(prompt_text, shell):
@@ -209,9 +217,7 @@ def render_prompt(prompt_text, shell):
         command_line_args = [
             'zsh',
             '-c',
-            # 'print',
-            # '-P',
-            f'print -P "{prompt_text}"'
+            f'print -P "{prompt_text}"',
         ]
         output = subprocess.check_output(command_line_args)
         rendered_output = output.decode("utf-8")
@@ -219,7 +225,20 @@ def render_prompt(prompt_text, shell):
     rprint(f'{indent(3)}[renderer]Renderer: {renderer}[/renderer]')
     return rendered_output
 
+
+def wrap_text(text, width=80):
+    lines = []
+    while len(text) > width:
+        lines.append(text[:width])
+        text = text[width:]
+    if text:
+        lines.append(text)
+    return lines
+
+
 def indent(level):
     return " " * 4 * level
+
+
 if __name__ == "__main__":
     cli()
