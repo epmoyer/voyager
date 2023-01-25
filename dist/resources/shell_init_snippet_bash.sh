@@ -1,5 +1,7 @@
 
 # voyager:start ---------------------------------------------------------------
+# voyager:snippet_version:1
+
 export VGER_OPT_POWERLINE="--powerline"
 vger_build_prompt() {
    export VGER_RETVAL=$?
