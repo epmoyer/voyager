@@ -19,7 +19,7 @@ THEME = Theme({
     # "shell": "#ffff00",
     "presentation": "#ff8000",
     "format": "#ff00ff",
-    # "format": "#00ffff",
+    "renderer": "#00ffff",
 })
 # fmt: on
 CONSOLE = Console(highlight=False, color_system='256', theme=THEME)
@@ -172,12 +172,31 @@ def show_formats(shell, presentation):
             command_line_args.append('-powerline')
         command_line_args.append(TARGET_PATH)
 
-        # ------------------------
-        # Render Powerline Prompt
-        # ------------------------
+        # Execute
         output = subprocess.check_output(command_line_args)
-        print(f'         {output.decode("utf-8")}')
+        output = output.decode("utf-8")
+
+        # Render prompt
+        if _format == 'prompt':
+            output = render_prompt(output, shell)
+        
+        print(f'         {output}')
 
 
+def render_prompt(prompt_text, shell):
+    renderer = f'(no prompt renderer implemented for shell: "{shell}".'
+    rendered_output = "(no renderer)"
+
+    if shell == 'bash':
+        renderer = 'Simulated Bash rendering in software.'
+        rendered_output = prompt_text.replace(r'\[', '').replace(r'\]', '')
+    # elif shell == 'zsh':
+    #     renderer = "(renderer not implemented)"
+
+    rprint(f'          [renderer]Renderer: {renderer}[/renderer]')
+    return rendered_output
+
+def indent(level):
+    return " " * 4 * level
 if __name__ == "__main__":
     cli()
