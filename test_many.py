@@ -2,7 +2,6 @@
 import os
 import subprocess
 from pathlib import Path
-import textwrap
 
 # Library
 import click
@@ -183,12 +182,19 @@ def show_formats(shell, presentation, disable_text_wrap):
             output = render_prompt(output, shell)
         
         if _format in ('ics', 'prompt_debug', 'display_debug') and not disable_text_wrap:
-            wrapped = textwrap.wrap(output, width=80)
-            for line in wrapped:
+            for line in wrap_text(output):
                 print(f'{indent(3)}{line}')
-                # print(wrapped)
         else:
             print(f'{indent(3)}{output}')
+
+def wrap_text(text, width=80):
+    lines = []
+    while len(text) > width:
+        lines.append(text[:width])
+        text = text[width:]
+    if text:
+        lines.append(text)
+    return lines
 
 
 def render_prompt(prompt_text, shell):
