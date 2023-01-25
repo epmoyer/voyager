@@ -15,7 +15,11 @@ from rich.theme import Theme
 THEME = Theme({
     "case": "#d0d0d0",
     "path": "#808080",
-    "shell": "##00ff00",
+    "shell": "#00ff00",
+    # "shell": "#ffff00",
+    "presentation": "#ff8000",
+    "format": "#ff00ff",
+    # "format": "#00ffff",
 })
 # fmt: on
 CONSOLE = Console(highlight=False, color_system='256', theme=THEME)
@@ -150,15 +154,15 @@ def run_tests(extra_args=None):
 @click.option('-c', '--colors', 'enable_color_modes', is_flag=True, help='Run test in all color modes')
 def formats(enable_color_modes):
     for shell in ['zsh', 'bash']:
-        print(f'{shell}')
+        rprint(f'[shell]{shell}[/shell]')
         for presentation in ("PowerLine", "Text"):
-            print(f'   {presentation}')
+            rprint(f'   [presentation]{presentation}[/presentation]')
             show_formats(shell, presentation)
 
 def show_formats(shell, presentation):
     TARGET_PATH = str(Path("./test1/test2").absolute())
     for _format in ('ics', 'prompt', 'display_debug', 'display'):
-        print(f'      {_format}')
+        rprint(f'      [format]{_format}[/format]')
         command_line_args = [
             './voyager',
             f'-format={_format}',
