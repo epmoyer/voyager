@@ -15,6 +15,7 @@ from rich.theme import Theme
 THEME = Theme({
     "case": "#d0d0d0",
     "path": "#808080",
+    "shell": "##00ff00",
 })
 # fmt: on
 CONSOLE = Console(highlight=False, color_system='256', theme=THEME)
@@ -143,6 +144,35 @@ def run_tests(extra_args=None):
         output = subprocess.check_output(command_line_args, env=environment,)
         print(f'   {output.decode("utf-8")}')
     print()
+
+
+@cli.command()
+@click.option('-c', '--colors', 'enable_color_modes', is_flag=True, help='Run test in all color modes')
+def formats(enable_color_modes):
+    for shell in ['zsh', 'bash']:
+        print(f'{shell}')
+        for presentation in ("PowerLine", "Text"):
+            print(f'   {presentation}')
+            show_formats(shell, presentation)
+
+def show_formats(shell, presentation):
+    TARGET_PATH = str(Path("./test1/test2").absolute())
+    for _format in ('ics', 'prompt', 'display_debug', 'display'):
+        print(f'      {_format}')
+        command_line_args = [
+            './voyager',
+            f'-format={_format}',
+            f'-shell={shell}',
+        ]
+        if presentation == 'PowerLine':
+            command_line_args.append('-powerline')
+        command_line_args.append(TARGET_PATH)
+
+        # ------------------------
+        # Render Powerline Prompt
+        # ------------------------
+        output = subprocess.check_output(command_line_args)
+        print(f'         {output.decode("utf-8")}')
 
 
 if __name__ == "__main__":
