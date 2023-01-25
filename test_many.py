@@ -115,7 +115,7 @@ def run_tests(extra_args=None):
         rprint(f'[case]{name}:[/case]')
         path = test_case["path"]
         path = str(Path(path).absolute())
-        rprint(f'   [path]{path}[/path]')
+        rprint(f'{indent(1)}[path]{path}[/path]')
 
         command_line_args = [
             './voyager',
@@ -139,14 +139,14 @@ def run_tests(extra_args=None):
         # Render Powerline Prompt
         # ------------------------
         output = subprocess.check_output(command_line_args, env=environment,)
-        print(f'   {output.decode("utf-8")}')
+        print(f'{indent(1)}{output.decode("utf-8")}')
 
         # ------------------------
         # Render Text Prompt
         # ------------------------
         command_line_args.remove('--powerline')
         output = subprocess.check_output(command_line_args, env=environment,)
-        print(f'   {output.decode("utf-8")}')
+        print(f'{indent(1)}{output.decode("utf-8")}')
     print()
 
 
@@ -156,13 +156,13 @@ def formats(enable_color_modes):
     for shell in ['zsh', 'bash']:
         rprint(f'[shell]{shell}[/shell]')
         for presentation in ("PowerLine", "Text"):
-            rprint(f'   [presentation]{presentation}[/presentation]')
+            rprint(f'{indent(1)}[presentation]{presentation}[/presentation]')
             show_formats(shell, presentation)
 
 def show_formats(shell, presentation):
     TARGET_PATH = str(Path("./test1/test2").absolute())
     for _format in ('ics', 'prompt_debug', 'prompt', 'display_debug', 'display'):
-        rprint(f'      [format]{_format}[/format]')
+        rprint(f'{indent(2)}[format]{_format}[/format]')
         command_line_args = [
             './voyager',
             f'-format={_format}',
@@ -180,20 +180,20 @@ def show_formats(shell, presentation):
         if _format == 'prompt':
             output = render_prompt(output, shell)
         
-        print(f'         {output}')
+        print(f'{indent(3)}{output}')
 
 
 def render_prompt(prompt_text, shell):
-    renderer = f'(no prompt renderer implemented for shell: "{shell}".'
+    renderer = f'(no prompt renderer implemented for shell: "{shell}")'
     rendered_output = "(no renderer)"
 
     if shell == 'bash':
-        renderer = 'Simulated Bash rendering in software.'
+        renderer = 'Simulated bash renderer'
         rendered_output = prompt_text.replace(r'\[', '').replace(r'\]', '')
     # elif shell == 'zsh':
     #     renderer = "(renderer not implemented)"
 
-    rprint(f'          [renderer]Renderer: {renderer}[/renderer]')
+    rprint(f'{indent(3)}[renderer]Renderer: {renderer}[/renderer]')
     return rendered_output
 
 def indent(level):
