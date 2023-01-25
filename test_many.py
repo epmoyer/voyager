@@ -161,7 +161,7 @@ def formats(enable_color_modes):
 
 def show_formats(shell, presentation):
     TARGET_PATH = str(Path("./test1/test2").absolute())
-    for _format in ('ics', 'prompt', 'display_debug', 'display'):
+    for _format in ('ics', 'prompt_debug', 'prompt', 'display_debug', 'display'):
         rprint(f'      [format]{_format}[/format]')
         command_line_args = [
             './voyager',

@@ -143,7 +143,7 @@ func main() {
 	optColor := flag.String("color", "16m",
 		"Set color mode. Can be set to any of: 16, 256, 16m.")
 	optFormat := flag.String("format", "prompt",
-		"Output format: [prompt, printable, printable_debug, ics]")
+		"Output format: [prompt, prompt_debug, printable, printable_debug, ics]")
 	flag.Parse()
 
 	setColorMode(*optNoColor, *optColor)

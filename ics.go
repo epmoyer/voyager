@@ -111,6 +111,11 @@ func icsRenderPrompt(icsText string, colorMode int, shell string) string {
 	return result
 }
 
+func icsRenderPromptDebug(icsText string, colorMode int, shell string) string {
+	prompt := icsRenderPrompt(icsText, colorMode, shell)
+	return escapeToLiteral(prompt)
+}
+
 func icsRenderDisplay(icsText string, colorMode int) string {
 	// fmt.Printf("icsRenderDisplay()  %d", colorMode)
 	result := icsText

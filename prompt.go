@@ -161,6 +161,8 @@ func (prompt *promptT) render(optFormat string) string {
 		return icsRenderDisplayDebug(prompt.PromptTextICS, colorMode)
 	case "prompt":
 		return icsRenderPrompt(prompt.PromptTextICS, colorMode, prompt.Shell)
+	case "prompt_debug":
+		return icsRenderPromptDebug(prompt.PromptTextICS, colorMode, prompt.Shell)
 	}
 
 	fmt.Printf("Unrecognized -format option: %s", optFormat)
