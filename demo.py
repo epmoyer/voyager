@@ -222,7 +222,7 @@ def render_prompt(prompt_text, shell):
         output = subprocess.check_output(command_line_args)
         rendered_output = output.decode("utf-8")
 
-    rprint(f'{indent(3)}[renderer]Renderer: {renderer}[/renderer]')
+    rprint(f'{indent(4)}[renderer]Renderer: {renderer}[/renderer]')
     return rendered_output
 
 

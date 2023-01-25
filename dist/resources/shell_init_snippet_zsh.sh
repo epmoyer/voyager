@@ -1,5 +1,7 @@
 
 # voyager:start ---------------------------------------------------------------
+# voyager:snippet_version:1
+
 # Allow substitutions and expansions in the prompt
 setopt prompt_subst
 
