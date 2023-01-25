@@ -130,6 +130,14 @@
             "id": 3,
             "cards": [
                 {
+                    "name": "add software renderer for bash prompt.",
+                    "id": 118,
+                    "id_labels": [],
+                    "description": "",
+                    "due": null,
+                    "due_complete": false
+                },
+                {
                     "name": "Add 256, 16, no-color support",
                     "id": 113,
                     "id_labels": [],
