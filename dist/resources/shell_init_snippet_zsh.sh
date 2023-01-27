@@ -12,7 +12,11 @@ vger_build_prompt() {
     if [ $VGER_RETVAL -ne 0 ]; then
         VGER_OPT_ERROR="-showerror"
     fi
-    echo $(voyager $VGER_OPT_POWERLINE $VGER_OPT_ERROR "$(pwd)")
+    VGER_OPT_DEFAULTUSER=""
+    if [ ! -z "$VGER_DEFAULT_USER" ]; then
+        VGER_OPT_DEFAULTUSER="-defaultuser=$VGER_DEFAULT_USER"
+    fi
+    echo $(voyager $VGER_OPT_POWERLINE $VGER_OPT_ERROR $VGER_OPT_DEFAULTUSER "$(pwd)")
 }
 export PROMPT='$(vger_build_prompt)'
 
