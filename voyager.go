@@ -140,6 +140,7 @@ func main() {
 	optUsername := flag.String("username", "", "Force the prompt username (for testing).")
 	optNoColor := flag.Bool("no-color", false,
 		"Disable colorization")
+	optError := flag.Bool("showerror", false, "Show the error indicator.")
 	optColor := flag.String("color", "16m",
 		"Set color mode. Can be set to any of: 16, 256, 16m.")
 	optFormat := flag.String("format", "prompt",
@@ -166,7 +167,7 @@ func main() {
 	// fmt.Fprintf(os.Stderr, "args[0]:%#v\n", args[0])
 	// fmt.Fprintf(os.Stderr, "path:%#v\n", path)
 
-	promptInfo, _ := buildPromptInfo(path, *optUsername)
+	promptInfo, _ := buildPromptInfo(path, *optUsername, *optError)
 
 	prompt := promptT{}
 	prompt.init(*optPowerline, *optShell, *optNoColor, *optColor)
@@ -207,7 +208,7 @@ func (prompt *promptT) build(promptInfo promptInfoT) {
 	// -----------------------
 	// Error
 	// -----------------------
-	if promptInfo.ReturnValue != 0 {
+	if promptInfo.ShowErrorIndicator {
 		prompt.addSegment(
 			symbols["error"],
 			STYLE_ERROR)
@@ -284,7 +285,7 @@ func (prompt *promptT) build(promptInfo promptInfoT) {
 	prompt.endSegments(promptInfo)
 }
 
-func buildPromptInfo(path string, optUsername string) (promptInfoT, error) {
+func buildPromptInfo(path string, optUsername string, optError bool) (promptInfoT, error) {
 	promptInfo := promptInfoT{}
 
 	promptInfo.ShowContext = true
@@ -294,16 +295,10 @@ func buildPromptInfo(path string, optUsername string) (promptInfoT, error) {
 	promptInfo.PathGitSub = pathGitSub
 
 	// ---------------------
-	// Previous command return value
+	// Show error indicator
 	// ---------------------
-	returnValue := os.Getenv("VGER_RETVAL")
-	// fmt.Fprintf(os.Stderr, "VGER_RETVAL: %s\n", returnValue)
-	if returnValue != "" {
-		value, err := strconv.Atoi(returnValue)
-		if err == nil {
-			promptInfo.ReturnValue = value
-			// fmt.Fprintf(os.Stderr, "value: %d\n", value)
-		}
+	if optError {
+		promptInfo.ShowErrorIndicator = true
 	}
 
 	// ---------------------

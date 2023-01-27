@@ -36,14 +36,15 @@ TEST_CASES = [
         'path': r'/usr/local/bin',
         'environment_vars': {
             'VGER_TRUNCATION_START_DEPTH': "1000"
-        }
+        },
     },
     {
         'name': 'Error',
         'path': r'/usr/local/bin',
         'environment_vars': {
             'VGER_RETVAL': "1"
-        }
+        },
+        'arguments': ['-showerror'],
     },
     {
         'name': 'With Context',
@@ -124,14 +125,20 @@ def run_tests(extra_args=None):
 
         command_line_args = [
             './voyager',
-            '--format=display',
-            '--powerline',
+            '-format=display',
+            '-powerline',
         ]
         if extra_args:
             command_line_args += extra_args
+    
+        case_args = test_case.get('arguments', None)
+        if case_args:
+            command_line_args += case_args
+ 
         username = test_case.get('username')
         if username:
-            command_line_args.append(f'--username={username}')
+            command_line_args.append(f'-username={username}')
+
         command_line_args.append(path)
 
         environment = os.environ.copy()
@@ -149,7 +156,7 @@ def run_tests(extra_args=None):
         # ------------------------
         # Render Text Prompt
         # ------------------------
-        command_line_args.remove('--powerline')
+        command_line_args.remove('-powerline')
         output = subprocess.check_output(command_line_args, env=environment,)
         print(f'{indent(1)}{output.decode("utf-8")}')
     print()
