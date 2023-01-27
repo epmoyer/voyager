@@ -2,10 +2,14 @@
 # voyager:start ---------------------------------------------------------------
 # voyager:snippet_version:1
 
-export VGER_OPT_POWERLINE="--powerline"
+export VGER_OPT_POWERLINE="-powerline"
 vger_build_prompt() {
-   export VGER_RETVAL=$?
-   PS1=`voyager $VGER_OPT_POWERLINE --shell=bash "$(pwd)"`
+    VGER_RETVAL=$?
+    VGER_OPT_ERROR=""
+    if [ $VGER_RETVAL -ne 0 ]; then
+        VGER_OPT_ERROR="-showerror"
+    fi
+    PS1=`voyager $VGER_OPT_POWERLINE $VGER_OPT_ERROR -shell=bash "$(pwd)"`
 }
 export PROMPT_COMMAND=vger_build_prompt
 
@@ -24,7 +28,7 @@ export PROMPT_COMMAND=vger_build_prompt
 # Set prompt to "text" mode
 alias vger_text="export VGER_OPT_POWERLINE=''"
 # Set prompt to "powerline" mode
-alias vger_pl="export VGER_OPT_POWERLINE=--powerline"
+alias vger_pl="export VGER_OPT_POWERLINE=-powerline"
 # Truncate all but the final path element.
 alias vger_short="export VGER_TRUNCATION_START_DEPTH=1"
 # Don't truncate any path elements.
