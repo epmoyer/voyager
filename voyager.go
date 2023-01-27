@@ -138,6 +138,7 @@ func main() {
 		"Render prompt using PowerLine font.")
 	optShell := flag.String("shell", "zsh", "The shell to format the prompt for.")
 	optUsername := flag.String("username", "", "Force the prompt username (for testing).")
+	optDefaultUser := flag.String("defaultuser", "", "The default username (don't show user/host for this user).")
 	optNoColor := flag.Bool("no-color", false,
 		"Disable colorization")
 	optError := flag.Bool("showerror", false, "Show the error indicator.")
@@ -167,7 +168,7 @@ func main() {
 	// fmt.Fprintf(os.Stderr, "args[0]:%#v\n", args[0])
 	// fmt.Fprintf(os.Stderr, "path:%#v\n", path)
 
-	promptInfo, _ := buildPromptInfo(path, *optUsername, *optError)
+	promptInfo, _ := buildPromptInfo(path, *optUsername, *optError, *optDefaultUser)
 
 	prompt := promptT{}
 	prompt.init(*optPowerline, *optShell, *optNoColor, *optColor)
@@ -285,7 +286,7 @@ func (prompt *promptT) build(promptInfo promptInfoT) {
 	prompt.endSegments(promptInfo)
 }
 
-func buildPromptInfo(path string, optUsername string, optError bool) (promptInfoT, error) {
+func buildPromptInfo(path string, optUsername string, optError bool, defaultUser string) (promptInfoT, error) {
 	promptInfo := promptInfoT{}
 
 	promptInfo.ShowContext = true
@@ -328,11 +329,25 @@ func buildPromptInfo(path string, optUsername string, optError bool) (promptInfo
 	}
 	promptInfo.Hostname = hostname
 	sshClient := os.Getenv("SSH_CLIENT")
-	// fmt.Printf("sshClient:%#v", sshClient)
+	username := promptInfo.Username
+	if optUsername != "" {
+		// A username was injected on the command line (for testing)
+		username = optUsername
+	}
+
+	// Show/Hide context (i.e. user & hostname)
+	if sshClient != "" {
+		// Always show context when connected over SSH.
+		promptInfo.ShowContext = true
+	} else if username != defaultUser {
+		// Show context if the current user is NOT the default user
+		promptInfo.ShowContext = true
+	} else {
+		promptInfo.ShowContext = false
+	}
+
 	if sshClient == "" && optUsername == "" {
-		defaultUser := os.Getenv("DEFAULT_USER")
-		// fmt.Printf("defaultUser:%#v", defaultUser)
-		if defaultUser == promptInfo.Username {
+		if defaultUser == username {
 			promptInfo.ShowContext = false
 		}
 	}

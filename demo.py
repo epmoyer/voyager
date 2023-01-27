@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import os
+import pwd
 import subprocess
 from pathlib import Path
 
@@ -24,7 +25,7 @@ THEME = Theme({
 # fmt: on
 CONSOLE = Console(highlight=False, color_system='256', theme=THEME)
 rprint = CONSOLE.print  # rich print
-
+CURRENT_USERNAME = pwd.getpwuid(os.getuid()).pw_name
 # fmt:off
 TEST_CASES = [
     {
@@ -49,7 +50,7 @@ TEST_CASES = [
     {
         'name': 'With Context',
         'path': r'/usr/local/bin',
-        'username': 'eric',
+        'username': 'ziggy',
     },
     {
         'name': 'With Context (as root)',
@@ -127,6 +128,7 @@ def run_tests(extra_args=None):
             './voyager',
             '-format=display',
             '-powerline',
+            f'-defaultuser={CURRENT_USERNAME}',
         ]
         if extra_args:
             command_line_args += extra_args
@@ -191,6 +193,7 @@ def show_formats(shell, presentation, disable_text_wrap, color_option):
             './voyager',
             f'-format={_format}',
             f'-shell={shell}',
+            f'-defaultuser={CURRENT_USERNAME}',
             color_option
         ]
         if presentation == 'PowerLine':
