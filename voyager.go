@@ -56,7 +56,6 @@ const ICS_RESET_ALL = "%{%f%k%b%}"
 
 const DEBUG_ENABLE = false
 
-var truncationStartDepth int
 var colorMode int = ColorMode16
 
 var STYLE_DEBUG = promptStyleT{
@@ -151,7 +150,6 @@ func main() {
 	flag.Parse()
 
 	setColorMode(*optNoColor, *optColor)
-	truncationStartDepth = *optTruncationStartDepth
 
 	if *optVersion {
 		showVersion()
@@ -171,7 +169,7 @@ func main() {
 	// fmt.Fprintf(os.Stderr, "args[0]:%#v\n", args[0])
 	// fmt.Fprintf(os.Stderr, "path:%#v\n", path)
 
-	promptInfo, _ := buildPromptInfo(path, *optUsername, *optError, *optDefaultUser)
+	promptInfo, _ := buildPromptInfo(path, *optUsername, *optError, *optDefaultUser, *optTruncationStartDepth)
 
 	prompt := promptT{}
 	prompt.init(*optPowerline, *optShell, *optNoColor, *optColor)
@@ -289,12 +287,12 @@ func (prompt *promptT) build(promptInfo promptInfoT) {
 	prompt.endSegments(promptInfo)
 }
 
-func buildPromptInfo(path string, optUsername string, optError bool, optDefaultUser string) (promptInfoT, error) {
+func buildPromptInfo(path string, optUsername string, optError bool, optDefaultUser string, optTruncationStartDepth int) (promptInfoT, error) {
 	promptInfo := promptInfoT{}
 
 	promptInfo.ShowContext = true
 
-	pathGitRoot, pathGitSub := getPath(path)
+	pathGitRoot, pathGitSub := getPath(path, optTruncationStartDepth)
 	promptInfo.PathGitRootBeginning, promptInfo.PathGitRootFinal = chopPath(pathGitRoot)
 	promptInfo.PathGitSub = pathGitSub
 
@@ -363,7 +361,7 @@ func buildPromptInfo(path string, optUsername string, optError bool, optDefaultU
 	return promptInfo, nil
 }
 
-func getPath(path string) (string, string) {
+func getPath(path string, optTruncationStartDepth int) (string, string) {
 
 	usr, _ := user.Current()
 	homeDir := usr.HomeDir
@@ -376,19 +374,19 @@ func getPath(path string) (string, string) {
 	if strings.HasPrefix(pathGitRoot, homeDir) {
 		pathGitRoot = strings.Replace(pathGitRoot, homeDir, "~", 1)
 	}
-	pathGitRoot = shortenPath(pathGitRoot)
+	pathGitRoot = shortenPath(pathGitRoot, optTruncationStartDepth)
 
 	return pathGitRoot, pathGitSub
 }
 
-func shortenPath(path string) string {
+func shortenPath(path string, optTruncationStartDepth int) string {
 	pieces := strings.Split(path, "/")
 	newPieces := []string{}
 	var piece string
 	for i := 0; i < len(pieces); i++ {
 		piece = pieces[i]
 		depth := len(pieces) - 1 - i
-		if depth >= truncationStartDepth {
+		if depth >= optTruncationStartDepth {
 			piece = shorten(piece)
 		}
 		newPieces = append(newPieces, piece)
