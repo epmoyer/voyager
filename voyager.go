@@ -69,9 +69,9 @@ var STYLE_ERROR = promptStyleT{
 	ICSColorFGText:      "red:212:#ff92c5",
 }
 var STYLE_SHELL = promptStyleT{
-	ICSColorBGPowerline: "white:151:#B8E3B8",
+	ICSColorBGPowerline: "yellow:151:#B8E3B8",
 	ICSColorFGPowerline: "black:16:#000000",
-	ICSColorFGText:      "white:151:#B8E3B8",
+	ICSColorFGText:      "yellow:151:#B8E3B8",
 }
 var STYLE_CONDA = promptStyleT{
 	ICSColorBGPowerline: "white:75:#5EABF7",
