@@ -145,7 +145,7 @@ func main() {
 		"Set color mode. Can be set to any of: 16, 256, 16m.")
 	optFormat := flag.String("format", "prompt",
 		"Output format: [prompt, prompt_debug, printable, printable_debug, ics]")
-	optTruncationStartDepth := flag.Int("truncation-start-depth", 1,
+	optTruncationStartDepth := flag.Int("truncation", 1,
 		"How many path components (right to left) to show in full. The rest will be truncated to a single character.")
 	flag.Parse()
 

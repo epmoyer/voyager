@@ -35,7 +35,7 @@ TEST_CASES = [
     {
         'name': 'Normal, No path truncation',
         'path': r'/usr/local/bin',
-        'arguments': ['-truncation-start-depth=1000'],
+        'arguments': ['-truncation=1000'],
     },
     {
         'name': 'Error',

@@ -16,12 +16,12 @@ vger_build_prompt() {
         VGER_OPT_DEFAULTUSER="-defaultuser=$VGER_DEFAULT_USER"
     fi
 
-    VGER_OPT_TRUNCATION_START_DEPTH=""
+    VGER_OPT_TRUNCATION=""
      if [ ! -z "$VGER_TRUNCATION_START_DEPTH" ]; then
-        VGER_OPT_TRUNCATION_START_DEPTH="-truncation-start-depth=$VGER_TRUNCATION_START_DEPTH"
+        VGER_OPT_TRUNCATION="-truncation=$VGER_TRUNCATION_START_DEPTH"
     fi
 
-    PS1=`voyager $VGER_OPT_POWERLINE $VGER_OPT_ERROR $VGER_OPT_DEFAULTUSER $VGER_OPT_TRUNCATION_START_DEPTH -shell=bash "$(pwd)"`
+    PS1=`voyager $VGER_OPT_POWERLINE $VGER_OPT_ERROR $VGER_OPT_DEFAULTUSER $VGER_OPT_TRUNCATION -shell=bash "$(pwd)"`
 }
 export PROMPT_COMMAND=vger_build_prompt
 
