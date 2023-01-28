@@ -16,7 +16,6 @@ echo "Copying shell init scripts to ~/.voyager ..."
 mkdir -p "$HOME/.voyager"
 cp bashrc.init.bash "$HOME/.voyager"
 cp zshrc.init.zsh "$HOME/.voyager"
-echo "${GREEN}   Copied.${ENDCOLOR}"
 
 install_shell_snippet() {
     echo "         Adding to() function to $SHELL_INIT_SCRIPT..."
