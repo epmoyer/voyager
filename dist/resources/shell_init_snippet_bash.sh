@@ -5,15 +5,23 @@
 export VGER_OPT_POWERLINE="-powerline"
 vger_build_prompt() {
     VGER_RETVAL=$?
+ 
     VGER_OPT_ERROR=""
     if [ $VGER_RETVAL -ne 0 ]; then
         VGER_OPT_ERROR="-showerror"
     fi
+
     VGER_OPT_DEFAULTUSER=""
     if [ ! -z "$VGER_DEFAULT_USER" ]; then
         VGER_OPT_DEFAULTUSER="-defaultuser=$VGER_DEFAULT_USER"
     fi
-    PS1=`voyager $VGER_OPT_POWERLINE $VGER_OPT_ERROR $VGER_OPT_DEFAULTUSER -shell=bash "$(pwd)"`
+
+    VGER_OPT_TRUNCATION_START_DEPTH=""
+     if [ ! -z "$VGER_TRUNCATION_START_DEPTH" ]; then
+        VGER_OPT_TRUNCATION_START_DEPTH="-truncation-start-depth=$VGER_TRUNCATION_START_DEPTH"
+    fi
+
+    PS1=`voyager $VGER_OPT_POWERLINE $VGER_OPT_ERROR $VGER_OPT_DEFAULTUSER $VGER_OPT_TRUNCATION_START_DEPTH -shell=bash "$(pwd)"`
 }
 export PROMPT_COMMAND=vger_build_prompt
 
