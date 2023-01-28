@@ -24,7 +24,12 @@ vger_build_prompt() {
         VGER_OPT_TRUNCATION="-truncation=$VGER_TRUNCATION_START_DEPTH"
     fi
 
-    echo $(voyager $VGER_OPT_POWERLINE $VGER_OPT_ERROR $VGER_OPT_DEFAULTUSER $VGER_OPT_TRUNCATION "$(pwd)")
+    VGER_OPT_COLOR=""
+     if [ ! -z "$VGER_COLOR" ]; then
+        VGER_OPT_COLOR="-color=$VGER_COLOR"
+    fi
+
+    echo $(voyager $VGER_OPT_POWERLINE $VGER_OPT_ERROR $VGER_OPT_DEFAULTUSER $VGER_OPT_TRUNCATION $VGER_OPT_COLOR "$(pwd)")
 }
 export PROMPT='$(vger_build_prompt)'
 
@@ -48,4 +53,9 @@ alias vger_pl="export VGER_OPT_POWERLINE=-powerline"
 alias vger_short="export VGER_TRUNCATION_START_DEPTH=1"
 # Don't truncate any path elements.
 alias vger_long="export VGER_TRUNCATION_START_DEPTH=1000"
+# Set color modes
+alias vger_16m="export VGER_COLOR=16m"
+alias vger_256="export VGER_COLOR=256"
+alias vger_16="export VGER_COLOR=16"
+alias vger_none="export VGER_COLOR=none"
 # voyager:end -----------------------------------------------------------------

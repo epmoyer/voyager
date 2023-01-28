@@ -64,7 +64,7 @@ var STYLE_DEBUG = promptStyleT{
 	ICSColorFGText:      "brightgreen:151:#B7E2B7",
 }
 var STYLE_ERROR = promptStyleT{
-	ICSColorBGPowerline: "red:212:#ff92c5",
+	ICSColorBGPowerline: "brightred:212:#ff92c5",
 	ICSColorFGPowerline: "black:16:#000000",
 	ICSColorFGText:      "red:212:#ff92c5",
 }
@@ -90,7 +90,7 @@ var STYLE_CONTEXT_ROOT = promptStyleT{
 }
 var STYLE_GITROOT_PRE = promptStyleT{
 	ICSColorBGPowerline: "green:66:#4F6D6F",
-	ICSColorFGPowerline: "brightblack:251:#c0c0c0",
+	ICSColorFGPowerline: "black:251:#c0c0c0",
 	ICSColorFGText:      "green:70:#729E72",
 }
 var STYLE_GITROOT = promptStyleT{

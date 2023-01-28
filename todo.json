@@ -141,18 +141,26 @@
             "id": 3,
             "cards": [
                 {
-                    "name": "Show color options in usage",
-                    "id": 117,
+                    "name": "make color helpers like vger_256()",
+                    "id": 125,
                     "id_labels": [],
                     "description": "",
                     "due": null,
                     "due_complete": false
                 },
                 {
-                    "name": "Make all env vars command options where possible",
-                    "id": 121,
+                    "name": "INSTALLER: Install helper scripts to ~/.voyager/",
+                    "id": 123,
                     "id_labels": [],
-                    "description": "`VGER_TRUNCATION_START_DEPTH` for one.\n\nOk to inject VGER_TRUNCATION_START_DEPTH as option like `-truncation_start=VGER_TRUNCATION_START_DEPTH`",
+                    "description": "",
+                    "due": null,
+                    "due_complete": false
+                },
+                {
+                    "name": "INSTALLER: Inject call (source ./voyager/xxx) instead of snippet (into init script)",
+                    "id": 124,
+                    "id_labels": [],
+                    "description": "Fig does it like this:\n`builtin source \"$HOME/.fig/shell/zshrc.post.zsh\"`\n\nSo probably we do:\n`builtin source \"$HOME/.voyager/zshrc.init.zsh\"`",
                     "due": null,
                     "due_complete": false,
                     "repeat": null
@@ -163,6 +171,23 @@
             "name": "Done",
             "id": 4,
             "cards": [
+                {
+                    "name": "Make all env vars command options where possible",
+                    "id": 121,
+                    "id_labels": [],
+                    "description": "`VGER_TRUNCATION_START_DEPTH` for one.\n\nOk to inject VGER_TRUNCATION_START_DEPTH as option like `-truncation_start=VGER_TRUNCATION_START_DEPTH`",
+                    "due": null,
+                    "due_complete": false,
+                    "repeat": null
+                },
+                {
+                    "name": "Show color options in usage",
+                    "id": 117,
+                    "id_labels": [],
+                    "description": "",
+                    "due": null,
+                    "due_complete": false
+                },
                 {
                     "name": "Add some kind of parseable version to snippets",
                     "id": 119,
