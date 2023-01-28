@@ -138,18 +138,16 @@ func main() {
 	optShell := flag.String("shell", "zsh", "The shell to format the prompt for.")
 	optUsername := flag.String("username", "", "Force the prompt username (for testing).")
 	optDefaultUser := flag.String("defaultuser", "", "The default username (don't show user/host for this user).")
-	optNoColor := flag.Bool("no-color", false,
-		"Disable colorization")
 	optError := flag.Bool("showerror", false, "Show the error indicator.")
 	optColor := flag.String("color", "16m",
-		"Set color mode. Can be set to any of: 16, 256, 16m.")
+		"Set color mode. Can be set to any of: [\"16\", \"256\", \"16m\", \"none\"].")
 	optFormat := flag.String("format", "prompt",
 		"Output format: [prompt, prompt_debug, printable, printable_debug, ics]")
 	optTruncationStartDepth := flag.Int("truncation", 1,
 		"How many path components (right to left) to show in full. The rest will be truncated to a single character.")
 	flag.Parse()
 
-	setColorMode(*optNoColor, *optColor)
+	setColorMode(*optColor)
 
 	if *optVersion {
 		showVersion()
@@ -172,7 +170,7 @@ func main() {
 	promptInfo, _ := buildPromptInfo(path, *optUsername, *optError, *optDefaultUser, *optTruncationStartDepth)
 
 	prompt := promptT{}
-	prompt.init(*optPowerline, *optShell, *optNoColor, *optColor)
+	prompt.init(*optPowerline, *optShell)
 
 	if *optDump {
 		fmt.Printf("path:%#v\n", path)
@@ -445,17 +443,16 @@ func chopPath(path string) (string, string) {
 	return strings.Join(newPieces, "/"), finalComponent
 }
 
-func setColorMode(optNoColor bool, optColor string) {
-	if optNoColor {
-		colorMode = ColorModeNone
-		return
-	}
+func setColorMode(optColor string) {
 	switch optColor {
+	case "none":
+		colorMode = ColorModeNone
 	case "16":
 		colorMode = ColorMode16
 	case "256":
 		colorMode = ColorMode256
-	case "16m":
+	// "16m"
+	default:
 		colorMode = ColorMode16m
 	}
 }

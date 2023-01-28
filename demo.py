@@ -105,7 +105,7 @@ def cases(enable_color_modes):
     if not enable_color_modes:
         run_tests()
         return
-    for arg in ['--color=16m', '--color=256', '--color=16', '--no-color']:
+    for arg in ['-color=16m', '-color=256', '-color=16', '-color=none']:
         print('-' * 50 + ' ' + arg)
         run_tests([arg])
 
@@ -166,7 +166,7 @@ def run_tests(extra_args=None):
 @click.option('-n', '--nowrap', 'disable_text_wrap', is_flag=True, help='Do not text wrap.')
 def formats(enable_color_modes, disable_text_wrap):
     if enable_color_modes:
-        color_options = ('-color=16m', '-color=256', '-color=16', '-no-color')
+        color_options = ('-color=16m', '-color=256', '-color=16', '-color=none')
     else:
         color_options = ('-color=16m',)
 

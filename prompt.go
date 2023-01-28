@@ -25,7 +25,6 @@ type promptT struct {
 	CurrentBGColorICS string
 
 	IsPowerLine bool
-	ColorMode   int
 	Shell       string
 }
 
@@ -37,25 +36,9 @@ type promptStyleT struct {
 	Bold bool
 }
 
-func (prompt *promptT) init(isPowerline bool, shell string, optNoColor bool, optColor string) {
+func (prompt *promptT) init(isPowerline bool, shell string) {
 	prompt.Shell = shell
 	prompt.IsPowerLine = isPowerline
-
-	// --------------------
-	// Set color mode
-	// --------------------
-	if optNoColor {
-		prompt.ColorMode = ColorModeNone
-		return
-	}
-	switch optColor {
-	case "16":
-		prompt.ColorMode = ColorMode16
-	case "256":
-		prompt.ColorMode = ColorMode256
-	case "16m":
-		prompt.ColorMode = ColorMode16m
-	}
 }
 
 func (prompt *promptT) addSegment(text string, style promptStyleT) {
