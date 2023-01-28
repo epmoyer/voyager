@@ -12,6 +12,11 @@ sudo cp $APP_NAME /usr/local/bin
 sudo chmod 755 /usr/local/bin/$APP_NAME
 echo "${GREEN}   Copied.${ENDCOLOR}"
 
+echo "Copying shell init scripts to ~/.voyager ..."
+mkdir -p "$HOME/.voyager"
+cp bashrc.init.bash "$HOME/.voyager"
+cp zshrc.init.zsh "$HOME/.voyager"
+
 install_shell_snippet() {
     echo "         Adding to() function to $SHELL_INIT_SCRIPT..."
     cat $SNIPPET_SCRIPT >> $SHELL_INIT_SCRIPT
