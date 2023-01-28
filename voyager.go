@@ -142,7 +142,7 @@ func main() {
 	optColor := flag.String("color", "16m",
 		"Set color mode. Can be set to any of: [\"16\", \"256\", \"16m\", \"none\"].")
 	optFormat := flag.String("format", "prompt",
-		"Output format: [prompt, prompt_debug, printable, printable_debug, ics]")
+		"Output format. Can be any of: [\"prompt\", \"prompt_debug\", \"printable\", \"printable_debug\", \"ics\"].")
 	optTruncationStartDepth := flag.Int("truncation", 1,
 		"How many path components (right to left) to show in full. The rest will be truncated to a single character.")
 	flag.Parse()
