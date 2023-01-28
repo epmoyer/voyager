@@ -57,6 +57,7 @@ const ICS_RESET_ALL = "%{%f%k%b%}"
 
 const DEBUG_ENABLE = false
 
+var truncationStartDepth int
 var colorMode int = ColorMode16
 
 var STYLE_DEBUG = promptStyleT{
@@ -146,9 +147,12 @@ func main() {
 		"Set color mode. Can be set to any of: 16, 256, 16m.")
 	optFormat := flag.String("format", "prompt",
 		"Output format: [prompt, prompt_debug, printable, printable_debug, ics]")
+	optTruncationStartDepth := flag.String("truncation-start-depth", "1",
+		"How many path components (right to left) to show in full; rest will be truncated to a single character.")
 	flag.Parse()
 
 	setColorMode(*optNoColor, *optColor)
+	truncationStartDepth = parseOptTruncationStartDepth(*optTruncationStartDepth)
 
 	if *optVersion {
 		showVersion()
@@ -286,7 +290,7 @@ func (prompt *promptT) build(promptInfo promptInfoT) {
 	prompt.endSegments(promptInfo)
 }
 
-func buildPromptInfo(path string, optUsername string, optError bool, defaultUser string) (promptInfoT, error) {
+func buildPromptInfo(path string, optUsername string, optError bool, optDefaultUser string) (promptInfoT, error) {
 	promptInfo := promptInfoT{}
 
 	promptInfo.ShowContext = true
@@ -339,7 +343,7 @@ func buildPromptInfo(path string, optUsername string, optError bool, defaultUser
 	if sshClient != "" {
 		// Always show context when connected over SSH.
 		promptInfo.ShowContext = true
-	} else if username != defaultUser {
+	} else if username != optDefaultUser {
 		// Show context if the current user is NOT the default user
 		promptInfo.ShowContext = true
 	} else {
@@ -347,7 +351,7 @@ func buildPromptInfo(path string, optUsername string, optError bool, defaultUser
 	}
 
 	if sshClient == "" && optUsername == "" {
-		if defaultUser == username {
+		if optDefaultUser == username {
 			promptInfo.ShowContext = false
 		}
 	}
@@ -379,7 +383,6 @@ func getPath(path string) (string, string) {
 }
 
 func shortenPath(path string) string {
-	truncationStartDepth := getPathTruncationStartDepth()
 	pieces := strings.Split(path, "/")
 	newPieces := []string{}
 	var piece string
@@ -425,12 +428,11 @@ func finalComponent(path string) string {
 	return pieces[len(pieces)-1]
 }
 
-func getPathTruncationStartDepth() int {
-	truncationStartDepthStr := os.Getenv("VGER_TRUNCATION_START_DEPTH")
-	if truncationStartDepthStr == "" {
+func parseOptTruncationStartDepth(optPathTruncationStartDepth string) int {
+	if optPathTruncationStartDepth == "" {
 		return 1
 	}
-	truncationStartDepth, err := strconv.Atoi(truncationStartDepthStr)
+	truncationStartDepth, err := strconv.Atoi(optPathTruncationStartDepth)
 	if err != nil {
 		return 1
 	}
