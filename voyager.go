@@ -8,7 +8,6 @@ import (
 	"os/exec"
 	"os/user"
 	"path/filepath"
-	"strconv"
 	"strings"
 )
 
@@ -147,12 +146,12 @@ func main() {
 		"Set color mode. Can be set to any of: 16, 256, 16m.")
 	optFormat := flag.String("format", "prompt",
 		"Output format: [prompt, prompt_debug, printable, printable_debug, ics]")
-	optTruncationStartDepth := flag.String("truncation-start-depth", "1",
-		"How many path components (right to left) to show in full; rest will be truncated to a single character.")
+	optTruncationStartDepth := flag.Int("truncation-start-depth", 1,
+		"How many path components (right to left) to show in full. The rest will be truncated to a single character.")
 	flag.Parse()
 
 	setColorMode(*optNoColor, *optColor)
-	truncationStartDepth = parseOptTruncationStartDepth(*optTruncationStartDepth)
+	truncationStartDepth = *optTruncationStartDepth
 
 	if *optVersion {
 		showVersion()
@@ -426,17 +425,6 @@ func splitGitPath(path string) (string, string) {
 func finalComponent(path string) string {
 	pieces := strings.Split(path, "/")
 	return pieces[len(pieces)-1]
-}
-
-func parseOptTruncationStartDepth(optPathTruncationStartDepth string) int {
-	if optPathTruncationStartDepth == "" {
-		return 1
-	}
-	truncationStartDepth, err := strconv.Atoi(optPathTruncationStartDepth)
-	if err != nil {
-		return 1
-	}
-	return truncationStartDepth
 }
 
 func chopPath(path string) (string, string) {
