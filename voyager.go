@@ -8,12 +8,11 @@ import (
 	"os/exec"
 	"os/user"
 	"path/filepath"
-	"strconv"
 	"strings"
 )
 
 const APP_NAME = "voyager"
-const APP_VERSION = "1.5.3"
+const APP_VERSION = "1.6.0"
 
 const ENABLE_DEBUG_INDICATOR = false
 const ENABLE_BULLNOSE = false
@@ -52,70 +51,73 @@ var SYMBOLS_TEXT = map[string]string{
 	"error":      "",
 }
 
-const COLOR_BG_DEFAULT = "#000000"
-const COLOR_FG_DEFAULT = "#ffffff"
-const COLOR_TEXT_FG_SEPARATOR = "#707070"
+const ICS_COLOR_TEXT_FG_SEPARATOR = "white:241:#707070"
+const ICS_RESET_ALL = "%{%f%k%b%}"
+
+const DEBUG_ENABLE = false
+
+var colorMode int = ColorMode16
 
 var STYLE_DEBUG = promptStyleT{
-	ColorHexFGPowerline: "#000000",
-	ColorHexBGPowerline: "#B7E2B7",
-	ColorHexFGText:      "#B7E2B7",
+	ICSColorBGPowerline: "brightgreen:151:#B7E2B7",
+	ICSColorFGPowerline: "black:0:#000000",
+	ICSColorFGText:      "brightgreen:151:#B7E2B7",
 }
 var STYLE_ERROR = promptStyleT{
-	ColorHexFGPowerline: "#000000",
-	ColorHexBGPowerline: "#ff92c5",
-	ColorHexFGText:      "#ff92c5",
+	ICSColorBGPowerline: "red:212:#ff92c5",
+	ICSColorFGPowerline: "black:16:#000000",
+	ICSColorFGText:      "red:212:#ff92c5",
 }
 var STYLE_SHELL = promptStyleT{
-	ColorHexFGPowerline: "#000000",
-	ColorHexBGPowerline: "#B8E3B8",
-	ColorHexFGText:      "#B8E3B8",
+	ICSColorBGPowerline: "white:151:#B8E3B8",
+	ICSColorFGPowerline: "black:16:#000000",
+	ICSColorFGText:      "white:151:#B8E3B8",
 }
 var STYLE_CONDA = promptStyleT{
-	ColorHexFGPowerline: "#202020",
-	ColorHexBGPowerline: "#5EABF7",
-	ColorHexFGText:      "#4040ff",
+	ICSColorBGPowerline: "white:75:#5EABF7",
+	ICSColorFGPowerline: "black:16:#202020",
+	ICSColorFGText:      "brightblue:63:#4040ff",
 }
 var STYLE_CONTEXT = promptStyleT{
-	ColorHexFGPowerline: "#000000",
-	ColorHexBGPowerline: "#B294BF",
-	ColorHexFGText:      "#C040BE",
+	ICSColorBGPowerline: "brightmagenta:139:#B294BF",
+	ICSColorFGPowerline: "black:16:#000000",
+	ICSColorFGText:      "brightmagenta:133:#C040BE",
 }
 var STYLE_CONTEXT_ROOT = promptStyleT{
-	ColorHexFGPowerline: "#000000",
-	ColorHexBGPowerline: "#ff8080",
-	ColorHexFGText:      "#ff3030",
+	ICSColorBGPowerline: "brightred:210:#ff8080",
+	ICSColorFGPowerline: "black:16:#000000",
+	ICSColorFGText:      "red:197:#ff3030",
 }
 var STYLE_GITROOT_PRE = promptStyleT{
-	ColorHexFGPowerline: "#c0c0c0",
-	ColorHexBGPowerline: "#4F6D6F",
-	ColorHexFGText:      "#729E72",
+	ICSColorBGPowerline: "green:66:#4F6D6F",
+	ICSColorFGPowerline: "brightblack:251:#c0c0c0",
+	ICSColorFGText:      "green:70:#729E72",
 }
 var STYLE_GITROOT = promptStyleT{
-	ColorHexFGPowerline: "#ffffff",
-	ColorHexBGPowerline: "#4F6D6F",
-	ColorHexFGText:      "#9EFF9E",
+	ICSColorBGPowerline: "green:66:#4F6D6F",
+	ICSColorFGPowerline: "brightwhite:231:#ffffff",
+	ICSColorFGText:      "white:157:#9EFF9E",
 	Bold:                true,
 }
 var STYLE_GIT_INFO_CLEAN = promptStyleT{
-	ColorHexFGPowerline: "#000000",
-	ColorHexBGPowerline: "#A2C3C7",
-	ColorHexFGText:      "#5EABF7",
+	ICSColorBGPowerline: "cyan:152:#A2C3C7",
+	ICSColorFGPowerline: "black:16:#000000",
+	ICSColorFGText:      "cyan:75:#5EABF7",
 }
 var STYLE_GIT_INFO_DIRTY = promptStyleT{
-	ColorHexFGPowerline: "#000000",
-	ColorHexBGPowerline: "#E2D47D",
-	ColorHexFGText:      "#E2D47D",
+	ICSColorBGPowerline: "brightyellow:186:#E2D47D",
+	ICSColorFGPowerline: "black:16:#000000",
+	ICSColorFGText:      "brightyellow:186:#E2D47D",
 }
 var STYLE_GIT_INFO_DETACHED = promptStyleT{
-	ColorHexFGPowerline: "#000000",
-	ColorHexBGPowerline: "#FFAA55",
-	ColorHexFGText:      "#FF8000",
+	ICSColorBGPowerline: "magenta:215:#FFAA55",
+	ICSColorFGPowerline: "black:16:#000000",
+	ICSColorFGText:      "magenta:208:#FF8000",
 }
 var STYLE_GITSUB = promptStyleT{
-	ColorHexFGPowerline: "#c0c0c0",
-	ColorHexBGPowerline: "#515151",
-	ColorHexFGText:      "#7A9CA1",
+	ICSColorBGPowerline: "brightblack:59:#515151",
+	ICSColorFGPowerline: "white:145:#c0c0c0",
+	ICSColorFGText:      "brightblack:109:#7A9CA1",
 }
 
 func main() {
@@ -135,9 +137,17 @@ func main() {
 		"Render prompt using PowerLine font.")
 	optShell := flag.String("shell", "zsh", "The shell to format the prompt for.")
 	optUsername := flag.String("username", "", "Force the prompt username (for testing).")
-	optPrintable := flag.Bool("printable", false,
-		"Return a printable (ASCII Esc) string rather than a shell $PROMPT/$PS1 string.")
+	optDefaultUser := flag.String("defaultuser", "", "The default username (don't show user/host for this user).")
+	optError := flag.Bool("showerror", false, "Show the error indicator.")
+	optColor := flag.String("color", "16m",
+		"Set color mode. Can be set to any of: [\"16\", \"256\", \"16m\", \"none\"].")
+	optFormat := flag.String("format", "prompt",
+		"Output format. Can be any of: [\"prompt\", \"prompt_debug\", \"printable\", \"printable_debug\", \"ics\"].")
+	optTruncationStartDepth := flag.Int("truncation", 1,
+		"How many path components (right to left) to show in full. The rest will be truncated to a single character.")
 	flag.Parse()
+
+	setColorMode(*optColor)
 
 	if *optVersion {
 		showVersion()
@@ -157,7 +167,7 @@ func main() {
 	// fmt.Fprintf(os.Stderr, "args[0]:%#v\n", args[0])
 	// fmt.Fprintf(os.Stderr, "path:%#v\n", path)
 
-	promptInfo, _ := buildPromptInfo(path, *optUsername)
+	promptInfo, _ := buildPromptInfo(path, *optUsername, *optError, *optDefaultUser, *optTruncationStartDepth)
 
 	prompt := promptT{}
 	prompt.init(*optPowerline, *optShell)
@@ -168,12 +178,8 @@ func main() {
 		os.Exit(0)
 	}
 
-	prompt.renderPrompt(promptInfo)
-	if *optPrintable {
-		fmt.Print(prompt.TextPrintable)
-	} else {
-		fmt.Print(prompt.TextShell)
-	}
+	prompt.build(promptInfo)
+	fmt.Print(prompt.render(*optFormat))
 
 	os.Exit(0)
 }
@@ -182,9 +188,9 @@ func showVersion() {
 	fmt.Printf("%s %s\n", APP_NAME, APP_VERSION)
 }
 
-func (prompt *promptT) renderPrompt(promptInfo promptInfoT) {
+func (prompt *promptT) build(promptInfo promptInfoT) {
 	var symbols map[string]string
-	if prompt.isPowerline {
+	if prompt.IsPowerLine {
 		symbols = SYMBOLS_POWERLINE
 	} else {
 		symbols = SYMBOLS_TEXT
@@ -202,7 +208,7 @@ func (prompt *promptT) renderPrompt(promptInfo promptInfoT) {
 	// -----------------------
 	// Error
 	// -----------------------
-	if promptInfo.ReturnValue != 0 {
+	if promptInfo.ShowErrorIndicator {
 		prompt.addSegment(
 			symbols["error"],
 			STYLE_ERROR)
@@ -211,7 +217,7 @@ func (prompt *promptT) renderPrompt(promptInfo promptInfoT) {
 	// -----------------------
 	// Shell
 	// -----------------------
-	if prompt.colorizer.shell == "bash" {
+	if prompt.Shell == "bash" {
 		prompt.addSegment(
 			symbols["shell_bash"],
 			STYLE_SHELL)
@@ -261,7 +267,7 @@ func (prompt *promptT) renderPrompt(promptInfo promptInfoT) {
 		if git.IsDetached {
 			style = STYLE_GIT_INFO_DETACHED
 		}
-		text := git.render(prompt.isPowerline)
+		text := git.render(prompt.IsPowerLine)
 		prompt.addSegment(
 			text,
 			style)
@@ -279,26 +285,20 @@ func (prompt *promptT) renderPrompt(promptInfo promptInfoT) {
 	prompt.endSegments(promptInfo)
 }
 
-func buildPromptInfo(path string, optUsername string) (promptInfoT, error) {
+func buildPromptInfo(path string, optUsername string, optError bool, optDefaultUser string, optTruncationStartDepth int) (promptInfoT, error) {
 	promptInfo := promptInfoT{}
 
 	promptInfo.ShowContext = true
 
-	pathGitRoot, pathGitSub := getPath(path)
+	pathGitRoot, pathGitSub := getPath(path, optTruncationStartDepth)
 	promptInfo.PathGitRootBeginning, promptInfo.PathGitRootFinal = chopPath(pathGitRoot)
 	promptInfo.PathGitSub = pathGitSub
 
 	// ---------------------
-	// Previous command return value
+	// Show error indicator
 	// ---------------------
-	returnValue := os.Getenv("VGER_RETVAL")
-	// fmt.Fprintf(os.Stderr, "VGER_RETVAL: %s\n", returnValue)
-	if returnValue != "" {
-		value, err := strconv.Atoi(returnValue)
-		if err == nil {
-			promptInfo.ReturnValue = value
-			// fmt.Fprintf(os.Stderr, "value: %d\n", value)
-		}
+	if optError {
+		promptInfo.ShowErrorIndicator = true
 	}
 
 	// ---------------------
@@ -328,11 +328,25 @@ func buildPromptInfo(path string, optUsername string) (promptInfoT, error) {
 	}
 	promptInfo.Hostname = hostname
 	sshClient := os.Getenv("SSH_CLIENT")
-	// fmt.Printf("sshClient:%#v", sshClient)
+	username := promptInfo.Username
+	if optUsername != "" {
+		// A username was injected on the command line (for testing)
+		username = optUsername
+	}
+
+	// Show/Hide context (i.e. user & hostname)
+	if sshClient != "" {
+		// Always show context when connected over SSH.
+		promptInfo.ShowContext = true
+	} else if username != optDefaultUser {
+		// Show context if the current user is NOT the default user
+		promptInfo.ShowContext = true
+	} else {
+		promptInfo.ShowContext = false
+	}
+
 	if sshClient == "" && optUsername == "" {
-		defaultUser := os.Getenv("DEFAULT_USER")
-		// fmt.Printf("defaultUser:%#v", defaultUser)
-		if defaultUser == promptInfo.Username {
+		if optDefaultUser == username {
 			promptInfo.ShowContext = false
 		}
 	}
@@ -345,7 +359,7 @@ func buildPromptInfo(path string, optUsername string) (promptInfoT, error) {
 	return promptInfo, nil
 }
 
-func getPath(path string) (string, string) {
+func getPath(path string, optTruncationStartDepth int) (string, string) {
 
 	usr, _ := user.Current()
 	homeDir := usr.HomeDir
@@ -358,20 +372,19 @@ func getPath(path string) (string, string) {
 	if strings.HasPrefix(pathGitRoot, homeDir) {
 		pathGitRoot = strings.Replace(pathGitRoot, homeDir, "~", 1)
 	}
-	pathGitRoot = shortenPath(pathGitRoot)
+	pathGitRoot = shortenPath(pathGitRoot, optTruncationStartDepth)
 
 	return pathGitRoot, pathGitSub
 }
 
-func shortenPath(path string) string {
-	truncationStartDepth := getPathTruncationStartDepth()
+func shortenPath(path string, optTruncationStartDepth int) string {
 	pieces := strings.Split(path, "/")
 	newPieces := []string{}
 	var piece string
 	for i := 0; i < len(pieces); i++ {
 		piece = pieces[i]
 		depth := len(pieces) - 1 - i
-		if depth >= truncationStartDepth {
+		if depth >= optTruncationStartDepth {
 			piece = shorten(piece)
 		}
 		newPieces = append(newPieces, piece)
@@ -410,18 +423,6 @@ func finalComponent(path string) string {
 	return pieces[len(pieces)-1]
 }
 
-func getPathTruncationStartDepth() int {
-	truncationStartDepthStr := os.Getenv("VGER_TRUNCATION_START_DEPTH")
-	if truncationStartDepthStr == "" {
-		return 1
-	}
-	truncationStartDepth, err := strconv.Atoi(truncationStartDepthStr)
-	if err != nil {
-		return 1
-	}
-	return truncationStartDepth
-}
-
 func chopPath(path string) (string, string) {
 	pieces := strings.Split(path, "/")
 	newPieces := []string{}
@@ -440,4 +441,18 @@ func chopPath(path string) (string, string) {
 		newPieces = append(newPieces, "")
 	}
 	return strings.Join(newPieces, "/"), finalComponent
+}
+
+func setColorMode(optColor string) {
+	switch optColor {
+	case "none":
+		colorMode = ColorModeNone
+	case "16":
+		colorMode = ColorMode16
+	case "256":
+		colorMode = ColorMode256
+	// "16m"
+	default:
+		colorMode = ColorMode16m
+	}
 }
