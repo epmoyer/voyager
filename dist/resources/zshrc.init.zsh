@@ -26,10 +26,8 @@ vger_build_prompt() {
     fi
 
     VGER_OPT_VIRTUAL_ENVIRONMENT=""
-    if [ ! -z "$CONDA_DEFAULT_ENV" ]; then
-        if [ $CONDA_DEFAULT_ENV != "base" ]; then
-            VGER_OPT_COLOR="-virtualenv=$CONDA_DEFAULT_ENV"
-        fi
+    if [ ! -z "$CONDA_DEFAULT_ENV" ] && [ $CONDA_DEFAULT_ENV != "base" ]; then
+        VGER_OPT_COLOR="-virtualenv=$CONDA_DEFAULT_ENV"
     fi
 
     echo $(voyager $VGER_OPT_POWERLINE $VGER_OPT_ERROR $VGER_OPT_DEFAULTUSER $VGER_OPT_TRUNCATION $VGER_OPT_COLOR $VGER_OPT_VIRTUAL_ENVIRONMENT "$(pwd)")
