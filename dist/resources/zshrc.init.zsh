@@ -16,16 +16,23 @@ vger_build_prompt() {
     fi
 
     VGER_OPT_TRUNCATION=""
-     if [ ! -z "$VGER_TRUNCATION_START_DEPTH" ]; then
+    if [ ! -z "$VGER_TRUNCATION_START_DEPTH" ]; then
         VGER_OPT_TRUNCATION="-truncation=$VGER_TRUNCATION_START_DEPTH"
     fi
 
     VGER_OPT_COLOR=""
-     if [ ! -z "$VGER_COLOR" ]; then
+    if [ ! -z "$VGER_COLOR" ]; then
         VGER_OPT_COLOR="-color=$VGER_COLOR"
     fi
 
-    echo $(voyager $VGER_OPT_POWERLINE $VGER_OPT_ERROR $VGER_OPT_DEFAULTUSER $VGER_OPT_TRUNCATION $VGER_OPT_COLOR "$(pwd)")
+    VGER_OPT_VIRTUAL_ENVIRONMENT=""
+    if [ ! -z "$CONDA_DEFAULT_ENV" ]; then
+        if [ $CONDA_DEFAULT_ENV != "base" ]; then
+            VGER_OPT_COLOR="-virtualenv=$CONDA_DEFAULT_ENV"
+        fi
+    fi
+
+    echo $(voyager $VGER_OPT_POWERLINE $VGER_OPT_ERROR $VGER_OPT_DEFAULTUSER $VGER_OPT_TRUNCATION $VGER_OPT_COLOR $VGER_OPT_VIRTUAL_ENVIRONMENT "$(pwd)")
 }
 export PROMPT='$(vger_build_prompt)'
 
