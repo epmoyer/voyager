@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 1.6.1 - 2023-01-30
 ### Fixed
 - Fix usage text for `-format`
+- Virtual environment (now via `-virtualenv`)
 
 ## 1.6.0 - 2023-01-28
 ### Added
