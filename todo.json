@@ -139,7 +139,24 @@
         {
             "name": "Doing",
             "id": 3,
-            "cards": []
+            "cards": [
+                {
+                    "name": "Fix coda/venv support",
+                    "id": 126,
+                    "id_labels": [],
+                    "description": "",
+                    "due": null,
+                    "due_complete": false
+                },
+                {
+                    "name": "Lift SSH_CLIENT env var out of go code into shell snippet.",
+                    "id": 127,
+                    "id_labels": [],
+                    "description": "",
+                    "due": null,
+                    "due_complete": false
+                }
+            ]
         },
         {
             "name": "Done",

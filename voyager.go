@@ -12,7 +12,7 @@ import (
 )
 
 const APP_NAME = "voyager"
-const APP_VERSION = "1.6.0"
+const APP_VERSION = "1.6.1"
 
 const ENABLE_DEBUG_INDICATOR = false
 const ENABLE_BULLNOSE = false
@@ -132,17 +132,17 @@ func main() {
 	optVersion := flag.Bool("version", false,
 		"Show version.")
 	optDump := flag.Bool("dump", false,
-		"Show all prompt components and all prompts in all formatting styles.")
+		"DEBUG: Show all internal prompt data components.")
 	optPowerline := flag.Bool("powerline", false,
 		"Render prompt using PowerLine font.")
 	optShell := flag.String("shell", "zsh", "The shell to format the prompt for.")
-	optUsername := flag.String("username", "", "Force the prompt username (for testing).")
+	optUsername := flag.String("username", "", "DEBUG: Force the prompt username.")
 	optDefaultUser := flag.String("defaultuser", "", "The default username (don't show user/host for this user).")
 	optError := flag.Bool("showerror", false, "Show the error indicator.")
 	optColor := flag.String("color", "16m",
 		"Set color mode. Can be set to any of: [\"16\", \"256\", \"16m\", \"none\"].")
 	optFormat := flag.String("format", "prompt",
-		"Output format. Can be any of: [\"prompt\", \"prompt_debug\", \"printable\", \"printable_debug\", \"ics\"].")
+		"Output format. Can be any of: [\"prompt\", \"prompt_debug\", \"display\", \"display_debug\", \"ics\"].")
 	optTruncationStartDepth := flag.Int("truncation", 1,
 		"How many path components (right to left) to show in full. The rest will be truncated to a single character.")
 	flag.Parse()

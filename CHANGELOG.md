@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.6.1 - 2023-01-30
+### Fixed
+- Fix usage text for `-format`
+
+## 1.6.0 - 2023-01-28
+### Added
+- Support color modes
+### Changed
+- Adopt ICS internally
+- Snippet install location
+- Improve demo coverage
+
 ## 1.5.2 - 2023-01-19
 ### Changed
 - Adopt pink for `STYLE_ERROR`
