@@ -51,6 +51,28 @@ _Voyager also supports a "text" format for use in environments where Powerline s
 - Delete the executable:
     - `sudo rm /usr/local/bin/voyager`
 
+## Configuration
+`voyager` is an executable called by a shell script (see `dist/resources/bashrc.init.bash` and `dist/resources/zshcr.init.sh`).  The `voyager` executable takes all its arguments on the command line (it does not access any environment variables directly), but the supporting shell scripts use environment variables to configure what command line options they pass to the `voyager` executable.  That means that you can configure Voyager's behavior by setting the environment variables the _shell scripts_ use (or, if you prefer, modifying the shell scripts).
+
+- `VGER_DEFAULT_USER`
+    - If you set this to a user name (e.g. `ziggy`) then the "context" information (e.g. `ziggy@<machinename>`) will not be shown for that user.
+        - e.g. `export VGER_DEFAULT_USER=ziggy`
+    - Typically you would set this to your own username to de-clutter the prompt during "normal" use.
+    - NOTE: The context is always shown when you are SSH'd into a machine, regardless of the default user setting.
+- `VGER_OPT_POWERLINE`
+    - This is set to `-powerline` by default. Clear it to use text mode instead.
+    - NOTE: The helper aliases `vger_text` and `vger_pl` manipulate this variable. 
+- `VGER_TRUNCATION_START_DEPTH`
+    - Sets how may path elements (right to left) to show in full before truncation begins.
+        - Set this to 0 to truncate all path components.
+        - Set this to 1 to truncate all but the last path component (the default).
+        - Set this to 1000 for no truncation.
+    - NOTE: The helper aliases `vger_short` and `vger_long` manipulate this variable. 
+- `VGER_COLOR`
+    - Sets the color mode.  Set this to one of `16m`, `256`, `16`, or `none`
+    - Note: The helper aliases `vger_16m`. `vger_256`, `vger_16`, and `vger_none` manipulate this variable. 
+
+
 ## Helper aliases
 Voyager defines several aliases to help you easily change options on-the-fly (see `dist/resources/bashrc.init.bash` and `dist/resources/zshcr.init.sh`).
 
