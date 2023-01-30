@@ -77,6 +77,8 @@ The demo is written in Python. To run it you will need to have Python 3.8 or gre
 
 The demo expects a bunch of small subdirectories to exist under `git_test_cases/` (each one is a small git repo to exercise the prompt under different repo conditions). To create those directories, `cd git_test_cases`, then `tar -xvzf git_test_cases.tgz`.
 
+The demo expects an executable (`voyager`) to be at the git repo root.  You can run `go build .` to create it.
+
 - View the various prompt cases in color mode `16m`:
     - `./demo.py cases`
 - View the various prompt cases in all color modes:
