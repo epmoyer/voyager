@@ -41,9 +41,9 @@ _Voyager also supports a "text" format for use in environments where Powerline s
 ## Uninstalling
 - Delete the shell initialization hook from your `~/.bashrc` and/or `~/.zshrc`.
     - Delete the lines from:
-        - `# voyager:start -----------------------------------------------------------------`
+        - `# voyager:start ---------------------------------------------------------`
     - Through:
-        - `# voyager:end -----------------------------------------------------------------`
+        - `# voyager:end --------------------------------------------------------`
 - Exit your shell (`exit`) and start a new one.
     - Your prompt should now be back to its "pre-voyager" normal.  We needed to do that before deleting the voyager scripts and executable below.
 - Delete the shell initialization scripts
