@@ -27,10 +27,15 @@ vger_build_prompt() {
 
     VGER_OPT_VIRTUAL_ENVIRONMENT=""
     if [ ! -z "$CONDA_DEFAULT_ENV" ] && [ $CONDA_DEFAULT_ENV != "base" ]; then
-        VGER_OPT_COLOR="-virtualenv=$CONDA_DEFAULT_ENV"
+        VGER_OPT_VIRTUAL_ENVIRONMENT="-virtualenv=$CONDA_DEFAULT_ENV"
     fi
 
-    echo $(voyager $VGER_OPT_POWERLINE $VGER_OPT_ERROR $VGER_OPT_DEFAULTUSER $VGER_OPT_TRUNCATION $VGER_OPT_COLOR $VGER_OPT_VIRTUAL_ENVIRONMENT "$(pwd)")
+    VGER_OPT_SSH=""
+    if [ ! -z "$SSH_CLIENT" ]; then
+        VGER_OPT_SSH="-ssh"
+    fi
+
+    echo $(voyager $VGER_OPT_POWERLINE $VGER_OPT_ERROR $VGER_OPT_DEFAULTUSER $VGER_OPT_TRUNCATION $VGER_OPT_COLOR $VGER_OPT_VIRTUAL_ENVIRONMENT $VGER_OPT_SSH "$(pwd)")
 }
 export PROMPT='$(vger_build_prompt)'
 

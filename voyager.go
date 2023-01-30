@@ -136,6 +136,7 @@ func main() {
 	optPowerline := flag.Bool("powerline", false,
 		"Render prompt using PowerLine font.")
 	optShell := flag.String("shell", "zsh", "The shell to format the prompt for.")
+	optSSH := flag.Bool("ssh", false, "User is currently SSH'd into this machine.")
 	optUsername := flag.String("username", "", "DEBUG: Force the prompt username.")
 	optDefaultUser := flag.String("defaultuser", "", "The default username (don't show user/host for this user).")
 	optError := flag.Bool("showerror", false, "Show the error indicator.")
@@ -169,7 +170,14 @@ func main() {
 	// fmt.Fprintf(os.Stderr, "args[0]:%#v\n", args[0])
 	// fmt.Fprintf(os.Stderr, "path:%#v\n", path)
 
-	promptInfo, _ := buildPromptInfo(path, *optUsername, *optError, *optDefaultUser, *optTruncationStartDepth, *optVirtualEnv)
+	promptInfo, _ := buildPromptInfo(
+		path,
+		*optUsername,
+		*optError,
+		*optDefaultUser,
+		*optTruncationStartDepth,
+		*optVirtualEnv,
+		*optSSH)
 
 	prompt := promptT{}
 	prompt.init(*optPowerline, *optShell)
@@ -293,7 +301,9 @@ func buildPromptInfo(
 	optError bool,
 	optDefaultUser string,
 	optTruncationStartDepth int,
-	optVirtualEnv string) (promptInfoT, error) {
+	optVirtualEnv string,
+	optSSH bool,
+) (promptInfoT, error) {
 
 	promptInfo := promptInfoT{}
 
@@ -337,7 +347,6 @@ func buildPromptInfo(
 		hostname = strings.Replace(hostname, ".local", "", 1)
 	}
 	promptInfo.Hostname = hostname
-	sshClient := os.Getenv("SSH_CLIENT")
 	username := promptInfo.Username
 	if optUsername != "" {
 		// A username was injected on the command line (for testing)
@@ -345,7 +354,7 @@ func buildPromptInfo(
 	}
 
 	// Show/Hide context (i.e. user & hostname)
-	if sshClient != "" {
+	if optSSH {
 		// Always show context when connected over SSH.
 		promptInfo.ShowContext = true
 	} else if username != optDefaultUser {
@@ -353,12 +362,6 @@ func buildPromptInfo(
 		promptInfo.ShowContext = true
 	} else {
 		promptInfo.ShowContext = false
-	}
-
-	if sshClient == "" && optUsername == "" {
-		if optDefaultUser == username {
-			promptInfo.ShowContext = false
-		}
 	}
 
 	// ---------------------
