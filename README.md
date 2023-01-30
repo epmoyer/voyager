@@ -6,6 +6,10 @@ Like [Starship](https://starship.rs) but smaller, and with a single mission.
 
 ![](docs/img/voyager_test_many.png)
 
+Voyager recognizes when you are in a git repo directory and shows your git repo name and status in the middle of your path, with the git root path on the left, and your location within that repo (i.e. subdirectory relative to the repo root) on the right. 
+
+![](docs/img/voyager_prompt_example.png)
+
 ## Installation
 
 ### Powerline font
@@ -48,14 +52,25 @@ _Voyager also supports a "text" format for use in environments where Powerline s
     - `sudo rm /usr/local/bin/voyager`
 
 ## Helper aliases
-🔴 TBD
-
 Voyager defines several aliases to help you easily change options on-the-fly (see `dist/resources/bashrc.init.bash` and `dist/resources/zshcr.init.sh`).
 
 - `vger_text`
     - Set the prompt to text mode.
 - `vger_pl`
-    - Set the prompt to powerline mode.
+    - Set the prompt to [powerline](#powerline-font) mode.
+- `vger_short`
+    - All but the last path component will be truncated (to a single character).
+    - If you are in a git repo, this only affects the git root-path (i.e. the path up to the git root folder.  Git repo subdirectories are always shown in full).
+- `vger_long`
+    - All path components will be shown in full.
+- `vger_16m`
+    - Set the color mode to `16m` (i.e. 24-bit RGB)
+- `vger_256`
+    - Set the color mode to `256`
+- `vger_16`
+    - Set the color mode to `16`
+- `vger_none`
+    - Set the color mode to `none`
 
 ## Running the demo
 The demo is written in Python. To run it you will need to have Python 3.8 or greater installed, as well as [click](https://click.palletsprojects.com/en/8.1.x/) and [rich](https://rich.readthedocs.io/en/stable/introduction.html).
