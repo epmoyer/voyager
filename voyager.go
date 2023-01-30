@@ -73,7 +73,7 @@ var STYLE_SHELL = promptStyleT{
 	ICSColorFGPowerline: "black:16:#000000",
 	ICSColorFGText:      "yellow:151:#B8E3B8",
 }
-var STYLE_CONDA = promptStyleT{
+var STYLE_VIRTUAL_ENVIRONMENT = promptStyleT{
 	ICSColorBGPowerline: "white:75:#5EABF7",
 	ICSColorFGPowerline: "black:16:#202020",
 	ICSColorFGText:      "brightblue:63:#4040ff",
@@ -145,6 +145,8 @@ func main() {
 		"Output format. Can be any of: [\"prompt\", \"prompt_debug\", \"display\", \"display_debug\", \"ics\"].")
 	optTruncationStartDepth := flag.Int("truncation", 1,
 		"How many path components (right to left) to show in full. The rest will be truncated to a single character.")
+	optVirtualEnv := flag.String("virtualenv", "",
+		"Virtual environment name to display.")
 	flag.Parse()
 
 	setColorMode(*optColor)
@@ -167,7 +169,7 @@ func main() {
 	// fmt.Fprintf(os.Stderr, "args[0]:%#v\n", args[0])
 	// fmt.Fprintf(os.Stderr, "path:%#v\n", path)
 
-	promptInfo, _ := buildPromptInfo(path, *optUsername, *optError, *optDefaultUser, *optTruncationStartDepth)
+	promptInfo, _ := buildPromptInfo(path, *optUsername, *optError, *optDefaultUser, *optTruncationStartDepth, *optVirtualEnv)
 
 	prompt := promptT{}
 	prompt.init(*optPowerline, *optShell)
@@ -224,12 +226,12 @@ func (prompt *promptT) build(promptInfo promptInfoT) {
 	}
 
 	// -----------------------
-	// Conda Environment
+	// Virtual Environment
 	// -----------------------
-	if promptInfo.CondaEnvironment != "" {
+	if promptInfo.VirtualEnvironment != "" {
 		prompt.addSegment(
-			fmt.Sprint(promptInfo.CondaEnvironment),
-			STYLE_CONDA)
+			fmt.Sprint(promptInfo.VirtualEnvironment),
+			STYLE_VIRTUAL_ENVIRONMENT)
 	}
 
 	// -----------------------
@@ -285,10 +287,18 @@ func (prompt *promptT) build(promptInfo promptInfoT) {
 	prompt.endSegments(promptInfo)
 }
 
-func buildPromptInfo(path string, optUsername string, optError bool, optDefaultUser string, optTruncationStartDepth int) (promptInfoT, error) {
+func buildPromptInfo(
+	path string,
+	optUsername string,
+	optError bool,
+	optDefaultUser string,
+	optTruncationStartDepth int,
+	optVirtualEnv string) (promptInfoT, error) {
+
 	promptInfo := promptInfoT{}
 
 	promptInfo.ShowContext = true
+	promptInfo.VirtualEnvironment = optVirtualEnv
 
 	pathGitRoot, pathGitSub := getPath(path, optTruncationStartDepth)
 	promptInfo.PathGitRootBeginning, promptInfo.PathGitRootFinal = chopPath(pathGitRoot)

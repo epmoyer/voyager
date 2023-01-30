@@ -7,7 +7,7 @@ import (
 )
 
 type promptInfoT struct {
-	CondaEnvironment     string
+	VirtualEnvironment   string
 	Username             string
 	UserHomeDir          string
 	ShowContext          bool
