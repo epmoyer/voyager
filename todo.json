@@ -116,6 +116,16 @@
                     "due_complete": false
                 },
                 {
+                    "name": "Document vger_xxx() helper functions",
+                    "id": 128,
+                    "id_labels": [
+                        8
+                    ],
+                    "description": "",
+                    "due": null,
+                    "due_complete": false
+                },
+                {
                     "name": "Zip or tar the test repos and include in release repo.",
                     "id": 115,
                     "id_labels": [],
@@ -139,6 +149,11 @@
         {
             "name": "Doing",
             "id": 3,
+            "cards": []
+        },
+        {
+            "name": "Done",
+            "id": 4,
             "cards": [
                 {
                     "name": "Lift SSH_CLIENT env var out of go code into shell snippet.",
@@ -147,13 +162,7 @@
                     "description": "",
                     "due": null,
                     "due_complete": false
-                }
-            ]
-        },
-        {
-            "name": "Done",
-            "id": 4,
-            "cards": [
+                },
                 {
                     "name": "Fix coda/venv support",
                     "id": 126,
