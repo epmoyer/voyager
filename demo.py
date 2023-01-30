@@ -53,6 +53,11 @@ TEST_CASES = [
         'username': 'root',
     },
     {
+        'name': 'With Virtual Environment',
+        'path': r'/usr/local/bin',
+        'arguments': ['-virtualenv=Python311'],
+    },
+    {
         'name': 'Git repo',
         'path': r'./git_test_cases/normal',
     },

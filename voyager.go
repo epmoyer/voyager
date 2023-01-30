@@ -74,9 +74,9 @@ var STYLE_SHELL = promptStyleT{
 	ICSColorFGText:      "yellow:151:#B8E3B8",
 }
 var STYLE_VIRTUAL_ENVIRONMENT = promptStyleT{
-	ICSColorBGPowerline: "white:75:#5EABF7",
+	ICSColorBGPowerline: "blue:75:#5EABF7",
 	ICSColorFGPowerline: "black:16:#202020",
-	ICSColorFGText:      "brightblue:63:#4040ff",
+	ICSColorFGText:      "blue:63:#4040ff",
 }
 var STYLE_CONTEXT = promptStyleT{
 	ICSColorBGPowerline: "brightmagenta:139:#B294BF",
