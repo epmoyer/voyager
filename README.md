@@ -75,6 +75,8 @@ Voyager defines several aliases to help you easily change options on-the-fly (se
 ## Running the demo
 The demo is written in Python. To run it you will need to have Python 3.8 or greater installed, as well as [click](https://click.palletsprojects.com/en/8.1.x/) and [rich](https://rich.readthedocs.io/en/stable/introduction.html).
 
+The demo expects a bunch of small subdirectories to exist under `git_test_cases/` (each one is a small git repo to exercise the prompt under different repo conditions). To create those directories, `cd git_test_cases`, then `tar -xvzf git_test_cases.tgz`.
+
 - View the various prompt cases in color mode `16m`:
     - `./demo.py cases`
 - View the various prompt cases in all color modes:
