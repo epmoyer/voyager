@@ -19,7 +19,7 @@ You can find a huge number of Powerline patched fonts [here](https://github.com/
 
 Personally I use the Powerline patched version of [SourceCodePro](https://github.com/powerline/fonts/tree/master/SourceCodePro).
 
-_Voyager also supports a "text" format for use in environments where Powerline symbols are unavailable (its also useful when you are capturing terminal output logs)._
+_Voyager also supports a "text" format for use in environments where Powerline symbols are unavailable (also useful when you are capturing terminal output logs)._
 
 ### Installing From a Pre-Made Build
 - Download one of the pre-made builds from [Releases](https://github.com/epmoyer/voyager/releases).
