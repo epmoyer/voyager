@@ -4,7 +4,7 @@ A git-aware prompt for `zsh` and `bash`.
 
 Like [Starship](https://starship.rs) but smaller, and with a single mission.
 
-![](docs/img/voyager_test_many.png)
+![](docs/img/voyager_demo.png)
 
 Voyager recognizes when you are in a git repo directory and shows your git repo name and status in the middle of your path, with the git root path on the left, and your location within that repo (i.e. subdirectory relative to the repo root) on the right. 
 
