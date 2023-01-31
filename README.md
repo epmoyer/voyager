@@ -31,7 +31,9 @@ _Voyager also supports a "text" format for use in environments where Powerline s
     - NOTE: I recommend opening a new shell first to test that the new prompt is working.  It's always frustrating to break the prompt in the shell you are trying to do work in.  If the prompt is wonky in the new shell for some reason, then you'll still have a good prompt in your old shell session so that you can fix the issue or uninstall.
 
 #### Installation example
-🔴 TBD
+![](docs/img/voyager_install.png)
+
+NOTE: If you are installing on MacOS and you downloaded one of the pre-built images (rather than building from source) then you will need to grant MacOS permission to run the `voyager` executable.
 
 ### Installing From Source
 - Follow the [Build Instructions](#build-instructions) to build the installation images.
@@ -61,16 +63,16 @@ _Voyager also supports a "text" format for use in environments where Powerline s
     - NOTE: The context is always shown when you are SSH'd into a machine, regardless of the default user setting.
 - `VGER_OPT_POWERLINE`
     - This is set to `-powerline` by default. Clear it to use text mode instead.
-    - NOTE: The helper aliases `vger_text` and `vger_pl` manipulate this variable. 
+    - NOTE: The [helper aliases](#helper-aliases) `vger_text` and `vger_pl` manipulate this variable. 
 - `VGER_TRUNCATION_START_DEPTH`
     - Sets how may path elements (right to left) to show in full before truncation begins.
         - Set this to 0 to truncate all path components.
         - Set this to 1 to truncate all but the last path component (the default).
         - Set this to 1000 for no truncation.
-    - NOTE: The helper aliases `vger_short` and `vger_long` manipulate this variable. 
+    - NOTE: The [helper aliases](#helper-aliases) `vger_short` and `vger_long` manipulate this variable. 
 - `VGER_COLOR`
     - Sets the color mode.  Set this to one of `16m`, `256`, `16`, or `none`
-    - Note: The helper aliases `vger_16m`. `vger_256`, `vger_16`, and `vger_none` manipulate this variable. 
+    - Note: The [helper aliases](#helper-aliases) `vger_16m`. `vger_256`, `vger_16`, and `vger_none` manipulate this variable. 
 
 
 ## Helper aliases
