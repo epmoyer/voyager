@@ -12,12 +12,12 @@ Voyager recognizes when you are in a git repo directory and shows your git repo 
 
 ## Installation
 
-### Powerline font
-By default Voyager uses Powerline font symbols.  To view them you will need to install a Powerline font in your terminal program.
+### Nerd Font (Powerline + other stymbols)
+By default Voyager uses Powerline font symbols.  To view them you will need to install a Powerline font in your terminal program.  It also uses at least one "Nerd Fonts" symbol (for the `$` prefix for `bash`), so you'll want to use a "Nerd Fonts" font for full compatibility.
 
-You can find a huge number of Powerline patched fonts [here](https://github.com/powerline/fonts).
+You can find a huge number of Nerd Fonts patched fonts [here](https://github.com/ryanoasis/nerd-fonts).
 
-Personally I use the Powerline patched version of [SourceCodePro](https://github.com/powerline/fonts/tree/master/SourceCodePro).
+Personally I use the Nerd Fonts patched version of [SourceCodePro](https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/SourceCodePro/Regular/complete) (which they call "Sauce Code Pro").
 
 _Voyager also supports a "text" format for use in environments where Powerline symbols are unavailable (also useful when you are capturing terminal output logs)._
 
