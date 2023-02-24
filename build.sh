@@ -85,6 +85,7 @@ do_build () {
 do_build darwin amd64 zip
 do_build darwin arm64 zip
 do_build linux amd64 tar
+do_build linux arm64 tar
 do_build linux arm tar
 
 echo "${GREEN}Done.${ENDCOLOR}"
