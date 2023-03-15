@@ -36,7 +36,6 @@ func (gitInfo *gitInfoT) update(path string) {
 		return
 	}
 
-	// cmd = exec.Command("git", "symbolic-ref", "HEAD")
 	cmd = exec.Command("git", "rev-parse", "--abbrev-ref", "HEAD")
 	cmd.Stderr = &e
 	cmd.Dir = path
@@ -44,9 +43,6 @@ func (gitInfo *gitInfoT) update(path string) {
 	if err == nil {
 		branchName = strings.TrimSpace(string(out))
 	}
-	// if branchName != "" {
-	// 	branchName = finalComponent(branchName)
-	// } else {
 	if branchName == "" {
 		// reference = "(other)"
 		cmd = exec.Command("git", "rev-parse", "--short", "HEAD")
