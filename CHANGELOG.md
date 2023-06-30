@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.9.0 - 2023-06-30
+### Changed
+- Add support for Python virtual environments (venv).
+    - Voyager prompt now displays "venv" as the current virtual environment if it detects that `$VIRTUAL_ENV` is set.
+    - Voyager explicitly sets `VIRTUAL_ENV_DISABLE_PROMPT=1` during shell initialization, which tells Python venv to not manipulate the shell prompt (because Voyager is handling it). Without this, activating a venv would cause venv to inject "(venv) " before the prompt string, which is now redundant (because Voyager is now including "venv" inside it's own prompt string).
+
 ## 1.8.0 - 2023-03-15
 ### Fixed
 - Properly render branch names that contain a slash.

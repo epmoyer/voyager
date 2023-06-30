@@ -24,7 +24,12 @@ vger_build_prompt() {
 
     VGER_OPT_VIRTUAL_ENVIRONMENT=""
     if [ ! -z "$CONDA_DEFAULT_ENV" ] && [ $CONDA_DEFAULT_ENV != "base" ]; then
+        # Anaconda virtual environment is running
         VGER_OPT_VIRTUAL_ENVIRONMENT="-virtualenv=$CONDA_DEFAULT_ENV"
+    fi
+    if [ ! -z "$VIRTUAL_ENV" ]; then
+        # Python virturl environment (i.e. venv) is running
+        VGER_OPT_VIRTUAL_ENVIRONMENT="-virtualenv=venv"
     fi
 
     VGER_OPT_SSH=""
@@ -35,6 +40,11 @@ vger_build_prompt() {
     PS1=`voyager $VGER_OPT_POWERLINE $VGER_OPT_ERROR $VGER_OPT_DEFAULTUSER $VGER_OPT_TRUNCATION $VGER_OPT_COLOR $VGER_OPT_VIRTUAL_ENVIRONMENT $VGER_OPT_SSH -shell=bash "$(pwd)"`
 }
 export PROMPT_COMMAND=vger_build_prompt
+
+# Voyager will detect when a Python virtual environment (venv) is running and display it in
+# the prompt, so we set the following to tell venv not to inject it's own "(venv) " string
+# into the prompt environment variable
+export VIRTUAL_ENV_DISABLE_PROMPT=1
 
 # By default Voyager will truncate all but the last directory of your base (pre-git-repo) path.
 # To truncate at a different start depth, uncomment the following.  For example, setting it to
