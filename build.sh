@@ -87,6 +87,8 @@ do_build darwin arm64 zip
 do_build linux amd64 tar
 do_build linux arm64 tar
 do_build linux arm tar
-do_build freebsd arm64 tar
+# TODO: Removed this build for now. The executable works, but the install script
+# needs work to be freebsd compatible.  Fix use of sudo, and shell compatibility.
+#do_build freebsd arm64 tar
 
 echo "${GREEN}Done.${ENDCOLOR}"
