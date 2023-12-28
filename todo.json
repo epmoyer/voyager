@@ -65,6 +65,43 @@
             "id": 2,
             "cards": [
                 {
+                    "name": "Git init behavior",
+                    "id": 132,
+                    "id_labels": [],
+                    "description": "Today we do not indicate that we are in a git repo when we have run `git init` but have not yet executed the first commit.  bob-the-fish does, and I prefer that.  Do something.",
+                    "due": null,
+                    "due_complete": false,
+                    "repeat": null
+                },
+                {
+                    "name": "Branch checkout behavior",
+                    "id": 133,
+                    "id_labels": [],
+                    "description": "I can't remember exactly, but there was something about switching to a detached commit that I didn't like.  Maybe it was that we don't show the branch name, or maybe it was that we don't show the tag.  Try a bunch of detached checkouts, figure out what we don't like, update this issue, then fix it.",
+                    "due": null,
+                    "due_complete": false,
+                    "repeat": null
+                },
+                {
+                    "name": "Line wrap issue",
+                    "id": 131,
+                    "id_labels": [
+                        4
+                    ],
+                    "description": "Background color can behave badly if line wrap happens at a particular spot.  It is not super-easy to reproduce, but dragging the width of a terminal window back and forth can often find a \"sweet spot\" where the background color doesn't get turned off properly following the line feed.",
+                    "due": null,
+                    "due_complete": false,
+                    "repeat": null
+                },
+                {
+                    "name": "---",
+                    "id": 130,
+                    "id_labels": [],
+                    "description": "",
+                    "due": null,
+                    "due_complete": false
+                },
+                {
                     "name": "Document command line jumble issue (set $LANG)",
                     "id": 109,
                     "id_labels": [

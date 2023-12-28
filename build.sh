@@ -87,5 +87,6 @@ do_build darwin arm64 zip
 do_build linux amd64 tar
 do_build linux arm64 tar
 do_build linux arm tar
+do_build freebsd arm64 tar
 
 echo "${GREEN}Done.${ENDCOLOR}"
