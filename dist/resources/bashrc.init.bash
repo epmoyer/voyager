@@ -28,7 +28,7 @@ vger_build_prompt() {
         VGER_OPT_VIRTUAL_ENVIRONMENT="-virtualenv=$CONDA_DEFAULT_ENV"
     fi
     if [ ! -z "$VIRTUAL_ENV" ]; then
-        # Python virturl environment (i.e. venv) is running
+        # Python virtual environment (i.e. venv) is running
         VGER_OPT_VIRTUAL_ENVIRONMENT="-virtualenv=venv"
     fi
 
