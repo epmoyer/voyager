@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - If a virtual environment is running then show the basename (final path component) of $VIRTUAL_ENV instead of the default `venv` text.
     - This fix causes us to now display the actual name of a named `virtualenvwrapper` venv instead of the generic `venv`.
+- Append conda env name if virual env running on top of conda env.
 
 ## 1.9.0 - 2023-06-30
 ### Changed
