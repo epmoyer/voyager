@@ -97,6 +97,10 @@ TEST_CASES = [
         'name': 'Git repo, slash in branch name',
         'path': r'./git_test_cases/slash_in_branch',
     },
+    {
+        'name': 'Git repo, not main',
+        'path': r'./git_test_cases/notmain',
+    },
 ]
 # fmt: on
 

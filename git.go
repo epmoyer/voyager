@@ -43,6 +43,21 @@ func (gitInfo *gitInfoT) update(path string) {
 	if err == nil {
 		branchName = strings.TrimSpace(string(out))
 	}
+	if branchName == "HEAD" {
+		// This is a detached HEAD
+		// Get the commit hash instead
+		cmd = exec.Command("git", "rev-parse", "--short", "HEAD")
+		var e bytes.Buffer
+		cmd.Stderr = &e
+		cmd.Dir = path
+		out, err = cmd.Output()
+		if err != nil {
+			// This is not a git repo
+			return
+		}
+		branchName = strings.TrimSpace(string(out))
+		gitInfo.IsDetached = true
+	}
 	if branchName == "" {
 		// reference = "(other)"
 		cmd = exec.Command("git", "rev-parse", "--short", "HEAD")
