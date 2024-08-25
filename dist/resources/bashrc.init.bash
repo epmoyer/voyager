@@ -28,13 +28,8 @@ vger_build_prompt() {
         VGER_OPT_VIRTUAL_ENVIRONMENT="-virtualenv=$CONDA_DEFAULT_ENV"
     fi
     if [ ! -z "$VIRTUAL_ENV" ]; then
-        # Python virtual environment (i.e. venv) is running
-        env_name=$(basename "$VIRTUAL_ENV")
-        VGER_OPT_VIRTUAL_ENVIRONMENT="-virtualenv=$env_name"
-        if [ ! -z "$CONDA_DEFAULT_ENV" ]; then
-            # We are running the virtual environment ON TOP OF an Anaconda environment
-            VGER_OPT_VIRTUAL_ENVIRONMENT+=" (on $CONDA_DEFAULT_ENV)"
-        fi
+        # Python virturl environment (i.e. venv) is running
+        VGER_OPT_VIRTUAL_ENVIRONMENT="-virtualenv=venv"
     fi
 
     VGER_OPT_SSH=""
