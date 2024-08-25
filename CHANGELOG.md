@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## **(Unreleased)**
 
+## 1.12.0 - 2024-08-25
+- Merge "missing" local venv prompt changes into `zshrc.init.zsh`
+    - Merge those changes into `bashrc.init.bash`
+- Add missing `notmain` dir to `git_test_cases.tgz`
+
 ## 1.11.0 - 2024-08-24
 ### Changed.
 - Properly detect detached head. Show (short) commit hash in prompt.
