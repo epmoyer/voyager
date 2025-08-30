@@ -435,6 +435,8 @@ func splitGitPath(path string) (string, string) {
 	} else {
 		// Remove the git subpath from the end of path to get git root
 		pathGitRoot = strings.TrimSuffix(path, pathGitSub)
+		// Remove trailing slash from git root if present
+		pathGitRoot = strings.TrimSuffix(pathGitRoot, "/")
 	}
 
 	return pathGitRoot, pathGitSub
