@@ -12,7 +12,7 @@ import (
 )
 
 const APP_NAME = "voyager"
-const APP_VERSION = "1.12.0"
+const APP_VERSION = "1.13.0"
 
 const ENABLE_DEBUG_INDICATOR = false
 const ENABLE_BULLNOSE = false
@@ -413,7 +413,7 @@ func shorten(pathComponent string) string {
 }
 
 func splitGitPath(path string) (string, string) {
-	cmd := exec.Command("git", "rev-parse", "--show-toplevel")
+	cmd := exec.Command("git", "rev-parse", "--show-prefix")
 	var e bytes.Buffer
 	cmd.Stderr = &e
 	cmd.Dir = path
@@ -422,10 +422,19 @@ func splitGitPath(path string) (string, string) {
 		// This is not a git repo
 		return path, ""
 	}
-	pathGitRoot := strings.TrimSpace(string(out))
-	pathGitSub := strings.Replace(path, pathGitRoot, "", 1)
-	if strings.HasPrefix(pathGitSub, "/") {
-		pathGitSub = strings.Replace(pathGitSub, "/", "", 1)
+
+	pathGitSub := strings.TrimSpace(string(out))
+	// Remove trailing slash if present
+	pathGitSub = strings.TrimSuffix(pathGitSub, "/")
+
+	// Calculate git root by removing the suffix from the path
+	var pathGitRoot string
+	if pathGitSub == "" {
+		// We're at the git root
+		pathGitRoot = path
+	} else {
+		// Remove the git subpath from the end of path to get git root
+		pathGitRoot = strings.TrimSuffix(path, pathGitSub)
 	}
 
 	return pathGitRoot, pathGitSub

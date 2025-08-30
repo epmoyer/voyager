@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## **(Unreleased)**
 
+## 1.13.0 - 2025-08-30
+- Fix resolution of Git path when current dir has a symlink ancestor.
+
 ## 1.12.0 - 2024-08-25
 - Merge "missing" local venv prompt changes into `zshrc.init.zsh`
     - Merge those changes into `bashrc.init.bash`
