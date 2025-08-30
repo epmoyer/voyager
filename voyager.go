@@ -12,13 +12,13 @@ import (
 )
 
 const APP_NAME = "voyager"
-const APP_VERSION = "1.13.0"
+const APP_VERSION = "1.14.0"
 
 const ENABLE_DEBUG_INDICATOR = false
 const ENABLE_BULLNOSE = false
 
 const SYMBOL_PL_GIT_BRANCH = "\uf418"           // PowerLine: VCS Branch ()
-const SYMBOL_PL_GIT_DETACHED = "\uf995"         // PowerLine: VCS Detached (秊)
+const SYMBOL_PL_GIT_DETACHED = "\uf0a9"         // PowerLine: VCS Detached ()
 const SYMBOL_PL_GIT_STAGED = "\uF0C7"           // PowerLine: Floppy Disk ()
 const SYMBOL_PL_GIT_MODIFIED = "\uF448"         // PowerLine: Pencil ()
 const SYMBOL_PL_GIT_BRANCH_AHEAD = "\uF0DE"     // PowerLine: Up-arrow

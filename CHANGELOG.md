@@ -6,7 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## **(Unreleased)**
 
+## 1.14.0 - 2025-08-30
+### Changed
+- Change Powerline icon for git detached state.  Previous icon was not rendering correctly in some modern nerdfonts.
+
 ## 1.13.0 - 2025-08-30
+### Fixed
 - Fix resolution of Git path when current dir has a symlink ancestor.
 
 ## 1.12.0 - 2024-08-25
