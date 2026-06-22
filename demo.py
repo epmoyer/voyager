@@ -101,6 +101,18 @@ TEST_CASES = [
         'name': 'Git repo, not main',
         'path': r'./git_test_cases/notmain',
     },
+    {
+        'name': 'Git repo, unpushed commits (ahead of upstream)',
+        'path': r'./git_test_cases/unpushed',
+    },
+    {
+        'name': 'Git repo, unpulled commits (behind upstream)',
+        'path': r'./git_test_cases/unpulled',
+    },
+    {
+        'name': 'Git repo, unpushed and unpulled commits (diverged)',
+        'path': r'./git_test_cases/diverged',
+    },
 ]
 # fmt: on
 
