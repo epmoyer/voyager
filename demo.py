@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import os
 import pwd
+import shutil
 import subprocess
 from pathlib import Path
 
@@ -243,14 +244,18 @@ def render_prompt(prompt_text, shell):
         renderer = 'Simulated bash renderer'
         rendered_output = prompt_text.replace(r'\[', '').replace(r'\]', '')
     elif shell == 'zsh':
-        renderer = 'zsh (using "print -P")'
-        command_line_args = [
-            'zsh',
-            '-c',
-            f'print -P "{prompt_text}"',
-        ]
-        output = subprocess.check_output(command_line_args)
-        rendered_output = output.decode("utf-8")
+        if shutil.which('zsh') is None:
+            renderer = 'zsh (not installed; skipping shell render)'
+            rendered_output = '(zsh not installed)'
+        else:
+            renderer = 'zsh (using "print -P")'
+            command_line_args = [
+                'zsh',
+                '-c',
+                f'print -P "{prompt_text}"',
+            ]
+            output = subprocess.check_output(command_line_args)
+            rendered_output = output.decode("utf-8")
 
     rprint(f'{indent(4)}[renderer]Renderer: {renderer}[/renderer]')
     return rendered_output
