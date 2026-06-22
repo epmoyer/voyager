@@ -38,6 +38,9 @@ var SYMBOLS_POWERLINE = map[string]string{
 	"staged":     SYMBOL_PL_GIT_STAGED + " ",
 	"modified":   SYMBOL_PL_GIT_MODIFIED + " ",
 	"untracked":  SYMBOL_PL_GIT_BRANCH_UNTRACKED + " ",
+	"unpushed":   SYMBOL_PL_GIT_BRANCH_AHEAD,
+	"unpulled":   SYMBOL_PL_GIT_BRANCH_BEHIND,
+	"diverged":   SYMBOL_PL_GIT_BRANCH_BEHIND + SYMBOL_PL_GIT_BRANCH_AHEAD,
 	"shell_bash": SYMBOL_PL_DOLLAR,
 	"error":      SYMBOL_PL_X,
 }
@@ -47,6 +50,9 @@ var SYMBOLS_TEXT = map[string]string{
 	"staged":     "+",
 	"modified":   "!",
 	"untracked":  "?",
+	"unpushed":   "+",
+	"unpulled":   "-",
+	"diverged":   "±",
 	"shell_bash": "$",
 	"error":      "",
 }

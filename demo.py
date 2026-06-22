@@ -140,11 +140,11 @@ def run_tests(extra_args=None):
         ]
         if extra_args:
             command_line_args += extra_args
-    
+
         case_args = test_case.get('arguments', None)
         if case_args:
             command_line_args += case_args
- 
+
         username = test_case.get('username')
         if username:
             command_line_args.append(f'-username={username}')
@@ -189,7 +189,7 @@ def formats(enable_color_modes, disable_text_wrap):
             rprint(f'{indent(1)}[presentation]{presentation}[/presentation]')
             for color_option in color_options:
                 rprint(f'{indent(2)}[color_option]{color_option}[/color_option]')
-            
+
                 show_formats(shell, presentation, disable_text_wrap, color_option)
 
 
