@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import os
 import pwd
+import shutil
 import subprocess
 from pathlib import Path
 
@@ -101,6 +102,18 @@ TEST_CASES = [
         'name': 'Git repo, not main',
         'path': r'./git_test_cases/notmain',
     },
+    {
+        'name': 'Git repo, unpushed commits (ahead of upstream)',
+        'path': r'./git_test_cases/unpushed',
+    },
+    {
+        'name': 'Git repo, unpulled commits (behind upstream)',
+        'path': r'./git_test_cases/unpulled',
+    },
+    {
+        'name': 'Git repo, unpushed and unpulled commits (diverged)',
+        'path': r'./git_test_cases/diverged',
+    },
 ]
 # fmt: on
 
@@ -140,11 +153,11 @@ def run_tests(extra_args=None):
         ]
         if extra_args:
             command_line_args += extra_args
-    
+
         case_args = test_case.get('arguments', None)
         if case_args:
             command_line_args += case_args
- 
+
         username = test_case.get('username')
         if username:
             command_line_args.append(f'-username={username}')
@@ -189,7 +202,7 @@ def formats(enable_color_modes, disable_text_wrap):
             rprint(f'{indent(1)}[presentation]{presentation}[/presentation]')
             for color_option in color_options:
                 rprint(f'{indent(2)}[color_option]{color_option}[/color_option]')
-            
+
                 show_formats(shell, presentation, disable_text_wrap, color_option)
 
 
@@ -231,14 +244,18 @@ def render_prompt(prompt_text, shell):
         renderer = 'Simulated bash renderer'
         rendered_output = prompt_text.replace(r'\[', '').replace(r'\]', '')
     elif shell == 'zsh':
-        renderer = 'zsh (using "print -P")'
-        command_line_args = [
-            'zsh',
-            '-c',
-            f'print -P "{prompt_text}"',
-        ]
-        output = subprocess.check_output(command_line_args)
-        rendered_output = output.decode("utf-8")
+        if shutil.which('zsh') is None:
+            renderer = 'zsh (not installed; skipping shell render)'
+            rendered_output = '(zsh not installed)'
+        else:
+            renderer = 'zsh (using "print -P")'
+            command_line_args = [
+                'zsh',
+                '-c',
+                f'print -P "{prompt_text}"',
+            ]
+            output = subprocess.check_output(command_line_args)
+            rendered_output = output.decode("utf-8")
 
     rprint(f'{indent(4)}[renderer]Renderer: {renderer}[/renderer]')
     return rendered_output

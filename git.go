@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"os/exec"
+	"strconv"
 	"strings"
 )
 
@@ -14,6 +15,8 @@ type gitInfoT struct {
 	IsStaged    bool
 	IsModified  bool
 	IsUntracked bool
+	HasUnpushed bool // Local commits not on the upstream (ahead)
+	HasUnpulled bool // Upstream commits not local (behind)
 }
 
 func (gitInfo *gitInfoT) update(path string) {
@@ -97,6 +100,33 @@ func (gitInfo *gitInfoT) update(path string) {
 	gitInfo.IsDirty = (gitInfo.IsUntracked ||
 		gitInfo.IsStaged ||
 		gitInfo.IsModified)
+
+	// ---------------------------
+	// Upstream divergence (ahead/behind)
+	// ---------------------------
+	// Counts commits the upstream has that we don't (behind/unpulled) and
+	// commits we have that the upstream doesn't (ahead/unpushed). If there's
+	// no upstream configured (or detached HEAD), this command errors and we
+	// simply leave both indicators off.
+	cmd = exec.Command("git", "rev-list", "--count", "--left-right", "@{upstream}...HEAD")
+	cmd.Stderr = &e
+	cmd.Dir = path
+	out, err = cmd.Output()
+	if err == nil {
+		behind, ahead := extractDivergence(string(out))
+		gitInfo.HasUnpulled = behind > 0
+		gitInfo.HasUnpushed = ahead > 0
+	}
+}
+
+func extractDivergence(out string) (int, int) {
+	fields := strings.Fields(out)
+	if len(fields) != 2 {
+		return 0, 0
+	}
+	behind, _ := strconv.Atoi(fields[0])
+	ahead, _ := strconv.Atoi(fields[1])
+	return behind, ahead
 }
 
 func extractPorcelainStatus(line string) (string, string) {
@@ -122,6 +152,21 @@ func (git gitInfoT) render(isPowerline bool) string {
 		indicator = "detached"
 	}
 	text = symbols[indicator] + " " + git.Branch
+
+	// Upstream divergence indicator, placed at the end of the branch name
+	// (bobthefish-style): unpushed (+), unpulled (-), or both (±).
+	divergence := ""
+	switch {
+	case git.HasUnpushed && git.HasUnpulled:
+		divergence = symbols["diverged"]
+	case git.HasUnpushed:
+		divergence = symbols["unpushed"]
+	case git.HasUnpulled:
+		divergence = symbols["unpulled"]
+	}
+	if divergence != "" {
+		text += " " + divergence
+	}
 
 	status := ""
 	if git.IsStaged {
