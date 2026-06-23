@@ -16,3 +16,5 @@ voyager.linux.arm.bin
 # Distribution content
 dist/builds
 dist/images
+# local-only sidecar/ (synced out of band, never committed)
+/sidecar
